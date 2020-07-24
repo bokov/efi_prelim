@@ -1,0 +1,725 @@
+Category/Type	icd10	Description	icd10_ccode	shortname
+Hospital-acquired infection	A020	Salmonella enteritis	ICD10:A02.0	hospinfect
+Hospital-acquired infection	A021	Salmonella septicaemia	ICD10:A02.1	hospinfect
+Hospital-acquired infection	A044	Other intestinal Escherichia coli infections	ICD10:A04.4	hospinfect
+Hospital-acquired infection	A045	Campylobacter enteritis	ICD10:A04.5	hospinfect
+Hospital-acquired infection	A047	Enterocolitis due to Clostridium difficile; includes: Foodborne intoxication by Clostridium difficile, Pseudomembranous colitis	ICD10:A04.7	hospinfect
+Hospital-acquired infection	A048	Other specified bacterial intestinal infections	ICD10:A04.8	hospinfect
+Hospital-acquired infection	A049	Bacterial intestinal infection, unspecified	ICD10:A04.9	hospinfect
+Hospital-acquired infection	A080	Rotaviral enteritis	ICD10:A08.0	hospinfect
+Hospital-acquired infection	A081	Acute gastroenteropathy due to Norwalk agent; includes: Small round structured virus enteritis	ICD10:A08.1	hospinfect
+Hospital-acquired infection	A410	Sepsis due to Staphylococcus aureus	ICD10:A41.0	hospinfect
+Hospital-acquired infection	A411	Sepsis due to other specified staphylococcus; includes: Sepsis due to coagulase-negative staphylococcus	ICD10:A41.1	hospinfect
+Hospital-acquired infection	A412	Sepsis due to unspecified staphylococcus	ICD10:A41.2	hospinfect
+Hospital-acquired infection	A414	Septicaemia due to anaerobes	ICD10:A41.4	hospinfect
+Hospital-acquired infection	A4150	Sepsis due to Escherichia coli [E.coli]	ICD10:A41.50	hospinfect
+Hospital-acquired infection	A4151	Sepsis due to Pseudomonas; includes: Pseudomonas aeroginosa	ICD10:A41.51	hospinfect
+Hospital-acquired infection	A4152	Sepsis due to Serratia	ICD10:A41.52	hospinfect
+Hospital-acquired infection	A4158	Sepsis due to other gram-negative organisms; includes: Gram-negative sepsis NOS	ICD10:A41.58	hospinfect
+Hospital-acquired infection	A4180	Sepsis due to enterococcus; excludes: due to Streptococcus D (A40.2)	ICD10:A41.80	hospinfect
+Hospital-acquired infection	A4188	Other specified septicaemia	ICD10:A41.88	hospinfect
+Hospital-acquired infection	A419	Septicaemia unspecified	ICD10:A41.9	hospinfect
+Hospital-acquired infection	A490	Staphylococcal infection, unspecified site	ICD10:A49.0	hospinfect
+Hospital-acquired infection	B309	Viral conjunctivitis unspecified	ICD10:B30.9	hospinfect
+Hospital-acquired infection	B373	Candidiasis of vulva and vagina	ICD10:B37.3	hospinfect
+Hospital-acquired infection	B374	Candidiasis of other urogenital sites	ICD10:B37.4	hospinfect
+Hospital-acquired infection	B377	Candidal septicaemia	ICD10:B37.7	hospinfect
+Hospital-acquired infection	B3780	Candidal esophagitis	ICD10:B37.80	hospinfect
+Hospital-acquired infection	B3781	Candidal enteritis	ICD10:B37.81	hospinfect
+Hospital-acquired infection	B956	Staphylococcus aureus as the cause of diseases classified to other chapters	ICD10:B95.6	hospinfect
+Hospital-acquired infection	B957	Other staphylococcus as the cause of diseases classified to other chapters	ICD10:B95.7	hospinfect
+Hospital-acquired infection	B958	Unspecified staphylococcus as the cause of diseases classified to other chapters	ICD10:B95.8	hospinfect
+Hospital-acquired infection	B961	Klebsiella pneumoniae [K. pneumoniae] as the cause of diseases classified to other chapters	ICD10:B96.1	hospinfect
+Hospital-acquired infection	B962	Escherichia coli [E. coli] as the cause of diseases classified to other chapters	ICD10:B96.2	hospinfect
+Hospital-acquired infection	B964	Proteus (mirabilis)(morganii) as the cause of diseases classified in other chapters	ICD10:B96.4	hospinfect
+Hospital-acquired infection	B965	Pseudomonas (aeruginosa) as the cause of diseases classified to other chapters	ICD10:B96.5	hospinfect
+Hospital-acquired infection	B9681	Enterococcus as the cause of diseases classified to other chapters	ICD10:B96.81	hospinfect
+Hospital-acquired infection	B9688	Other specified bacterial agents as the cause of diseases classified to other chapters	ICD10:B96.88	hospinfect
+Hospital-acquired infection	B974	Respiratory syncytial virus as the cause of diseases classified to other chapters	ICD10:B97.4	hospinfect
+Hospital-acquired infection	G003	Staphylococcal meningitis	ICD10:G00.3	hospinfect
+Hospital-acquired infection	J150	Pneumonia due to Klebsiella pneumonia	ICD10:J15.0	hospinfect
+Hospital-acquired infection	J151	Pneumonia due to Pseudomonas	ICD10:J15.1	hospinfect
+Hospital-acquired infection	J152	Pneumonia due to Staphylococcus	ICD10:J15.2	hospinfect
+Hospital-acquired infection	J155	Pneumonia due to Escherichia coli	ICD10:J15.5	hospinfect
+Hospital-acquired infection	J156	Pneumonia due to other aerobic Gram-negative bacteria; Includes: Pneumonia due to Serratia marcescens	ICD10:J15.6	hospinfect
+Hospital-acquired infection	J159	Bacterial pneumonia unspecified	ICD10:J15.9	hospinfect
+Hospital-acquired infection	J181	Lobar pneumonia unspecified	ICD10:J18.1	hospinfect
+Hospital-acquired infection	J210	Acute bronchiolitis due to respiratory syncytial virus	ICD10:J21.0	hospinfect
+Hospital-acquired infection	J853	Abscess of mediastinum	ICD10:J85.3	hospinfect
+Hospital-acquired infection	J860	Pyothorax with fistula	ICD10:J86.0	hospinfect
+Hospital-acquired infection	J869	Pyothorax without fistula	ICD10:J86.9	hospinfect
+Hospital-acquired infection	J9501	Infection of tracheostomy stoma	ICD10:J95.01	hospinfect
+Hospital-acquired infection	K650	Acute peritonitis	ICD10:K65.0	hospinfect
+Hospital-acquired infection	N390	Urinary tract infection, site not specified	ICD10:N39.0	hospinfect
+Hospital-acquired infection	N9951	Infection of external stoma of urinary tract	ICD10:N99.51	hospinfect
+Hospital-acquired infection	O7530	Other infection during labour/delivered	ICD10:O75.30	hospinfect
+Hospital-acquired infection	O8500	Puerperal sepsis, 	ICD10:O85.00	hospinfect
+Hospital-acquired infection	O8600	Infection of obstetric surgical wound; Includes: Infected caesarean section wound following delivery, Infected perineal repair following delivery; 	ICD10:O86.00	hospinfect
+Hospital-acquired infection	O8610	Other infection of genital tract following delivery; Includes: Cervicitis following delivery, Vaginitis following delivery; 	ICD10:O86.10	hospinfect
+Hospital-acquired infection	O8620	Urinary tract infection following delivery; Includes: Conditions in N15.-, N30.-, N34.-, N39.0 following delivery, Conditions in N39.0 following delivery, Conditions in N10-N12, N15.-, N30.-, N34.-, N39.0 following delivery, Conditions in N34.-, N39.0 following delivery, Conditions in, N30.-, N34.-, N39.0 following delivery; 	ICD10:O86.20	hospinfect
+Hospital-acquired infection	O8630	Other genitourinary tract infections following delivery; Includes: Puerperal genitourinary tract infection NOS; 	ICD10:O86.30	hospinfect
+Hospital-acquired infection	O8680	Other specified puerperal infections; 	ICD10:O86.80	hospinfect
+Hospital-acquired infection	P360	Sepsis of newborn due to streptococcus, group B	ICD10:P36.0	hospinfect
+Hospital-acquired infection	P361	Sepsis of newborn due to other and unspecified streptococci	ICD10:P36.1	hospinfect
+Hospital-acquired infection	P362	Sepsis of newborn due to Staphylococcus aureus	ICD10:P36.2	hospinfect
+Hospital-acquired infection	P363	Sepsis of newborn due to other and unspecified staphylococci	ICD10:P36.3	hospinfect
+Hospital-acquired infection	P364	Sepsis of newborn due to Escherichia coli	ICD10:P36.4	hospinfect
+Hospital-acquired infection	P368	Other bacterial sepsis of newborn	ICD10:P36.8	hospinfect
+Hospital-acquired infection	P369	Bacterial sepsis of newborn unspecified	ICD10:P36.9	hospinfect
+Hospital-acquired infection	P38	Omphalitis of newborn with or without mild haemorrhage	ICD10:P38	hospinfect
+Hospital-acquired infection	R572	septic shock	ICD10:R57.2	hospinfect
+Hospital-acquired infection	T814	Infection following a procedure, not elsewhere classified	ICD10:T81.4	hospinfect
+Hospital-acquired infection	T826	Infection and inflammatory reaction due to cardiac valve prosthesis	ICD10:T82.6	hospinfect
+Hospital-acquired infection	T827	Infection and inflammatory reaction due to other cardiac and vascular devices, implants and grafts	ICD10:T82.7	hospinfect
+Hospital-acquired infection	T835	Infection and inflammatory reaction due to prosthetic device, implant and graft in urinary system	ICD10:T83.5	hospinfect
+Hospital-acquired infection	T836	Infection and inflammatory reaction due to prosthetic device, implant and graft in genital tract	ICD10:T83.6	hospinfect
+Hospital-acquired infection	T8453	Infection and inflammatory reaction due to hip prosthesis	ICD10:T84.53	hospinfect
+Hospital-acquired infection	T8454	Infection and inflammatory reaction due to knee prosthesis	ICD10:T84.54	hospinfect
+Hospital-acquired infection	T8460	Infection and inflammatory reaction due to internal fixation device of humerus	ICD10:T84.60	hospinfect
+Hospital-acquired infection	T8461	Infection and inflammatory reaction due to internal fixation device of radius and ulna	ICD10:T84.61	hospinfect
+Hospital-acquired infection	T8463	Infection and inflammatory reaction due to internal fixation device of femur	ICD10:T84.63	hospinfect
+Hospital-acquired infection	T8464	Infection and inflammatory reaction due to internal fixation device of tibia and fibula	ICD10:T84.64	hospinfect
+Hospital-acquired infection	T8465	Infection and inflammatory reaction due to internal fixation device of bones of foot	ICD10:T84.65	hospinfect
+Hospital-acquired infection	T8468	Infection and inflammatory reaction due to internal fixation device of bones at other site	ICD10:T84.68	hospinfect
+Hospital-acquired infection	T847	Infection and inflammatory reaction due to other internal orthopaedic prosthetic devices, implants & grafts	ICD10:T84.7	hospinfect
+Hospital-acquired infection	T857	Infection and inflammatory reaction due to other internal prosthetic devices, implants and grafts	ICD10:T85.7	hospinfect
+Hospital-acquired infection	T8742	Infection of below knee amputation stump	ICD10:T87.42	hospinfect
+Hospital-acquired infection	T8746	Infection of above knee amputation stump	ICD10:T87.46	hospinfect
+Hospital-acquired infection	T8747	Infection of below knee amputation stump	ICD10:T87.47	hospinfect
+Hospital-acquired infection	T8748	Infection of other amputation stump	ICD10:T87.48	hospinfect
+Decubitus Ulcer	L89	Pressure ulcer	ICD10:L89	decubulcer
+Decubitus Ulcer	L890	Stage I decubitus ulcer and pressure area	ICD10:L89.0	decubulcer
+Decubitus Ulcer	L891	Stage II decubitus [pressure] ulcer	ICD10:L89.1	decubulcer
+Decubitus Ulcer	L892	Stage III decubitus [pressure] ulcer	ICD10:L89.2	decubulcer
+Decubitus Ulcer	L893	Stage IV decubitus [pressure] ulcer	ICD10:L89.3	decubulcer
+Decubitus Ulcer	L898	Decubitus [pressure] ulcer, unstageable	ICD10:L89.8	decubulcer
+Decubitus Ulcer	L899	Decubitus ulcer and pressure area, unspecified	ICD10:L89.9	decubulcer
+Endocrine & Metabolic Complications (electrolyte abnormalities, diabetes, etc) 	E1010	Type 1 diabetes mellitus with ketoacidosis	ICD10:E10.10	endometab
+Endocrine & Metabolic Complications (electrolyte abnormalities, diabetes, etc) 	E1063	Type 1 diabetes mellitus with hypoglycaemia	ICD10:E10.63	endometab
+Endocrine & Metabolic Complications (electrolyte abnormalities, diabetes, etc) 	E1064	type 1 diabetes mellitus with poor control, so described	ICD10:E10.64	endometab
+Endocrine & Metabolic Complications (electrolyte abnormalities, diabetes, etc) 	E110	Type 2 diabetes mellitus with coma	ICD10:E11.0	endometab
+Endocrine & Metabolic Complications (electrolyte abnormalities, diabetes, etc) 	E1110	Type 2 DM with ketoacidosis	ICD10:E11.10	endometab
+Endocrine & Metabolic Complications (electrolyte abnormalities, diabetes, etc) 	E1111	Type 2 diabetes mellitus with lactic acidosis	ICD10:E11.11	endometab
+Endocrine & Metabolic Complications (electrolyte abnormalities, diabetes, etc) 	E1163	Type 2 diabetes mellitus with hypoglycaemia	ICD10:E11.63	endometab
+Endocrine & Metabolic Complications (electrolyte abnormalities, diabetes, etc) 	E1164	type 2 diabetes mellitus with poor control, so described	ICD10:E11.64	endometab
+Endocrine & Metabolic Complications (electrolyte abnormalities, diabetes, etc) 	E1363	Other specified diabetes mellitus with hypoglycaemia	ICD10:E13.63	endometab
+Endocrine & Metabolic Complications (electrolyte abnormalities, diabetes, etc) 	E1463	Unspecified diabetes mellitus with hypoglycaemia	ICD10:E14.63	endometab
+Endocrine & Metabolic Complications (electrolyte abnormalities, diabetes, etc) 	E15	Hypoglycaemic coma	ICD10:E15	endometab
+Endocrine & Metabolic Complications (electrolyte abnormalities, diabetes, etc) 	E160	Drug-induced hypoglycaemia without coma	ICD10:E16.0	endometab
+Endocrine & Metabolic Complications (electrolyte abnormalities, diabetes, etc) 	E272	Addisonian crisis	ICD10:E27.2	endometab
+Endocrine & Metabolic Complications (electrolyte abnormalities, diabetes, etc) 	E891	Postprocedural hypoinsulinaemia	ICD10:E89.1	endometab
+Endocrine & Metabolic Complications (electrolyte abnormalities, diabetes, etc) 	E892	Postprocedural hypoparathyroidism	ICD10:E89.2	endometab
+Endocrine & Metabolic Complications (electrolyte abnormalities, diabetes, etc) 	E893	Postprocedural hypopituitarism	ICD10:E89.3	endometab
+Endocrine & Metabolic Complications (electrolyte abnormalities, diabetes, etc) 	G372	Central pontine myelinolysis	ICD10:G37.2	endometab
+Endocrine & Metabolic Complications (electrolyte abnormalities, diabetes, etc) 	T503	Poisoning by electrolytic, caloric and water-balance agents	ICD10:T50.3	endometab
+Venous Thromboembolic Events	I260	Pulmonary embolism with mention of acute cor pulmonale	ICD10:I26.0	thromb
+Venous Thromboembolic Events	I269	Pulmonary embolism without mention of acute cor pulmonale	ICD10:I26.9	thromb
+Venous Thromboembolic Events	I801	Phlebitis & thrombophlebitis of femoral vein	ICD10:I80.1	thromb
+Venous Thromboembolic Events	I802	Phlebitis and thrombophlebitis of other deep vessels of lower extremities (Includes: Deep vein thrombosis NOS)	ICD10:I80.2	thromb
+Venous Thromboembolic Events	I822	Embolism and thrombosis of vena cava	ICD10:I82.2	thromb
+Venous Thromboembolic Events	O8710	Deep phlebothrombosis in the puerperium; Includes: Deep-vein thrombosis, postpartum, Pelvic thrombophlebitis, postpartum; 	ICD10:O87.10	thromb
+Cardiac Complications	I200	Unstable angina	ICD10:I20.0	cardiac
+Cardiac Complications	I201	Angina pectoris with documented spasm	ICD10:I20.1	cardiac
+Cardiac Complications	I2088	Other forms of angina pectoris	ICD10:I20.88	cardiac
+Cardiac Complications	I209	Angina pectoris unspecified	ICD10:I20.9	cardiac
+Cardiac Complications	I210	Acute transmural myocardial infarction of anterior wall	ICD10:I21.0	cardiac
+Cardiac Complications	I211	Acute transmural myocardial infarction of inferior wall	ICD10:I21.1	cardiac
+Cardiac Complications	I212	Acute transmural myocardial infarction of other sites	ICD10:I21.2	cardiac
+Cardiac Complications	I213	Acute transmural myocardial infarction of unspecified site	ICD10:I21.3	cardiac
+Cardiac Complications	I214	Acute subendocardial myocardial infarction (Includes: Non-Q-wave myocardial infarction)	ICD10:I21.4	cardiac
+Cardiac Complications	I219	Acute myocardial infarction unspecified	ICD10:I21.9	cardiac
+Cardiac Complications	I220	Subsequent myocardial infarction of anterior wall	ICD10:I22.0	cardiac
+Cardiac Complications	I221	Subsequent myocardial infarction of inferior wall	ICD10:I22.1	cardiac
+Cardiac Complications	I228	Subsequent myocardial infarction of other sites	ICD10:I22.8	cardiac
+Cardiac Complications	I229	Subsequent myocardial infarction of unspecified site	ICD10:I22.9	cardiac
+Cardiac Complications	I461	Sudden cardiac death so described	ICD10:I46.1	cardiac
+Cardiac Complications	I469	Cardiac arrest unspecified	ICD10:I46.9	cardiac
+Cardiac Complications	I472	Ventricular tachycardia	ICD10:I47.2	cardiac
+Cardiac Complications	I481	Atrial flutter	ICD10:I48.1	cardiac
+Cardiac Complications	I4900	Ventricular fibrillation	ICD10:I49.00	cardiac
+Cardiac Complications	I4901	Ventricular flutter	ICD10:I49.01	cardiac
+Cardiac Complications	I500	Congestive heart failure	ICD10:I50.0	cardiac
+Cardiac Complications	I501	Left ventricular failure	ICD10:I50.1	cardiac
+Cardiac Complications	I509	Heart failure unspecified	ICD10:I50.9	cardiac
+Cardiac Complications	J81	Pulmonary oedema	ICD10:J81	cardiac
+Cardiac Complications	O7420	Cardiac complications of anaesthesia during labour and delivery; Includes: Cardiac arrest due to anaesthesia during labour and delivery, Cardiac failure due to anaesthesia during labour and delivery; 	ICD10:O74.20	cardiac
+Cardiac Complications	S26811	Laceration and puncture of heart; Includes: Minor, moderate, major lacerations, puncture, traumatic rupture; With open wound into thoracic cavity	ICD10:S26.811	cardiac
+Cardiac Complications	T820	Mechanical complication of heart valve prosthesis	ICD10:T82.0	cardiac
+Cardiac Complications	T821	Mechanical complication of cardiac electronic device	ICD10:T82.1	cardiac
+Cardiac Complications	T822	Mechanical complication of coronary artery bypass and valve grafts	ICD10:T82.2	cardiac
+Cardiac Complications	T825	Mechanical complication of other cardiac and vascular devices and implants	ICD10:T82.5	cardiac
+Cardiac Complications	T826	Infection and inflammatory reaction due to cardiac valve prosthesis	ICD10:T82.6	cardiac
+Cardiac Complications	T827	Infection and inflammatory reaction due to other cardiac and vascular devices, implants and grafts	ICD10:T82.7	cardiac
+Cardiac Complications	T828	Other specified complications of cardiac and vascular prosthetic devices, implants and grafts	ICD10:T82.8	cardiac
+Cardiac Complications	T829	Unspecified complication of cardiac and vascular prosthetic device, implant and graft	ICD10:T82.9	cardiac
+Respiratory Complications 	J150	Pneumonia due to Klebsiella pneumonia	ICD10:J15.0	respiratory
+Respiratory Complications 	J151	Pneumonia due to Pseudomonas	ICD10:J15.1	respiratory
+Respiratory Complications 	J152	Pneumonia due to Staphylococcus	ICD10:J15.2	respiratory
+Respiratory Complications 	J155	Pneumonia due to Escherichia coli	ICD10:J15.5	respiratory
+Respiratory Complications 	J156	Pneumonia due to other aerobic Gram-negative bacteria; Includes: Pneumonia due to Serratia marcescens	ICD10:J15.6	respiratory
+Respiratory Complications 	J159	Bacterial pneumonia unspecified	ICD10:J15.9	respiratory
+Respiratory Complications 	J181	Lobar pneumonia unspecified	ICD10:J18.1	respiratory
+Respiratory Complications 	J210	Acute bronchiolitis due to respiratory syncytial virus	ICD10:J21.0	respiratory
+Respiratory Complications 	J3801	Paralysis of vocal cords and larynx, unilateral	ICD10:J38.01	respiratory
+Respiratory Complications 	J3802	Paralysis of vocal cords and larynx, bilateral	ICD10:J38.02	respiratory
+Respiratory Complications 	J3809	Paralysis of vocal cords and larynx, unspecified whether unilateral or bilateral	ICD10:J38.09	respiratory
+Respiratory Complications 	J690	Pneumonitis due to food and vomit	ICD10:J69.0	respiratory
+Respiratory Complications 	J698	Pneumonitis due to other solids and liquids	ICD10:J69.8	respiratory
+Respiratory Complications 	J853	Abscess of mediastinum	ICD10:J85.3	respiratory
+Respiratory Complications 	J860	Pyothorax with fistula	ICD10:J86.0	respiratory
+Respiratory Complications 	J869	Pyothorax without fistula	ICD10:J86.9	respiratory
+Respiratory Complications 	J942	Haemothorax	ICD10:J94.2	respiratory
+Respiratory Complications 	J9500	Haemorrhage from tracheostomy stoma	ICD10:J95.00	respiratory
+Respiratory Complications 	J9501	Infection of tracheostomy stoma	ICD10:J95.01	respiratory
+Respiratory Complications 	J9502	Malfunction of tracheostomy stoma	ICD10:J95.02	respiratory
+Respiratory Complications 	J9503	Tracheo-esophageal fistula following tracheostomy	ICD10:J95.03	respiratory
+Respiratory Complications 	J9508	Other tracheostomy complication	ICD10:J95.08	respiratory
+Respiratory Complications 	J951	Acute pulmonary insufficiency following thoracic surgery	ICD10:J95.1	respiratory
+Respiratory Complications 	J952	Acute pulmonary insufficiency following nonthoracic surgery	ICD10:J95.2	respiratory
+Respiratory Complications 	J955	Postprocedural subglottic stenosis	ICD10:J95.5	respiratory
+Respiratory Complications 	J9580	Postprocedural pneumothorax	ICD10:J95.80	respiratory
+Respiratory Complications 	J9581	Transfusion related acute lung injury (TRALI)	ICD10:J95.81	respiratory
+Respiratory Complications 	J9588	Other postprocedural respiratory disorders	ICD10:J95.88	respiratory
+Respiratory Complications 	J959	Postprocedural respiratory disorder, unspecified	ICD10:J95.9	respiratory
+Respiratory Complications 	J960	Acute respiratory failure	ICD10:J96.0	respiratory
+Respiratory Complications 	S202	Contusion of thorax	ICD10:S20.2	respiratory
+Respiratory Complications 	S22200	Fracture of sternum; closed	ICD10:S22.200	respiratory
+Respiratory Complications 	S22300	Fracture of rib; closed	ICD10:S22.300	respiratory
+Respiratory Complications 	S22400	Multiple fractures of 2 - 4 ribs; closed	ICD10:S22.400	respiratory
+Respiratory Complications 	S22410	Multiple fractures of 5 or more ribs; closed	ICD10:S22.410	respiratory
+Respiratory Complications 	S22490	Multiple fractures of unspecified number of ribs; closed	ICD10:S22.490	respiratory
+Respiratory Complications 	S27000	Traumatic pneumothorax, without open wound into thoracic cavity	ICD10:S27.000	respiratory
+Respiratory Complications 	S27001	Traumatic pneumothorax, with open wound into thoracic cavity	ICD10:S27.001	respiratory
+Respiratory Complications 	S27100	Traumatic haemothorax, without open wound into thoracic cavity	ICD10:S27.100	respiratory
+Respiratory Complications 	S27200	Traumatic haemopneumothorax, without open wound into thoracic cavity	ICD10:S27.200	respiratory
+Respiratory Complications 	S27300	Contusion and haematoma of lung; Without open wound into thoracic cavity	ICD10:S27.300	respiratory
+Respiratory Complications 	S27310	Laceration and puncture of lung; Includes: Minor, moderate, major lacerations, puncture, traumatic rupture; Without open wound into thoracic cavity	ICD10:S27.310	respiratory
+Respiratory Complications 	T173	Foreign body in larynx	ICD10:T17.3	respiratory
+Respiratory Complications 	T174	Foreign body in trachea	ICD10:T17.4	respiratory
+Respiratory Complications 	T175	Foreign body in bronchus	ICD10:T17.5	respiratory
+Respiratory Complications 	T178	Foreign body in other and multiple parts of respiratory tract	ICD10:T17.8	respiratory
+Respiratory Complications 	T179	Foreign body in respiratory tract, part unspecified	ICD10:T17.9	respiratory
+Respiratory Complications 	T71	Asphyxiation	ICD10:T71	respiratory
+Respiratory Complications 	T797	Traumatic subcutaneous emphysema	ICD10:T79.7	respiratory
+Respiratory Complications 	T8181	Emphysema (subcutaneous) resulting from a procedure	ICD10:T81.81	respiratory
+Hemorrhagic Events	D62	Acute posthaemorrhagic anaemia	ICD10:D62	hemorrhage
+Hemorrhagic Events	D683	Haemorrhagic disorder due to circulating anticoagulants; Includes: longterm use of anticoagulants, warfarin or like drugs, Hyperheparinaemia increase in anti-IXa, VIIIa, Xa, Xia, antithrombin, non-traumatic hematoma due to circulating anticoagulants	ICD10:D68.3	hemorrhage
+Hemorrhagic Events	J942	Haemothorax	ICD10:J94.2	hemorrhage
+Hemorrhagic Events	J9500	Haemorrhage from tracheostomy stoma	ICD10:J95.00	hemorrhage
+Hemorrhagic Events	O7170	Obstetric haematoma of pelvis; Includes: Obstetric haematoma of perineum	ICD10:O71.70	hemorrhage
+Hemorrhagic Events	O7180	Other specified obstetric trauma 	ICD10:O71.80	hemorrhage
+Hemorrhagic Events	O7200	Third-stage haemorrhage; Includes: Haemorrhage associated with retained, trapped or adherent placenta, Retained placenta NOS; Code Also any morbidly adherent placenta (O43.2.-);	ICD10:O72.00	hemorrhage
+Hemorrhagic Events	O7210	Other immediate postpartum Haemorrhage; Includes: Haemorrhage following delivery of placenta, Postpartum haemorrhage (atonic) NOS;	ICD10:O72.10	hemorrhage
+Hemorrhagic Events	O7220	Delayed & secondary postpartum haemorrhage 	ICD10:O72.20	hemorrhage
+Hemorrhagic Events	O9020	Haematoma of obstetric wound; Includes: Haemorrhage of obstetric wound; 	ICD10:O90.20	hemorrhage
+Hemorrhagic Events	P120	Cephalhaematoma due to birth injury	ICD10:P12.0	hemorrhage
+Hemorrhagic Events	S064	Epidural haemorrhage	ICD10:S06.4	hemorrhage
+Hemorrhagic Events	S065	Traumatic subdural haemorrhage	ICD10:S06.5	hemorrhage
+Hemorrhagic Events	S066	Traumatic subarachnoid haemorrhage	ICD10:S06.6	hemorrhage
+Hemorrhagic Events	S27100	Traumatic haemothorax, without open wound into thoracic cavity	ICD10:S27.100	hemorrhage
+Hemorrhagic Events	S27200	Traumatic haemopneumothorax, without open wound into thoracic cavity	ICD10:S27.200	hemorrhage
+Hemorrhagic Events	S27300	Contusion and haematoma of lung; Without open wound into thoracic cavity	ICD10:S27.300	hemorrhage
+Hemorrhagic Events	S36090	Haematoma NOS, laceration NOS, injury to spleen NOS; Without open wound into cavity	ICD10:S36.090	hemorrhage
+Hemorrhagic Events	S36091	Haematoma NOS, laceration NOS, injury to spleen NOS; With open wound into cavity	ICD10:S36.091	hemorrhage
+Hemorrhagic Events	S36150	Liver haematoma NOS, laceration NOS, injury to liver NOS; Without open wound into cavity	ICD10:S36.150	hemorrhage
+Hemorrhagic Events	S36151	Liver haematoma NOS, laceration NOS, injury to liver NOS; With open wound into cavity	ICD10:S36.151	hemorrhage
+Hemorrhagic Events	S36800	Haematoma of other intra-abdominal organs; Without open wound into cavity	ICD10:S36.800	hemorrhage
+Hemorrhagic Events	S36810	Laceration of other intra-abdominal organs; Without open wound into cavity	ICD10:S36.810	hemorrhage
+Hemorrhagic Events	S37000	Haematoma of kidney; Without open wound into cavity	ICD10:S37.000	hemorrhage
+Hemorrhagic Events	S37300	Haematoma of urethra; Without open wound into cavity	ICD10:S37.300	hemorrhage
+Hemorrhagic Events	T792	Traumatic secondary and recurrent haemorrhage	ICD10:T79.2	hemorrhage
+Hemorrhagic Events	T810	Haemorrhage and haematoma complicating a procedure, not elsewhere classified	ICD10:T81.0	hemorrhage
+Drug Related Adverse Events	D683	Haemorrhagic disorder due to circulating anticoagulants; Includes: longterm use of anticoagulants, warfarin or like drugs, Hyperheparinaemia increase in anti-IXa, VIIIa, Xa, Xia, antithrombin, non-traumatic hematoma due to circulating anticoagulants	ICD10:D68.3	drugadverse
+Drug Related Adverse Events	E160	Drug-induced hypoglycaemia without coma	ICD10:E16.0	drugadverse
+Drug Related Adverse Events	E883	Tumour lysis syndrome	ICD10:E88.3	drugadverse
+Drug Related Adverse Events	H910	Ototoxic hearing loss	ICD10:H91.0	drugadverse
+Drug Related Adverse Events	I952	Hypotension due to drugs	ICD10:I95.2	drugadverse
+Drug Related Adverse Events	O7450	Toxic reaction to local anaesthesia during labour and delivery; 	ICD10:O74.50	drugadverse
+Drug Related Adverse Events	T360	Poisoning by penicillins	ICD10:T36.0	drugadverse
+Drug Related Adverse Events	T361	Poisoning by cefalosporins and other beta-lactam antibiotics	ICD10:T36.1	drugadverse
+Drug Related Adverse Events	T365	Poisoning by aminoglycosides	ICD10:T36.5	drugadverse
+Drug Related Adverse Events	T368	Poisoning by other systemic antibiotics	ICD10:T36.8	drugadverse
+Drug Related Adverse Events	T369	Poisoning by systemic antibiotic, unspecified	ICD10:T36.9	drugadverse
+Drug Related Adverse Events	T378	Poisoning by other specified systemic anti-infectives and antiparasitics	ICD10:T37.8	drugadverse
+Drug Related Adverse Events	T380	Poisoning by glucocorticoids and synthetic analogues	ICD10:T38.0	drugadverse
+Drug Related Adverse Events	T383	Poisoning by insulin and oral hypoglycaemic [antidiabetic] drugs	ICD10:T38.3	drugadverse
+Drug Related Adverse Events	T390	Poisoning by salicylates	ICD10:T39.0	drugadverse
+Drug Related Adverse Events	T391	Poisoning by 4-Aminophenol derivatives	ICD10:T39.1	drugadverse
+Drug Related Adverse Events	T393	Poisoning by other nonsteroidal anti-inflammatory drugs [NSAID]	ICD10:T39.3	drugadverse
+Drug Related Adverse Events	T398	Poisoning by other nonopioid analgesics and antipyretics, not elsewhere classified	ICD10:T39.8	drugadverse
+Drug Related Adverse Events	T402	Poisoning by other opioids	ICD10:T40.2	drugadverse
+Drug Related Adverse Events	T403	Poisoning by methadone	ICD10:T40.3	drugadverse
+Drug Related Adverse Events	T404	Poisoning by other synthetic narcotics	ICD10:T40.4	drugadverse
+Drug Related Adverse Events	T406	Poisoning by other and unspecified narcotics	ICD10:T40.6	drugadverse
+Drug Related Adverse Events	T412	Poisoning by other and unspecified general anaesthetics	ICD10:T41.2	drugadverse
+Drug Related Adverse Events	T413	Poisoning by local anaesthetics	ICD10:T41.3	drugadverse
+Drug Related Adverse Events	T420	Poisoning by hydantoin derivatives	ICD10:T42.0	drugadverse
+Drug Related Adverse Events	T421	Poisoning by iminostilbenes	ICD10:T42.1	drugadverse
+Drug Related Adverse Events	T424	Poisoning by benzodiazepines	ICD10:T42.4	drugadverse
+Drug Related Adverse Events	T426	Poisoning by other antiepileptic and sedative-hypnotic drugs	ICD10:T42.6	drugadverse
+Drug Related Adverse Events	T427	Poisoning by antiepileptic and sedative-hypnotic drugs, unspecified	ICD10:T42.7	drugadverse
+Drug Related Adverse Events	T430	Poisoning by tricyclic and tetracyclic antidepressants	ICD10:T43.0	drugadverse
+Drug Related Adverse Events	T432	Poisoning by other and unspecified antidepressants	ICD10:T43.2	drugadverse
+Drug Related Adverse Events	T434	Poisoning by butyrophenone and thioxanthene neuroleptics	ICD10:T43.4	drugadverse
+Drug Related Adverse Events	T435	Poisoning by other and unspecified antipsychotics and neuroleptics	ICD10:T43.5	drugadverse
+Drug Related Adverse Events	T438	Poisoning by other psychotropic drugs, not elsewhere classified	ICD10:T43.8	drugadverse
+Drug Related Adverse Events	T445	Poisoning by predominantly beta-adrenoreceptor agonists, not elsewhere classified	ICD10:T44.5	drugadverse
+Drug Related Adverse Events	T447	Poisoning by beta-Adrenoreceptor antagonists, not elsewhere classified	ICD10:T44.7	drugadverse
+Drug Related Adverse Events	T450	Poisoning by antiallergic and antiemetic drugs	ICD10:T45.0	drugadverse
+Drug Related Adverse Events	T451	Poisoning by antineoplastic and immunosuppressive drugs	ICD10:T45.1	drugadverse
+Drug Related Adverse Events	T455	Poisoning by anticoagulants	ICD10:T45.5	drugadverse
+Drug Related Adverse Events	T457	Poisoning by anticoagulant antagonists, vitamin K and other coagulants	ICD10:T45.7	drugadverse
+Drug Related Adverse Events	T458	Poisoning by other primarily systemic and haematological agents	ICD10:T45.8	drugadverse
+Drug Related Adverse Events	T460	Poisoning by cardiac-stimulant glycosides and drugs of similar action	ICD10:T46.0	drugadverse
+Drug Related Adverse Events	T461	Poisoning by calcium-channel blockers	ICD10:T46.1	drugadverse
+Drug Related Adverse Events	T462	Poisoning by other antidysrhythmic drugs, not elsewhere classified	ICD10:T46.2	drugadverse
+Drug Related Adverse Events	T464	Poisoning by angiotensin-converting-enzyme inhibitors	ICD10:T46.4	drugadverse
+Drug Related Adverse Events	T465	Poisoning by other antihypertensive drugs, not elsewhere classified	ICD10:T46.5	drugadverse
+Drug Related Adverse Events	T474	Poisoning by other laxatives	ICD10:T47.4	drugadverse
+Drug Related Adverse Events	T480	Poisoning by oxytocic drugs	ICD10:T48.0	drugadverse
+Drug Related Adverse Events	T486	Poisoning by antiasthmatics, not elsewhere classified	ICD10:T48.6	drugadverse
+Drug Related Adverse Events	T490	Poisoning by local antifungal, anti-infective and anti-inflammatory drugs, not elsewhere classified	ICD10:T49.0	drugadverse
+Drug Related Adverse Events	T501	Poisoning by loop [high-ceiling] diuretics	ICD10:T50.1	drugadverse
+Drug Related Adverse Events	T502	Poisoning by carbonic-anhydrase inhibitors, benzothiadiazides and other diuretics	ICD10:T50.2	drugadverse
+Drug Related Adverse Events	T509	Poisoning by other and unspecified drugs, medicaments and biological substances	ICD10:T50.9	drugadverse
+Drug Related Adverse Events	T808	Other complications following infusion, transfusion and therapeutic injection	ICD10:T80.8	drugadverse
+Drug Related Adverse Events	T809	Unspecified complication following infusion, transfusion and therapeutic injection	ICD10:T80.9	drugadverse
+Drug Related Adverse Events	T8180	Complication of inhalation therapy	ICD10:T81.80	drugadverse
+Drug Related Adverse Events	T882	Shock due to anaesthesia	ICD10:T88.2	drugadverse
+Drug Related Adverse Events	T883	Malignant hyperthermia due to anaesthesia	ICD10:T88.3	drugadverse
+Drug Related Adverse Events	T886	Anaphylactic shock due to adverse effect of correct drug or medicament properly administered	ICD10:T88.6	drugadverse
+Adverse events related to fluid management	E860	Dehydration	ICD10:E86.0	fluidmgmt
+Adverse events related to fluid management	E868	Other volume depletion	ICD10:E86.8	fluidmgmt
+Adverse events related to fluid management	E877	Fluid overload	ICD10:E87.7	fluidmgmt
+Adverse events related to fluid management	G372	Central pontine myelinolysis	ICD10:G37.2	fluidmgmt
+Adverse events related to fluid management	T503	Poisoning by electrolytic, caloric and water-balance agents	ICD10:T50.3	fluidmgmt
+Adverse events related to fluid management	T808	Other complications following infusion, transfusion and therapeutic injection	ICD10:T80.8	fluidmgmt
+Adverse events related to fluid management	T809	Unspecified complication following infusion, transfusion and therapeutic injection	ICD10:T80.9	fluidmgmt
+Obstetrical Complications affecting mother	O086	Damage to pelvic organs and tissues following abortion and ectopic molar pregnancy	ICD10:O08.6	mother
+Obstetrical Complications affecting mother	O2950	Other complications of spinal and epidural anaesthesia during pregnancy; 	ICD10:O29.50	mother
+Obstetrical Complications affecting mother	O7020	Third degree perineal laceration during delivery; Includes: Perineal laceration, rupture or tear as in O70.1, also involving anal sphincter during delivery, perineal laceration, rupture or tear as in O70.1, also involving rectovaginal septum during delivery, Perineal laceration, rupture or tear as in O70.1, also involving sphincter NOS during delivery; Excludes:that involving anal or rectal mucosa (O70.3); 	ICD10:O70.20	mother
+Obstetrical Complications affecting mother	O7030	Fourth degree perineal laceration during delivery; Includes: Perineal laceration, rupture or tear as in O70.2, also involving anal mucosa during delivery, Perineal laceration, rupture or tear as in O70.2, also involving rectal mucosa during delivery; 	ICD10:O70.30	mother
+Obstetrical Complications affecting mother	O7090	Perineal laceration during delivery, unspecified; 	ICD10:O70.90	mother
+Obstetrical Complications affecting mother	O7110	Dehiscence (without extension) of old uterine scar during labour 	ICD10:O71.10	mother
+Obstetrical Complications affecting mother	O7111	Dehiscence of uterus with extension during labour 	ICD10:O71.11	mother
+Obstetrical Complications affecting mother	O7118	Other rupture of uterus during labour 	ICD10:O71.18	mother
+Obstetrical Complications affecting mother	O7130	Obstetric laceration of cervix; Includes: Annular detachment of cervix; 	ICD10:O71.30	mother
+Obstetrical Complications affecting mother	O7140	Obstetric high vaginal laceration alone; Includes: Laceration of middle or upper third of vaginal wall without mention of perineal laceration; Excludes: with perineal laceration (O70.-); 	ICD10:O71.40	mother
+Obstetrical Complications affecting mother	O7150	Other obstetric injury to pelvic organs; Includes: Obstetric injury to bladder, Obstetric injury to urethra; 	ICD10:O71.50	mother
+Obstetrical Complications affecting mother	O7160	Obstetric damage to pelvic joints & ligaments 	ICD10:O71.60	mother
+Obstetrical Complications affecting mother	O7170	Obstetric haematoma of pelvis; Includes: Obstetric haematoma of perineum, Obstetric haematoma of vagina, Obstetric haematoma of vulva;	ICD10:O71.70	mother
+Obstetrical Complications affecting mother	O7180	Other specified obstetric trauma 	ICD10:O71.80	mother
+Obstetrical Complications affecting mother	O7200	Third-stage haemorrhage; Includes: Haemorrhage associated with retained, trapped or adherent placenta, Retained placenta NOS; Code Also any morbidly adherent placenta (O43.2.-);	ICD10:O72.00	mother
+Obstetrical Complications affecting mother	O7210	Other immediate postpartum Haemorrhage; Includes: Haemorrhage following delivery of placenta, Postpartum haemorrhage (atonic) NOS;	ICD10:O72.10	mother
+Obstetrical Complications affecting mother	O7220	Delayed & secondary postpartum haemorrhage 	ICD10:O72.20	mother
+Obstetrical Complications affecting mother	O7420	Cardiac complications of anaesthesia during labour and delivery; Includes: Cardiac arrest due to anaesthesia during labour and delivery, Cardiac failure due to anaesthesia during labour and delivery; 	ICD10:O74.20	mother
+Obstetrical Complications affecting mother	O7430	Central nervous system complications of anaesthesia during labour and delivery; Includes: Cerebral anoxia due to anaesthesia during labour and delivery; 	ICD10:O74.30	mother
+Obstetrical Complications affecting mother	O7450	Toxic reaction to local anaesthesia during labour and delivery; 	ICD10:O74.50	mother
+Obstetrical Complications affecting mother	O7460	Other complications of spinal and epidural anaesthesia during labour and delivery; 	ICD10:O74.60	mother
+Obstetrical Complications affecting mother	O7480	Other complications of anaesthesia during labour and delivery; 	ICD10:O74.80	mother
+Obstetrical Complications affecting mother	O7510	Shock during or following labour and delivery; Includes: Obstetric shock; 	ICD10:O75.10	mother
+Obstetrical Complications affecting mother	O7530	Other infection during labour	ICD10:O75.30	mother
+Obstetrical Complications affecting mother	O7540	Other complications of obstetric surgery and procedures; Includes: Cardiac arrest following cesarean or other obstetric surgery or procedures, including delivery NOS, Cardiac failure following cesarean or other obstetric surgery or procedures, including delivery NOS, Cerebral anoxia following cesarean or other obstetric surgery or procedures, including delivery NOS, Conditions in N99.0, N99.8, N99.9; Excludes: complications of anaesthesia during labour and delivery (O74.-); 	ICD10:O75.40	mother
+Obstetrical Complications affecting mother	O7560	Delayed delivery after spontaneous or unspecified rupture of membranes 	ICD10:O75.60	mother
+Obstetrical Complications affecting mother	O8500	Puerperal sepsis	ICD10:O85.00	mother
+Obstetrical Complications affecting mother	O8600	Infection of obstetric surgical wound; Includes: Infected caesarean section wound following delivery, Infected perineal repair following delivery; 	ICD10:O86.00	mother
+Obstetrical Complications affecting mother	O8610	Other infection of genital tract following delivery; Includes: Cervicitis following delivery, Vaginitis following delivery; 	ICD10:O86.10	mother
+Obstetrical Complications affecting mother	O8620	Urinary tract infection following delivery; Includes: Conditions in N15.-, N30.-, N34.-, N39.0 following delivery, Conditions in N39.0 following delivery, Conditions in N10-N12, N15.-, N30.-, N34.-, N39.0 following delivery, Conditions in N34.-, N39.0 following delivery, Conditions in, N30.-, N34.-, N39.0 following delivery; 	ICD10:O86.20	mother
+Obstetrical Complications affecting mother	O8630	Other genitourinary tract infections following delivery; Includes: Puerperal genitourinary tract infection NOS; 	ICD10:O86.30	mother
+Obstetrical Complications affecting mother	O8680	Other specified puerperal infections; 	ICD10:O86.80	mother
+Obstetrical Complications affecting mother	O8710	Deep phlebothrombosis in the puerperium; Includes: Deep-vein thrombosis, postpartum, Pelvic thrombophlebitis, postpartum; 	ICD10:O87.10	mother
+Obstetrical Complications affecting mother	O8940	Spinal and epidural anaesthesia-induced headache during the puerperium; 	ICD10:O89.40	mother
+Obstetrical Complications affecting mother	O8950	Other complications of spinal and epidural anaesthesia during the puerperium; 	ICD10:O89.50	mother
+Obstetrical Complications affecting mother	O8980	Other complications of anaesthesia during the puerperium; 	ICD10:O89.80	mother
+Obstetrical Complications affecting mother	O9000	Disruption of caesarean section wound; 	ICD10:O90.00	mother
+Obstetrical Complications affecting mother	O9010	Disruption of perineal obstetric wound; Includes: Disruption of wound of episiotomy, Disruption of wound of perineal laceration, Secondary perineal tear; 	ICD10:O90.10	mother
+Obstetrical Complications affecting mother	O9020	Haematoma of obstetric wound; Includes: Haemorrhage of obstetric wound; 	ICD10:O90.20	mother
+Obstetrical Complications affecting fetus	P033	Fetus & newborn affected by vacuum extractor [venthouse]	ICD10:P03.3	fetus
+Obstetrical Complications affecting fetus	P120	Cephalhaematoma due to birth injury	ICD10:P12.0	fetus
+Obstetrical Complications affecting fetus	P123	Bruising of scalp due to birth injury	ICD10:P12.3	fetus
+Obstetrical Complications affecting fetus	P128	Other birth injuries to scalp	ICD10:P12.8	fetus
+Obstetrical Complications affecting fetus	P134	Fracture of clavicle due to birth injury	ICD10:P13.4	fetus
+Obstetrical Complications affecting fetus	P143	Other brachial plexus birth injuries	ICD10:P14.3	fetus
+Obstetrical Complications affecting fetus	P154	Birth injury to face	ICD10:P15.4	fetus
+Obstetrical Complications affecting fetus	P158	Other specified birth injuries	ICD10:P15.8	fetus
+Obstetrical Complications affecting fetus	P360	Sepsis of newborn due to streptococcus, group B	ICD10:P36.0	fetus
+Obstetrical Complications affecting fetus	P361	Sepsis of newborn due to other and unspecified streptococci	ICD10:P36.1	fetus
+Obstetrical Complications affecting fetus	P362	Sepsis of newborn due to Staphylococcus aureus	ICD10:P36.2	fetus
+Obstetrical Complications affecting fetus	P363	Sepsis of newborn due to other and unspecified staphylococci	ICD10:P36.3	fetus
+Obstetrical Complications affecting fetus	P364	Sepsis of newborn due to Escherichia coli	ICD10:P36.4	fetus
+Obstetrical Complications affecting fetus	P368	Other bacterial sepsis of newborn	ICD10:P36.8	fetus
+Obstetrical Complications affecting fetus	P369	Bacterial sepsis of newborn unspecified	ICD10:P36.9	fetus
+Obstetrical Complications affecting fetus	P38	Omphalitis of newborn with or without mild haemorrhage	ICD10:P38	fetus
+Complications Directly Related to Surgery	H5980	Lens fragments in eye following cataract surgery	ICD10:H59.80	surgcomp
+Complications Directly Related to Surgery	M966	Fracture of bone following insertion of orthopaedic implant, joint prosthesis, or bone plate	ICD10:M96.6	surgcomp
+Complications Directly Related to Surgery	O7540	Other complications of obstetric surgery and procedures; Includes: Cardiac arrest following cesarean or other obstetric surgery or procedures, including delivery NOS, Cardiac failure following cesarean or other obstetric surgery or procedures, including delivery NOS, Cerebral anoxia following cesarean or other obstetric surgery or procedures, including delivery NOS, Conditions in N99.0, N99.8, N99.9; Excludes: complications of anaesthesia during labour and delivery (O74.-); 	ICD10:O75.40	surgcomp
+Complications Directly Related to Surgery	O8600	Infection of obstetric surgical wound; Includes: Infected caesarean section wound following delivery, Infected perineal repair following delivery; 	ICD10:O86.00	surgcomp
+Complications Directly Related to Surgery	O9000	Disruption of caesarean section wound; 	ICD10:O90.00	surgcomp
+Complications Directly Related to Surgery	S26811	Laceration and puncture of heart; Includes: Minor, moderate, major lacerations, puncture, traumatic rupture; With open wound into thoracic cavity	ICD10:S26.811	surgcomp
+Complications Directly Related to Surgery	S27001	Traumatic pneumothorax, with open wound into thoracic cavity	ICD10:S27.001	surgcomp
+Complications Directly Related to Surgery	S36091	Haematoma NOS, laceration NOS, injury to spleen NOS; With open wound into cavity	ICD10:S36.091	surgcomp
+Complications Directly Related to Surgery	S36151	Liver haematoma NOS, laceration NOS, injury to liver NOS; With open wound into cavity	ICD10:S36.151	surgcomp
+Complications Directly Related to Surgery	S36411	Laceration of duodenum (without bile duct injury); With open wound into cavity	ICD10:S36.411	surgcomp
+Complications Directly Related to Surgery	S36461	Laceration of small intestine, excluding duodenum; With open wound into cavity	ICD10:S36.461	surgcomp
+Complications Directly Related to Surgery	S37111	Laceration of ureter; With open wound into cavity	ICD10:S37.111	surgcomp
+Complications Directly Related to Surgery	S37211	Laceration of bladder; With open wound into cavity	ICD10:S37.211	surgcomp
+Complications Directly Related to Surgery	S37311	Laceration of urethra; With open wound into cavity	ICD10:S37.311	surgcomp
+Complications Directly Related to Surgery	T810	Haemorrhage and haematoma complicating a procedure, not elsewhere classified	ICD10:T81.0	surgcomp
+Complications Directly Related to Surgery	T811	Shock during or resulting from a procedure, not elsewhere classified	ICD10:T81.1	surgcomp
+Complications Directly Related to Surgery	T812	Accidental puncture and laceration during a procedure, not elsewhere classified	ICD10:T81.2	surgcomp
+Complications Directly Related to Surgery	T813	Disruption of operation wound, not elsewhere classified	ICD10:T81.3	surgcomp
+Complications Directly Related to Surgery	T8152	Perforation due to foreign body accidentally left in body cavity or operation wound following a procedure	ICD10:T81.52	surgcomp
+Complications Directly Related to Surgery	T8158	Other specified complication due to foreign body left in body cavity or operation wound following a procedure	ICD10:T81.58	surgcomp
+Complications Directly Related to Surgery	T8159	Unspecified complication due to foreign body accidentally left in body cavity or operation wound following a procedure	ICD10:T81.59	surgcomp
+Complications Directly Related to Surgery	T816	Acute reaction to foreign substance accidentally left during a procedure	ICD10:T81.6	surgcomp
+Complications Directly Related to Surgery	T8181	Emphysema (subcutaneous) resulting from a procedure	ICD10:T81.81	surgcomp
+Complications Directly Related to Surgery	T8188	Other complications of procedures, not elsewhere classified	ICD10:T81.88	surgcomp
+Complications Directly Related to Surgery	T819	Unspecified complication of procedure	ICD10:T81.9	surgcomp
+Traumatic injuries (non-procedural) arising in hospital 	S0100	Open wound of scalp uncomplicated	ICD10:S01.00	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S0101	Open wound of scalp complicated	ICD10:S01.01	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S0110	Open wound of eyelid and periocular area, uncomplicated	ICD10:S01.10	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S0120	Open wound of nose, uncomplicated	ICD10:S01.20	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S0130	Open wound of ear; uncomplicated	ICD10:S01.30	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S0140	Open wound of cheek and temporomandibular area, uncomplicated	ICD10:S01.40	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S0150	Open wound of lip and oral cavity, uncomplicated	ICD10:S01.50	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S0170	Multiple open wounds head; uncomplicated	ICD10:S01.70	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S0180	Open wounds of other parts of head, uncomplicated	ICD10:S01.80	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S0190	Open wound of head, part unspecified, uncomplicated	ICD10:S01.90	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S02000	Fracture of vault of skull; closed	ICD10:S02.000	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S02100	Fracture of base of skull; closed	ICD10:S02.100	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S02200	Fracture of nasal bones; closed	ICD10:S02.200	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S02300	Fracture of orbital floor; closed	ICD10:S02.300	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S02480	Other fracture of malar and maxillary bones; closed	ICD10:S02.480	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S02490	Unspecified fracture of malar and maxillary bones; closed	ICD10:S02.490	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S025	Fracture of tooth	ICD10:S02.5	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S02890	Fractures of other unspecified skull and facial bones; closed	ICD10:S02.890	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S030	Dislocation of jaw	ICD10:S03.0	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S050	Injury of conjunctiva and corneal abrasion without mention of foreign body	ICD10:S05.0	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S051	Contusion of eyeball and orbital tissues	ICD10:S05.1	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S058	Other injuries of eye and orbit	ICD10:S05.8	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S059	Injury of eye and orbit unspecified	ICD10:S05.9	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S060	Concussion	ICD10:S06.0	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S061	Traumatic cerebral oedema	ICD10:S06.1	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S0625	Diffuse brain injury without open intracranial wound	ICD10:S06.25	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S0635	Focal brain injury without open intracranial wound	ICD10:S06.35	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S064	Epidural haemorrhage	ICD10:S06.4	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S065	Traumatic subdural haemorrhage	ICD10:S06.5	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S066	Traumatic subarachnoid haemorrhage	ICD10:S06.6	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S0685	Other intracranial injuries without open intracranial wound	ICD10:S06.85	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S069	Intracranial injury, unspecified	ICD10:S06.9	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S090	Injury of blood vessels of head NEC	ICD10:S09.0	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S098	Other specified injuries of head	ICD10:S09.8	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S099	Unspecified injury of head	ICD10:S09.9	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S101	Other & unspecified superficial injuries of throat	ICD10:S10.1	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S109	Superficial injury of neck, part unspecified	ICD10:S10.9	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S1348	Other sprain & strain of cervical spine	ICD10:S13.48	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S1438	Other and unspecified injury of brachial plexus	ICD10:S14.38	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S202	Contusion of thorax	ICD10:S20.2	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S204	Other superficial injuries of back wall of thorax	ICD10:S20.4	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S208	Superficial injury of other and unspecified parts of thorax	ICD10:S20.8	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S22200	Fracture of sternum; closed	ICD10:S22.200	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S22300	Fracture of rib; closed	ICD10:S22.300	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S22400	Multiple fractures of 2 - 4 ribs; closed	ICD10:S22.400	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S22410	Multiple fractures of 5 or more ribs; closed	ICD10:S22.410	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S22490	Multiple fractures of unspecified number of ribs; closed	ICD10:S22.490	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S27000	Traumatic pneumothorax, without open wound into thoracic cavity	ICD10:S27.000	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S27100	Traumatic haemothorax, without open wound into thoracic cavity	ICD10:S27.100	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S27200	Traumatic haemopneumothorax, without open wound into thoracic cavity	ICD10:S27.200	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S27300	Contusion and haematoma of lung; Without open wound into thoracic cavity	ICD10:S27.300	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S27310	Laceration and puncture of lung; Includes: Minor, moderate, major lacerations, puncture, traumatic rupture; Without open wound into thoracic cavity	ICD10:S27.310	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S27810	Laceration of oesophagus; Includes: Minor, moderate, major lacerations, puncture, traumatic rupture; Without open wound into thoracic cavity	ICD10:S27.810	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S27860	Other and unspecified injury of oesophagus; Without open wound into thoracic cavity	ICD10:S27.860	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S300	Contusion of lower back and pelvis	ICD10:S30.0	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S301	Contusion of abdominal wall	ICD10:S30.1	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S3080	Other superficial injuries of lower back & pelvis	ICD10:S30.80	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S3081	Other superficial injuries of abdominal wall	ICD10:S30.81	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S3088	Other superficial injuries of abdomen, low back & pelvis, part unspecified	ICD10:S30.88	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S309	Superficial injury of abdomen, low back and pelvis, part unspecified	ICD10:S30.9	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S31200	Open wound of penis; uncomplicated	ICD10:S31.200	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S31400	Open wound of vagina and vulva, uncomplicated	ICD10:S31.400	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S32100	Fracture of sacrum; closed	ICD10:S32.100	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S32400	Fracture of acetabulum; closed	ICD10:S32.400	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S32500	Fracture of pubis; closed	ICD10:S32.500	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S32700	Multiple fractures of lumbar spine and pelvis, closed	ICD10:S32.700	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S32800	Fracture of other and unspecified parts of lumbar spine and pelvis, closed	ICD10:S32.800	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S335	Sprain and strain of lumbar spine	ICD10:S33.5	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S351	Injury of inferior vena cava	ICD10:S35.1	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S352	Injury of coeliac or mesenteric artery	ICD10:S35.2	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S355	Injury of iliac blood vessels	ICD10:S35.5	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S36090	Haematoma NOS, laceration NOS, injury to spleen NOS; Without open wound into cavity	ICD10:S36.090	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S36150	Liver haematoma NOS, laceration NOS, injury to liver NOS; Without open wound into cavity	ICD10:S36.150	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S36460	Laceration of small intestine, excluding duodenum; Without open wound into cavity	ICD10:S36.460	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S36610	Laceration of rectum; Without open wound into cavity	ICD10:S36.610	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S36810	Laceration of other intra-abdominal organs; Without open wound into cavity	ICD10:S36.810	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S37000	Haematoma of kidney; Without open wound into cavity	ICD10:S37.000	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S37090	Injury of kidney NOS; Without open wound into cavity	ICD10:S37.090	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S37110	Laceration of ureter; Without open wound into cavity	ICD10:S37.110	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S37190	Injury of NOS ureter; Without open wound into cavity	ICD10:S37.190	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S37210	Laceration of bladder; Without open wound into cavity	ICD10:S37.210	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S37290	Injury NOS of bladder; Without open wound into cavity	ICD10:S37.290	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S37300	Haematoma of urethra; Without open wound into cavity	ICD10:S37.300	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S37310	Laceration of urethra; Without open wound into cavity	ICD10:S37.310	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S37390	Injury NOS of urethra; Without open wound into cavity	ICD10:S37.390	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S37610	Laceration of uterus; Without open wound into cavity	ICD10:S37.610	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S3908	Other and unspecified injury of muscle and tendon of abdomen, lower back and pelvis	ICD10:S39.08	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S398	Other specified injuries of abdomen, lower back and pelvis	ICD10:S39.8	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S399	Unspecified injury of abdomen, lower back and pelvis	ICD10:S39.9	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S400	Contusion of shoulder and upper arm	ICD10:S40.0	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S408	Other superfic injuries of shoulder and upper arm	ICD10:S40.8	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S409	Superficial injury of shoulder & upper arm, unspecified	ICD10:S40.9	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S4110	Open wound of upper arm; uncomplicated	ICD10:S41.10	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S4111	Open wound of upper arm; complicated	ICD10:S41.11	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S42010	Fracture of shaft of clavicle; closed	ICD10:S42.010	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S42020	Fracture of acromial end of clavicle; closed	ICD10:S42.020	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S42090	Fracture of unspecified part of clavicle; closed	ICD10:S42.090	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S42190	Fracture of unspecified part of scapula; closed	ICD10:S42.190	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S42200	Fracture of surgical neck of humerus; closed	ICD10:S42.200	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S42210	Fracture of anatomical neck of humerus; closed	ICD10:S42.210	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S42220	Fracture greater tuberosity of humerus; closed	ICD10:S42.220	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S42280	Fracture of other part of upper end of humerus; closed	ICD10:S42.280	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S42290	Fracture of unspecified part of upper end of humerus; closed	ICD10:S42.290	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S42300	Fracture of shaft of humerus; closed	ICD10:S42.300	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S42390	Fracture of unspecified part of humerus; closed	ICD10:S42.390	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S42400	Supracondylar fracture of humerus; closed	ICD10:S42.400	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S42480	Fx oth part of low end of humerus; closed	ICD10:S42.480	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S43000	Anterior dislocation of shoulder; closed	ICD10:S43.000	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S43090	Unspecified dislocation of glenohumeral joint; closed	ICD10:S43.090	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S43100	Dislocation of acromioclavicular joint, closed	ICD10:S43.100	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S4600	Laceration of muscle(s) and tendon(s) of the rotator cuff of shoulder	ICD10:S46.00	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S4608	Other and unspecified injury of muscle(s) and tendon(s) of the rotator cuff or shoulder	ICD10:S46.08	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S497	Multiple injuries of shoulder & upper arm	ICD10:S49.7	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S498	Other specified injuries of shoulder & upper arm	ICD10:S49.8	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S499	Unspecified injury of shoulder and upper arm	ICD10:S49.9	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S500	Contusion of elbow	ICD10:S50.0	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S501	Contusion of other and unspecified parts of forearm	ICD10:S50.1	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S507	Multiple superficial injuries of forearm	ICD10:S50.7	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S508	Other superficial injuries of forearm	ICD10:S50.8	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S509	Superficial injury of forearm, unspecified	ICD10:S50.9	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S5100	Open wound of elbow; uncomplicated	ICD10:S51.00	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S5101	Open wound of elbow; complicated	ICD10:S51.01	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S5170	Open wound of forearm, multiple, uncomplicated	ICD10:S51.70	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S5180	Open wound of other parts of forearm, uncomplicated	ICD10:S51.80	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S5190	Open wound of forearm, part unspecified, uncomplicated	ICD10:S51.90	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S52000	Fracture of olecranon process of ulna; closed	ICD10:S52.000	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S52100	Fracture of head of radius; closed	ICD10:S52.100	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S52300	Fracture of shaft of radius; closed	ICD10:S52.300	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S52500	Colles' fracture; closed	ICD10:S52.500	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S52580	Other fracture of lower end of radius; closed	ICD10:S52.580	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S52590	Unspecified fracture of lower end of radius; closed	ICD10:S52.590	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S52600	Fracture of lower end of both ulna and radius, closed	ICD10:S52.600	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S52800	Fracture of other parts of forearm, closed	ICD10:S52.800	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S598	Other specified injuries of forearm	ICD10:S59.8	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S599	Unspecified injury of forearm	ICD10:S59.9	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S600	Contusion of finger(s) without damage to nail; includes: Contusion of finger(s) NOS; excludes: contusion involving nail (matrix) (S60.1)	ICD10:S60.0	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S602	Contusion of other parts of wrist and hand	ICD10:S60.2	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S607	Multiple superficial injuries of wrist & hand	ICD10:S60.7	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S608	Other superficial injuries of wrist & hand	ICD10:S60.8	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S609	Unspecified superficial injury of wrist & hand	ICD10:S60.9	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S6100	Open wound of finger(s) without damage to nail, uncomplicated	ICD10:S61.00	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S6170	Multiple open wounds of wrist and hand, uncomplicated	ICD10:S61.70	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S6180	Open wound of other parts of wrist and hand, uncomplicated	ICD10:S61.80	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S6190	Open wound of wrist and hand part, part unspecified, uncomplicated	ICD10:S61.90	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S62000	Fracture of navicular [scaphoid] bone of hand, closed	ICD10:S62.000	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S62500	Fracture of proximal phalanx; closed	ICD10:S62.500	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S62690	Fracture of unspecified part of phalanx of finger; closed	ICD10:S62.690	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S62800	Fracture of other and unspecified parts of wrist and hand, closed	ICD10:S62.800	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S63100	Dislocation of metacarpophalangeal (joint) of finger; closed	ICD10:S63.100	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S6359	Unspecified sprain and strain of wrist	ICD10:S63.59	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S698	Other specified injuries of wrist and hand	ICD10:S69.8	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S699	Unspecified injury of wrist and hand	ICD10:S69.9	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S700	Contusion of hip	ICD10:S70.0	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S701	Contusion of thigh	ICD10:S70.1	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S708	Other superficial injuries of hip & thigh	ICD10:S70.8	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S709	Superficial injury of hip and thigh, unspecified	ICD10:S70.9	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S7110	Open wound of thigh; uncomplicated	ICD10:S71.10	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S7111	Open wound of thigh; complicated	ICD10:S71.11	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S72000	Fracture of upper femoral epiphysis (separation); closed	ICD10:S72.000	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S72010	Fracture of base of femoral neck (cervicotrochanteric); closed	ICD10:S72.010	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S72080	Other fracture of femoral neck; closed	ICD10:S72.080	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S72090	Unspecified fracture of neck of femur; closed	ICD10:S72.090	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S72100	Intertrochanteric fracture; closed	ICD10:S72.100	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S72190	Unspecified trochanteric fracture closed	ICD10:S72.190	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S72200	Subtrochanteric fracture; closed	ICD10:S72.200	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S72300	Fracture of shaft of femur; closed	ICD10:S72.300	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S72410	Condylar fracture of femur; closed	ICD10:S72.410	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S72420	Supracondylar fracture of femur; closed	ICD10:S72.420	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S72490	Unspecified fracture of lower (distal) end of femur; closed	ICD10:S72.490	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S72800	Fractures of other parts of femur, closed	ICD10:S72.800	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S72900	Fracture of femur, part unspecified, closed	ICD10:S72.900	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S73000	Posterior dislocation of hip; closed	ICD10:S73.000	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S73090	Unspecified dislocation of hip; closed	ICD10:S73.090	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S7418	Other and unspecified injury of femoral nerve at hip and thigh level	ICD10:S74.18	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S750	Injury of femoral artery	ICD10:S75.0	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S799	Unspecified injury of hip and thigh	ICD10:S79.9	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S800	Contusion of knee	ICD10:S80.0	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S801	Contusion of other and unspecified parts of lower leg	ICD10:S80.1	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S807	Multiple superficial injuries lower leg	ICD10:S80.7	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S808	Other superficial injuries of lower leg	ICD10:S80.8	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S809	Superficial injury of lower leg, unspecified	ICD10:S80.9	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S8100	Open wound of knee; uncomplicated	ICD10:S81.00	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S8101	Open wound of knee; complicated	ICD10:S81.01	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S8180	Open wounds of other parts of lower leg, uncomplicated	ICD10:S81.80	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S8181	Open wounds of other parts of lower leg, complicated; includes: Wounds with mention of delayed healing, delayed treatment, foreign body or major infection	ICD10:S81.81	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S8190	Open wound of lower leg, part unspecified, uncomplicated	ICD10:S81.90	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S8191	Open wound of lower leg, part unspecified, complicated;  includes: Wounds with mention of delayed healing, delayed treatment, foreign body or major infection	ICD10:S81.91	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S82000	Fracture of patella; closed	ICD10:S82.000	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S82100	Fracture of upper (proximal) end of tibia with or without fibula, closed	ICD10:S82.100	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S82200	Fracture of shaft of tibia with or without fibula, closed	ICD10:S82.200	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S82300	Fracture of lower (distal) end of tibia with or without fibula, closed	ICD10:S82.300	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S82400	Fracture of fibula alone, closed	ICD10:S82.400	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S82500	Fracture of medial malleolus, closed	ICD10:S82.500	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S82600	Fracture of lateral malleolus, closed	ICD10:S82.600	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S82800	Bimalleolar fracture of ankle; closed	ICD10:S82.800	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S82890	Fracture of ankle NOS; closed	ICD10:S82.890	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S836	Sprain & strain of other and unspecified parts of knee	ICD10:S83.6	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S898	Other specified injuries of lower leg	ICD10:S89.8	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S899	Unspecified injury of lower leg	ICD10:S89.9	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S900	Contusion of ankle	ICD10:S90.0	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S901	Contusion of toe(s) without damage to nail; includes: Contusion of toe(s) NOS	ICD10:S90.1	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S903	Contusion of other and unspecified parts of foot	ICD10:S90.3	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S907	Multiple superficial injuries of ankle & foot	ICD10:S90.7	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S908	Other superficial injuries of ankle & foot	ICD10:S90.8	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S909	Superficial injury of ankle & foot, unspecified	ICD10:S90.9	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S9100	Open wound of ankle; uncomplicated	ICD10:S91.00	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S9110	Open wound of toe(s) without damage to nail, uncomplicated	ICD10:S91.10	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S9120	Open wound of toe(s) with damage to nail, uncomplicated	ICD10:S91.20	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S9130	Open wound of other parts of foot, uncomplicated	ICD10:S91.30	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S92000	Fracture of calcaneus; closed	ICD10:S92.000	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S92300	Fracture of metatarsal bone; closed	ICD10:S92.300	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S92400	Fracture of great toe; closed	ICD10:S92.400	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S92500	Fracture of other toe; closed	ICD10:S92.500	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S9349	Sprain and strain of ankle; unspecified	ICD10:S93.49	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S998	Other specified injuries of ankle and foot	ICD10:S99.8	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	S999	Unspecified injury of ankle and foot	ICD10:S99.9	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T001	Superficial injuries involving thorax with abdomen, lower back and pelvis	ICD10:T00.1	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T008	Superficial injuries involving other combinations of  body regions	ICD10:T00.8	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T009	Multiple superficial injuries, unspecified	ICD10:T00.9	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T090	Superficial injury of trunk level, unspecified	ICD10:T09.0	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T110	Superficial injury upper limb level, unspecified	ICD10:T11.0	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T111	Open wound of upper limb, level unspecified	ICD10:T11.1	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T130	Superficial injury lower limb level, unspecified	ICD10:T13.0	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T131	Open wound of lower limb, level unspecified	ICD10:T13.1	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T140	Superficial injuries of unspecified body region	ICD10:T14.0	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T149	Injury unspecified	ICD10:T14.9	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T200	Burn of unspecified degree of head and neck	ICD10:T20.0	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T202	Burn of second degree of head and neck	ICD10:T20.2	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T210	Burn of unspecified thickness of trunk	ICD10:T21.0	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T211	Burn of first degree of trunk	ICD10:T21.1	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T212	Burn of second degree of trunk	ICD10:T21.2	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T213	Burn of third degree of trunk	ICD10:T21.3	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T220	Burn of unspecified degree of shoulder and upper limb, except wrist and hand	ICD10:T22.0	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T224	Corrosion of unspecified degree of shoulder and upper limb, except wrist and hand	ICD10:T22.4	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T230	Burn of unspecified degree of wrist and hand	ICD10:T23.0	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T232	Burn of second degree of wrist and hand	ICD10:T23.2	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T240	Burn of unspecified degree of hip and lower limb, except ankle and foot	ICD10:T24.0	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T242	Burn of second degree of hip and lower limb, except ankle and foot	ICD10:T24.2	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T250	Burn of unspecified degree of ankle and foot	ICD10:T25.0	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T252	Burn of second degree of ankle and foot	ICD10:T25.2	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T71	Asphyxiation	ICD10:T71	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T792	Traumatic secondary and recurrent haemorrhage	ICD10:T79.2	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T796	Traumatic ischaemia of muscle	ICD10:T79.6	hosptrauma
+Traumatic injuries (non-procedural) arising in hospital 	T797	Traumatic subcutaneous emphysema	ICD10:T79.7	hosptrauma
+Anesthesia related complications	O2950	Other complications of spinal and epidural anaesthesia during pregnancy; 	ICD10:O29.50	anaesthesia
+Anesthesia related complications	O7420	Cardiac complications of anaesthesia during labour and delivery; Includes: Cardiac arrest due to anaesthesia during labour and delivery, Cardiac failure due to anaesthesia during labour and delivery; 	ICD10:O74.20	anaesthesia
+Anesthesia related complications	O7430	Central nervous system complications of anaesthesia during labour and delivery; Includes: Cerebral anoxia due to anaesthesia during labour and delivery; 	ICD10:O74.30	anaesthesia
+Anesthesia related complications	O7450	Toxic reaction to local anaesthesia during labour and delivery; 	ICD10:O74.50	anaesthesia
+Anesthesia related complications	O7460	Other complications of spinal and epidural anaesthesia during labour and delivery; 	ICD10:O74.60	anaesthesia
+Anesthesia related complications	O7480	Other complications of anaesthesia during labour and delivery; 	ICD10:O74.80	anaesthesia
+Anesthesia related complications	O8940	Spinal and epidural anaesthesia-induced headache during the puerperium; 	ICD10:O89.40	anaesthesia
+Anesthesia related complications	O8950	Other complications of spinal and epidural anaesthesia during the puerperium; 	ICD10:O89.50	anaesthesia
+Anesthesia related complications	O8980	Other complications of anaesthesia during the puerperium; 	ICD10:O89.80	anaesthesia
+Anesthesia related complications	T412	Poisoning by other and unspecified general anaesthetics	ICD10:T41.2	anaesthesia
+Anesthesia related complications	T413	Poisoning by local anaesthetics	ICD10:T41.3	anaesthesia
+Anesthesia related complications	T882	Shock due to anaesthesia	ICD10:T88.2	anaesthesia
+Anesthesia related complications	T883	Malignant hyperthermia due to anaesthesia	ICD10:T88.3	anaesthesia
+Anesthesia related complications	T884	Failed or difficult intubation	ICD10:T88.4	anaesthesia
+Anesthesia related complications	T885	Other complications of anaesthesia	ICD10:T88.5	anaesthesia
+Delirium	F05	Delirium	ICD10:F05	delirium
+Delirium	F050	Delirium not superimposed on dementia	ICD10:F05.0	delirium
+Delirium	F051	Delirium superimposed on dementia	ICD10:F05.1	delirium
+Delirium	F058	Other delirium	ICD10:F05.8	delirium
+Delirium	F059	Delirium unspecified	ICD10:F05.9	delirium
+Central Nervous System  Complications	E110	Type 2 diabetes mellitus with coma	ICD10:E11.0	cns
+Central Nervous System  Complications	E15	Hypoglycaemic coma	ICD10:E15	cns
+Central Nervous System  Complications	F050	Delirium not superimposed on dementia	ICD10:F05.0	cns
+Central Nervous System  Complications	F051	Delirium superimposed on dementia	ICD10:F05.1	cns
+Central Nervous System  Complications	F058	Other delirium	ICD10:F05.8	cns
+Central Nervous System  Complications	F059	Delirium unspecified	ICD10:F05.9	cns
+Central Nervous System  Complications	G003	Staphylococcal meningitis	ICD10:G00.3	cns
+Central Nervous System  Complications	G372	Central pontine myelinolysis	ICD10:G37.2	cns
+Central Nervous System  Complications	G972	Intracranial hypotension following ventricular shunting	ICD10:G97.2	cns
+Central Nervous System  Complications	O7430	Central nervous system complications of anaesthesia during labour and delivery; Includes: Cerebral anoxia due to anaesthesia during labour and delivery; 	ICD10:O74.30	cns
+Central Nervous System  Complications	O8940	Spinal and epidural anaesthesia-induced headache during the puerperium; 	ICD10:O89.40	cns
+Central Nervous System  Complications	S060	Concussion	ICD10:S06.0	cns
+Central Nervous System  Complications	S061	Traumatic cerebral oedema	ICD10:S06.1	cns
+Central Nervous System  Complications	S0625	Diffuse brain injury without open intracranial wound	ICD10:S06.25	cns
+Central Nervous System  Complications	S0635	Focal brain injury without open intracranial wound	ICD10:S06.35	cns
+Central Nervous System  Complications	S064	Epidural haemorrhage	ICD10:S06.4	cns
+Central Nervous System  Complications	S065	Traumatic subdural haemorrhage	ICD10:S06.5	cns
+Central Nervous System  Complications	S066	Traumatic subarachnoid haemorrhage	ICD10:S06.6	cns
+Central Nervous System  Complications	S0685	Other intracranial injuries without open intracranial wound	ICD10:S06.85	cns
+Central Nervous System  Complications	S069	Intracranial injury, unspecified	ICD10:S06.9	cns
+Gastrointestinal	A020	Salmonella enteritis	ICD10:A02.0	gastro
+Gastrointestinal	A044	Other intestinal Escherichia coli infections	ICD10:A04.4	gastro
+Gastrointestinal	A045	Campylobacter enteritis	ICD10:A04.5	gastro
+Gastrointestinal	A047	Enterocolitis due to Clostridium difficile; includes: Foodborne intoxication by Clostridium difficile, Pseudomembranous colitis	ICD10:A04.7	gastro
+Gastrointestinal	A048	Other specified bacterial intestinal infections	ICD10:A04.8	gastro
+Gastrointestinal	A049	Bacterial intestinal infection, unspecified	ICD10:A04.9	gastro
+Gastrointestinal	A080	Rotaviral enteritis	ICD10:A08.0	gastro
+Gastrointestinal	A081	Acute gastroenteropathy due to Norwalk agent; includes: Small round structured virus enteritis	ICD10:A08.1	gastro
+Gastrointestinal	B3780	Candidal esophagitis	ICD10:B37.80	gastro
+Gastrointestinal	B3781	Candidal enteritis	ICD10:B37.81	gastro
+Gastrointestinal	K223	Perforation of oesophagus	ICD10:K22.3	gastro
+Gastrointestinal	K650	Acute peritonitis	ICD10:K65.0	gastro
+Gastrointestinal	K910	Vomiting following gastrointestinal surgery	ICD10:K91.0	gastro
+Gastrointestinal	K913	Postoperative intestinal obstruction	ICD10:K91.3	gastro
+Gastrointestinal	S27810	Laceration of oesophagus; Includes: Minor, moderate, major lacerations, puncture, traumatic rupture; Without open wound into thoracic cavity	ICD10:S27.810	gastro
+Gastrointestinal	S27860	Other and unspecified injury of oesophagus; Without open wound into thoracic cavity	ICD10:S27.860	gastro
+Gastrointestinal	S36150	Liver haematoma NOS, laceration NOS, injury to liver NOS; Without open wound into cavity	ICD10:S36.150	gastro
+Gastrointestinal	S36151	Liver haematoma NOS, laceration NOS, injury to liver NOS; With open wound into cavity	ICD10:S36.151	gastro
+Gastrointestinal	S36411	Laceration of duodenum (without bile duct injury); With open wound into cavity	ICD10:S36.411	gastro
+Gastrointestinal	S36460	Laceration of small intestine, excluding duodenum; Without open wound into cavity	ICD10:S36.460	gastro
+Gastrointestinal	S36461	Laceration of small intestine, excluding duodenum; With open wound into cavity	ICD10:S36.461	gastro
+Gastrointestinal	S36610	Laceration of rectum; Without open wound into cavity	ICD10:S36.610	gastro
+Gastrointestinal	T181	Foreign body in oesophagus	ICD10:T18.1	gastro
+Gastrointestinal	T182	Foreign body in stomach	ICD10:T18.2	gastro
+Gastrointestinal	T183	Foreign body in small intestine	ICD10:T18.3	gastro
+Gastrointestinal	T189	Foreign body in alimentary tract, part unspecified	ICD10:T18.9	gastro
+Gastrointestinal	T282	Burn of other parts of alimentary tract	ICD10:T28.2	gastro
+Gastrointestinal	T855	Mechanical complication of gastrointestinal prosthetic devices, implants and grafts; Conditions listed in T82.0 due to: bile-duct prosthesis, oesophageal anti-reflux device	ICD10:T85.5	gastro
+Severe life or major vital organ threatening adverse event	G372	Central pontine myelinolysis	ICD10:G37.2	severe
+Severe life or major vital organ threatening adverse event	I210	Acute transmural myocardial infarction of anterior wall	ICD10:I21.0	severe
+Severe life or major vital organ threatening adverse event	I211	Acute transmural myocardial infarction of inferior wall	ICD10:I21.1	severe
+Severe life or major vital organ threatening adverse event	I212	Acute transmural myocardial infarction of other sites	ICD10:I21.2	severe
+Severe life or major vital organ threatening adverse event	I213	Acute transmural myocardial infarction of unspecified site	ICD10:I21.3	severe
+Severe life or major vital organ threatening adverse event	I214	Acute subendocardial myocardial infarction (Includes: Non-Q-wave myocardial infarction)	ICD10:I21.4	severe
+Severe life or major vital organ threatening adverse event	I219	Acute myocardial infarction unspecified	ICD10:I21.9	severe
+Severe life or major vital organ threatening adverse event	I220	Subsequent myocardial infarction of anterior wall	ICD10:I22.0	severe
+Severe life or major vital organ threatening adverse event	I221	Subsequent myocardial infarction of inferior wall	ICD10:I22.1	severe
+Severe life or major vital organ threatening adverse event	I228	Subsequent myocardial infarction of other sites	ICD10:I22.8	severe
+Severe life or major vital organ threatening adverse event	I229	Subsequent myocardial infarction of unspecified site	ICD10:I22.9	severe
+Severe life or major vital organ threatening adverse event	I260	Pulmonary embolism with mention of acute cor pulmonale	ICD10:I26.0	severe
+Severe life or major vital organ threatening adverse event	I461	Sudden cardiac death so described	ICD10:I46.1	severe
+Severe life or major vital organ threatening adverse event	I469	Cardiac arrest unspecified	ICD10:I46.9	severe
+Severe life or major vital organ threatening adverse event	I472	Ventricular tachycardia	ICD10:I47.2	severe
+Severe life or major vital organ threatening adverse event	I4900	Ventricular fibrillation	ICD10:I49.00	severe
+Severe life or major vital organ threatening adverse event	I4901	Ventricular flutter	ICD10:I49.01	severe
+Severe life or major vital organ threatening adverse event	J960	Acute respiratory failure	ICD10:J96.0	severe
+Severe life or major vital organ threatening adverse event	K223	Perforation of oesophagus	ICD10:K22.3	severe
+Severe life or major vital organ threatening adverse event	K650	Acute peritonitis	ICD10:K65.0	severe
+Severe life or major vital organ threatening adverse event	O7420	Cardiac complications of anaesthesia during labour and delivery; Includes: Cardiac arrest due to anaesthesia during labour and delivery, Cardiac failure due to anaesthesia during labour and delivery; 	ICD10:O74.20	severe
+Severe life or major vital organ threatening adverse event	O7420	Cardiac complications of anaesthesia during labour and delivery; Includes: Cardiac arrest due to anaesthesia during labour and delivery, Cardiac failure due to anaesthesia during labour and delivery; 	ICD10:O74.20	severe
+Severe life or major vital organ threatening adverse event	O7430	Central nervous system complications of anaesthesia during labour and delivery; Includes: Cerebral anoxia due to anaesthesia during labour and delivery; 	ICD10:O74.30	severe
+Severe life or major vital organ threatening adverse event	O7510	Shock during or following labour and delivery; Includes: Obstetric shock; 	ICD10:O75.10	severe
+Severe life or major vital organ threatening adverse event	O7540	Other complications of obstetric surgery and procedures; Includes: Cardiac arrest following cesarean or other obstetric surgery or procedures, including delivery NOS, Cardiac failure following cesarean or other obstetric surgery or procedures, including delivery NOS, Cerebral anoxia following cesarean or other obstetric surgery or procedures, including delivery NOS, Conditions in N99.0, N99.8, N99.9; Excludes: complications of anaesthesia during labour and delivery (O74.-); 	ICD10:O75.40	severe
+Severe life or major vital organ threatening adverse event	R571	Hypovolaemic shock	ICD10:R57.1	severe
+Severe life or major vital organ threatening adverse event	R572	septic shock	ICD10:R57.2	severe
+Severe life or major vital organ threatening adverse event	R578	Other shock	ICD10:R57.8	severe
+Severe life or major vital organ threatening adverse event	T71	Asphyxiation	ICD10:T71	severe
+Severe life or major vital organ threatening adverse event	T800	Air embolism following infusion, transfusion and therapeutic injection	ICD10:T80.0	severe
+Severe life or major vital organ threatening adverse event	T805	Anaphylactic shock due to serum	ICD10:T80.5	severe
+Severe life or major vital organ threatening adverse event	T811	Shock during or resulting from a procedure, not elsewhere classified	ICD10:T81.1	severe
+Severe life or major vital organ threatening adverse event	T882	Shock due to anaesthesia	ICD10:T88.2	severe
+Severe life or major vital organ threatening adverse event	T883	Malignant hyperthermia due to anaesthesia	ICD10:T88.3	severe
+Severe life or major vital organ threatening adverse event	T884	Failed or difficult intubation	ICD10:T88.4	severe
+Severe life or major vital organ threatening adverse event	T886	Anaphylactic shock due to adverse effect of correct drug or medicament properly administered	ICD10:T88.6	severe
