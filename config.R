@@ -25,6 +25,8 @@ inputdata <- c(
   ,map0 = 'data/autosugg02_dict_349c1d4c3250.csv'
   # manual mappings intended to persist from one refresh to the next
   ,map1 = 'data/persistent_dict.tsv'
+  # a table of derived variables which will get created later
+  ,map2 = 'data/derived_var_dictionary.tsv'
   # mappings of ICD10 codes to patient safety indicators 
   # from Southern et al., Medical Care 2017 doi: 10.1097/MLR.0000000000000649
   ,psi = 'data/southern_icd10patientsafetycodes_medicalcare17.csv'
@@ -34,6 +36,7 @@ inputdata <- c(
 #' In this project's data dictionaries, the default column name is stored in
 #' `colname`
 projectoptions <- list(tb.retcol='colname');
+project_seed <- '20200727';
 
 #### footer ####
 c()
