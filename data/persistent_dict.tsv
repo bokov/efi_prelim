@@ -1,41 +1,41 @@
-durablename	nval_num	name	comment_persistant	rename	c_patdata	c_vitals	c_visdata	c_death	c_respillness	c_falls	c_exposescreen	c_corona	c_vent
-sex_cd		sex_cd			TRUE								
-language_cd		language_cd			TRUE								
-race_cd		race_cd			TRUE								
-age_at_visit_days		age_at_visit_days			TRUE								
-age_at_death_days		age_at_death_days			TRUE			TRUE					
-_vntltrs_brthng_tf		1014859 - Ventilation assist and management, initiation of pressure or volume preset ventilators for assisted or controlled breathing											TRUE
-_Sts__ptnts_cd		1760 Vital Status		v_vitalstatus	TRUE			TRUE					
-_Extrcrprl_Prcdr_tf		5A - Extracorporeal or Systemic Assistance and Performance @ Physiological Systems (Procedure)											TRUE
-_Src__ptnts_cd		Admit Source		v_admitsrc			TRUE						
-_Crnvrs_unspcfd_tf		B34.2 - Coronavirus infection, unspecified										TRUE	
-_Crnvrs_elswhr_tf		B97.2 - Coronavirus as the cause of diseases classified elsewhere										TRUE	
-_Indx__ptnts_mn	1	Body Mass Index				TRUE							
-_fcts_ptnts_cd		COVID-19 RFV BASE	Not sure if RFV means suspected COVID-19 or confirmed	v_covid_rfv									
-_Dprtmnt__ptnts_cd		Clinical Service Department					TRUE						
-_Prsr__ptnts_mn	1	Diastolic Blood Pressure		v_diastolic		TRUE							
-_Dspstn__ptnts_cd		Discharge Disposition					TRUE	TRUE					
-_Sts__ptnts_cd		Discharge Status		v_dischst			TRUE	TRUE					
-_ACCDNTL_ptnts_tf		E880-E888.9 - ACCIDENTAL FALLS								TRUE			
-_undtrmnd_acdntl_tf		E987 - Falling from high place, undetermined whether accidentally or purposely inflicted								TRUE			
-_Encntr_ptnts_cd		Encounter Type					TRUE						
-_Ethnct__ptnts_cd		Ethnicity	May be incorrect until data refresh		TRUE								
-_Fncl_ptnts_cd		Financial Class					TRUE						
-_Insttn__ptnts_cd		Institution					TRUE						
-_rsprtr_ptnts_tf		J00-J99 - Diseases of the respiratory system (J00-J99)							TRUE				
-_Lng__ptnts_cd		Language			TRUE								
-_Strtn_ptnts_mn	1	O2 Saturation (UHS Only)		v_o2sat		TRUE							
-_Pls__ptnts_mn	1	Pulse				TRUE							
-_crcltr_rsprtr_tf		R00-R09 - Symptoms and signs involving the circulatory and respiratory systems (R00-R09)	Might need to break specific codes out of this one						TRUE				
-_Rsprtn_ptnts_mn	1	Respiration Rate				TRUE							
-_Scnmc_ptnts_cd	1	Socioeconomic Status	Complex variable		TRUE								
-_Prsr__ptnts_mn	1	Systolic Blood Pressure		v_systolic		TRUE							
-_Tmprtr_ptnts_mn	1	Temperature (F)				TRUE							
-_Usg__ptnts_cd	1	Tobacco Usage	Does this exclude non-use codes?			TRUE							
-_Pdstrn_cnvnc_tf		V00 - Pedestrian conveyance accident								TRUE			
-_UTMd___ptnts_cd		Visit Reason (UTMed)		v_visreason			TRUE						
-_stmblng_ptnts_tf		W00-W19 - Slipping, tripping, stumbling and falls (W00-W19)								TRUE			
-_obsrvtn_cndtns_tf		Z03.8 - Encounter for observation for other suspected diseases and conditions ruled out	Does this imply COVID-19 negative or positive?										
-_dss__ptnts_tf		Z11.59 - Encounter for screening for other viral diseases									TRUE		
-_spctd_cmncbl_tf		Z20.828 - Contact with and (suspected) exposure to other viral communicable diseases									TRUE		
-_Dpndnc_rsprtr_tf		Z99.1 - Dependence on respirator											TRUE
+durablename	nval_num	dispname	name	comment_persistant	rename	c_patdata	c_vitals	c_visdata	c_death	c_respillness	c_falls	c_exposescreen	c_corona	c_vent
+sex_cd		Sex	sex_cd			TRUE								
+language_cd		Language	language_cd			TRUE								
+race_cd		Race	race_cd			TRUE								
+age_at_visit_days		Patient age (days)	age_at_visit_days			TRUE								
+age_at_death_days		Patient age at death (days)	age_at_death_days			TRUE								
+_vntltrs_brthng_tf			1014859 - Ventilation assist and management, initiation of pressure or volume preset ventilators for assisted or controlled breathing											TRUE
+_Sts__ptnts_cd			1760 Vital Status	Vital status according to NAACCR, 0 = deceased, 1 = alive	v_vitalstatnaaccr	TRUE			TRUE					
+_Extrcrprl_Prcdr_tf			5A - Extracorporeal or Systemic Assistance and Performance @ Physiological Systems (Procedure)											TRUE
+_Src__ptnts_cd			Admit Source		v_admitsrc			TRUE						
+_Crnvrs_unspcfd_tf			B34.2 - Coronavirus infection, unspecified										TRUE	
+_Crnvrs_elswhr_tf			B97.2 - Coronavirus as the cause of diseases classified elsewhere										TRUE	
+_Indx__ptnts_mn	1		Body Mass Index				TRUE							
+_fcts_ptnts_cd			COVID-19 RFV BASE	Not sure if RFV means suspected COVID-19 or confirmed	v_covid_rfv									
+_Dprtmnt__ptnts_cd			Clinical Service Department					TRUE						
+_Prsr__ptnts_mn	1		Diastolic Blood Pressure		v_diastolic		TRUE							
+_Dspstn__ptnts_cd			Discharge Disposition	DischDisp:E = deceased (expired)	v_dischdsp			TRUE	TRUE					
+_Sts__ptnts_cd			Discharge Status	DischStat:EX = deceased (expired)	v_dischst			TRUE	TRUE					
+_ACCDNTL_ptnts_tf			E880-E888.9 - ACCIDENTAL FALLS								TRUE			
+_undtrmnd_acdntl_tf			E987 - Falling from high place, undetermined whether accidentally or purposely inflicted								TRUE			
+_Encntr_ptnts_cd			Encounter Type					TRUE						
+_Ethnct__ptnts_cd			Ethnicity	May be incorrect until data refresh		TRUE								
+_Fncl_ptnts_cd			Financial Class					TRUE						
+_Insttn__ptnts_cd			Institution					TRUE						
+_rsprtr_ptnts_tf			J00-J99 - Diseases of the respiratory system (J00-J99)							TRUE				
+_Lng__ptnts_cd			Language			TRUE								
+_Strtn_ptnts_mn	1		O2 Saturation (UHS Only)		v_o2sat		TRUE							
+_Pls__ptnts_mn	1		Pulse				TRUE							
+_crcltr_rsprtr_tf			R00-R09 - Symptoms and signs involving the circulatory and respiratory systems (R00-R09)	Might need to break specific codes out of this one						TRUE				
+_Rsprtn_ptnts_mn	1		Respiration Rate				TRUE							
+_Scnmc_ptnts_cd	1		Socioeconomic Status	Complex variable		TRUE								
+_Prsr__ptnts_mn	1		Systolic Blood Pressure		v_systolic		TRUE							
+_Tmprtr_ptnts_mn	1		Temperature (F)				TRUE							
+_Usg__ptnts_cd	1		Tobacco Usage	Does this exclude non-use codes?			TRUE							
+_Pdstrn_cnvnc_tf			V00 - Pedestrian conveyance accident								TRUE			
+_UTMd___ptnts_cd			Visit Reason (UTMed)		v_visreason			TRUE						
+_stmblng_ptnts_tf			W00-W19 - Slipping, tripping, stumbling and falls (W00-W19)								TRUE			
+_obsrvtn_cndtns_tf			Z03.8 - Encounter for observation for other suspected diseases and conditions ruled out	Does this imply COVID-19 negative or positive?										
+_dss__ptnts_tf			Z11.59 - Encounter for screening for other viral diseases									TRUE		
+_spctd_cmncbl_tf			Z20.828 - Contact with and (suspected) exposure to other viral communicable diseases									TRUE		
+_Dpndnc_rsprtr_tf			Z99.1 - Dependence on respirator											TRUE
