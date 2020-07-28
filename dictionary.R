@@ -10,6 +10,7 @@
 debug <- 0;
 .projpackages <- c( 'purrr', 'dplyr' );
 .globalpath <- c(list.files(patt='^global.R$',full=T)
+                 ,list.files(path='scripts',patt='^global.R$',full=T)
                  ,list.files(rec=T,pattern='^global.R$',full=T)
                  ,list.files(path='..',patt='^global.R$',full=T)
                  ,list.files(path='..',rec=T,pattern='^global.R$',full=T))[1];
@@ -30,6 +31,7 @@ map0 <- try_import(inputdata['map0']);
 #' Persistent data dictionary that (hopefully) will work over multiple data 
 #' pulls
 map1 <- try_import(inputdata['map1']);
+map2 <- try_import(inputdata['map2']);
 #' Patient safety indicators
 psi <- try_import(inputdata['psi']);
 
@@ -53,11 +55,11 @@ map0$c_psi <- map0[,paste0('c_',unique(psinames))] %>% rowSums > 0;
 #' Labs
 map0$c_loinc <- map0$ddomain == 'LOINC';
 
-#' Join on map1 
-map2 <- left_join(map0,map1);
+#' Join on map1 and add rows from map2
+map3 <- left_join(map0,map1) %>% bind_rows(map2);
 
 #### write varmap.csv ####
-export(map2,'varmap.csv');
+export(map3,'varmap.csv');
 
 #+ echo=F,eval=F
 c()
