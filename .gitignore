@@ -26,14 +26,21 @@ vignettes/*.pdf
 .Rproj.user
 *.Rproj
 *.Rout
+*.md
 # Local configuration
 local
 local.config.R
 # Other temp files
 .~lock.*#
 .out
+.logfile
+./scripts/.rio_installed
+./scripts/.tidbits_installed
+*_bak
+*_files
 # We don't commit data unless we really mean it.
 *.csv
+*.tsv
 data_characterization.R.rdata
 *.html
 *.spin.R
@@ -41,4 +48,5 @@ data_characterization.R.rdata
 *.R.rdata
 *.R.unsampled.rdata
 *.rda
+*.rdata
 *.xlsx
