@@ -135,27 +135,31 @@ for(jj in fits) {
 #'
 #' 
 # Table 1 ----
+panderOptions('knitr.auto.asis',TRUE);
 #' ## Cohort table 
 #' 
 #' The obligatory 'table-1': key variables stratified by frailty status.
 #' 
-panderOptions('knitr.auto.asis',TRUE);
 dat04 <- dat03[,lapply(.SD,head,1),by=patient_num,.SDcols=v(c_patdata)[1:5]] %>%
-  cbind(dat03[,lapply(.SD,any),by=patient_num,.SDcol=v(c_response)]
+  # the [,-1] in the following line and at the end are needed to avoid 
+  # duplicates of patient_num
+  cbind(dat03[,lapply(.SD,any),by=patient_num,.SDcol=v(c_response)][,-1]
         ,dat03[,.(Frailty=tail(a_efi,1),`Median Frailty`=median(a_efi,na.rm=T)
                   ,`Frailty Stage`=cut(tail(a_efi,1),c(0,0.1,0.2,1)
                                        ,include.lowest = T
                                        ,labels=c('Nonfrail, < 0.1'
                                                  ,'Prefrail, 0.1 - 0.2'
                                                  ,'Frail, > 0.2')))
-               ,by=patient_num]);
+               ,by=patient_num][,-1]);
 
-tb1 <- paste0('~',paste0('`',setdiff(names(dat04),c('language_cd'
-                                                    ,'Frailty Stage'
-                                                    ,'Median Frailty'
-                                                    ,'patient_num'))
-                         ,'`',collapse='+'),'|`Frailty Stage`') %>% formula %>%
-  table1(data=dat04);
+.tb1formula <- setdiff(names(dat04),c('language_cd','Frailty Stage'
+                                      ,'Median Frailty','patient_num')) %>%
+  paste0('`',.,'`',collapse='+') %>% paste('~',.,'|`Frailty Stage`') %>%
+  formula;
+
+tb1 <- table1(.tb1formula,data=dat04) %>% 
+  submulti(dct0[,c('colname','dispname')],'partial');
+
 tb1;
 
 # Response vars ----
@@ -163,14 +167,41 @@ tb1;
 #' ## Which variables are common enough to analyze?
 #' 
 #' Which events are most common (by distinct patient) in this dataset?
-pander(.resps <- dat03[
+pander(.resps <- dat04[
   ,lapply(.SD,any),by=patient_num
-  ,.SDcols=v(c_response)] %>% select(-patient_num) %>%
-    colSums() %>% sort() %>% rev() %>%
+  ,.SDcols=v(c_response)] %>% select(-patient_num) %>% 
+    colSums() %>% sort() %>% rev() %>% 
+    setNames(.,submulti(names(.),dct0[,c('colname','dispname')])) %>%
     cbind(`N Patients`=.
-          ,`Fraction Patients`=(.)/length(unique(dat03$patient_num)))); 
+          ,`Fraction Patients`=(.)/length(unique(dat04$patient_num)))); 
 
+# Reproducibility ----
+reproducibility <- tidbits:::git_status(print=F);
+if(identical(reproducibility$status,'')){
+  .repinfo0 <- '[%5$s commit](https://%3$s/%4$s/tree/%5$s) of the [%4$s](https://%3$s/%4$s) repository **%1$s** branch. You can download these scripts [here](https://%3$s/%4$s/archive/%5$s.zip)';
+  .repinfo1 <- 'you will generate a report that is identical to this one';
+  } else {
+    .repinfo0 <- '[%4$s](https://%3$s/%4$s) repository **%1$s** branch';
+    .repinfo1 <- 'you should be able to generate a report that is similar to this one, but since the copy you are reading is a draft version, there may be differences due to subsequent revisions';
+    }
+.repinfo0 <- with(reproducibility
+                  ,sprintf(.repinfo0,branch,tracking,githost,repo,hash));
+#' ## Reproducibility of these results.
+#' 
+#' This report was automatically generated using scripts and lookup tables 
+#' publicly shared in the `r .repinfo0`. In addition you will need the following 
+#' data files (at minimum either the first two of them or just the third one)
+#' which we are not able to publicly share:
+inputdata[1:3] %>% cbind(file=basename(.),MD5sum=tools::md5sum(.)) %>% 
+  `[`(,-1) %>% pander;
 
+#' If you run the version of the R scripts linked above on the files whose MD5 
+#' sums are identical to the ones shown in the above table, then `r .repinfo1`. 
+#' If you are already part of our grant-writing team and/or our IRB 
+#' determination, please contact me (Alex Bokov, bokov 'at' uthscsa 'dot' edu) 
+#' directly to get the data. All others please contact (_Kathleen, may I put 
+#' your email address here?_).
+#' 
 # Save results ----
 # 
 # Now the results are saved and available for use by other scriports if you
