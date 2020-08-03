@@ -10,21 +10,21 @@
 #'     toc: true
 #'     toc_float: true
 #' ---
-#' 
+#'
 #+ load_deps, echo=FALSE, message=FALSE, warning=FALSE,results='hide'
 # Settings ----
-# 
-# In the below two lines are the minimum script-level settings you need. 
-# The `.projpackages` object has the names of the packages you need installed 
+#
+# In the below two lines are the minimum script-level settings you need.
+# The `.projpackages` object has the names of the packages you need installed
 # if necessary and then loaded for this scriport. The `.deps` object contains
 # other scriports on which this one _directly_ depends (you don't need to worry
-# about the indirect ones-- each scriport manages its own dependencies for 
-# packages and scriports). The recommended value to start with is the one shown 
+# about the indirect ones-- each scriport manages its own dependencies for
+# packages and scriports). The recommended value to start with is the one shown
 # here. You can add more if the need arises later. For more information, please
 # see the [overview](overview.html) scriport.
 .projpackages <- c('GGally','tableone','pander','dplyr','ggplot2','data.table'
                    ,'survival','broom','forcats','table1');
-.deps <- c( '' ); 
+.deps <- c( '' );
 .debug <- 0;
 .junk<-capture.output(source('./scripts/global.R',chdir=TRUE,echo=FALSE));
 # Set some formatting options for this document
@@ -74,38 +74,38 @@ dct0<-sync_dictionary(dat03);
 
 # Fits ----
 #' ## Univariate survival models
-#' 
-#' For each of the response variables below, the survival curve represents 
+#'
+#' For each of the response variables below, the survival curve represents
 #' event-free survival from a randomly chosen index visit for Frail vs Non-frail
 #' patients. Below the table is a comparison of frailty as a predictor versus
 #' patient age as a predictor. The Wald statistic, concordance, log-likelihood,
-#' and AIC are all different ways to compare the performance of these 
-#' predictors. The **p.value.wald** is the hypothesis test (the lower it is, 
+#' and AIC are all different ways to compare the performance of these
+#' predictors. The **p.value.wald** is the hypothesis test (the lower it is,
 #' the greater the confidence with which we can reject the null hypothesis). The
 #' concordance is the agreement between the predictions of the respective models
-#' an actual outcomes-- the higher it is, the better the model. The 
-#' log-likelihood is the goodness-of-fit (the less negative, the better the 
+#' an actual outcomes-- the higher it is, the better the model. The
+#' log-likelihood is the goodness-of-fit (the less negative, the better the
 #' fit, all the models here have one degree of freedom). Finally the AIC is
 #' Akaike's Information Criterion, another goodness-of-fit metric that adjusts
 #' for the number of parameters (the smaller it is, the better the fit).
-#' 
+#'
 fits <- list();
 for(ii in v(c_mainresponse)){
-  .iidata <- gsub('%s',ii,"copy(dat03)[,c('keep','xx','Frail') := 
+  .iidata <- gsub('%s',ii,"copy(dat03)[,c('keep','xx','Frail') :=
   list(cumsum(cumsum(%s))<=1, %s, a_efi>0.2) ,by=patient_num][,xx:=%s][(keep)
                      ,c('patient_num','a_t0','a_t1','xx','Frail','a_efi'
-                  ,'age_at_visit_days')]") %>% 
+                  ,'age_at_visit_days')]") %>%
     parse(text=.) %>% eval;
   fits[[ii]]$dispname <- dct0[dct0$colname==ii,'dispname'];
-  fits[[ii]]$plot <- survfit(Surv(a_t0,a_t1,xx)~Frail,data=.iidata) %>% 
+  fits[[ii]]$plot <- survfit(Surv(a_t0,a_t1,xx)~Frail,data=.iidata) %>%
     ggsurv(plot.cens=F, main=fits[[ii]]$dispname
            ,surv.col = c('#00BFC4','#F8766D')
            ,ylab='% Patients event-free'
-           ,xlab='Days since randomly selected index visit') + 
-    #scale_x_continuous(limits=c(0,1096)) + 
+           ,xlab='Days since randomly selected index visit') +
+    #scale_x_continuous(limits=c(0,1096)) +
     scale_y_continuous(labels=scales::percent_format(1)) +
-    geom_ribbon(aes(ymin=low,ymax=up,fill=group),alpha=0.3,show.legend = F) + 
-    scale_fill_manual(values=c('#00BFC4','#F8766D')) + 
+    geom_ribbon(aes(ymin=low,ymax=up,fill=group),alpha=0.3,show.legend = F) +
+    scale_fill_manual(values=c('#00BFC4','#F8766D')) +
     coord_cartesian(ylim=c(.5,1),xlim=c(0,1096));
   fits[[ii]]$models$Frailty <- coxph(Surv(a_t0,a_t1,xx)~a_efi,data=.iidata);
   fits[[ii]]$models$`Patient Age` <- update(fits[[ii]]$models$Frailty,. ~age_at_visit_days);
@@ -121,7 +121,7 @@ panderOptions('knitr.auto.asis', FALSE);
 for(jj in fits) {
   message(jj$dispname);
   cat('\n###',jj$dispname,'\n\n');
-  print(jj$plot); 
+  print(jj$plot);
   .jjresult <- sapply(jj$models,function(xx){
     c(glance(xx)[,c('statistic.wald','p.value.wald','concordance','logLik'
                     ,'AIC')]
@@ -133,15 +133,15 @@ for(jj in fits) {
   };
 
 #'
-#' 
+#'
 # Table 1 ----
 panderOptions('knitr.auto.asis',TRUE);
-#' ## Cohort table 
-#' 
+#' ## Cohort table
+#'
 #' The obligatory 'table-1': key variables stratified by frailty status.
-#' 
+#'
 dat04 <- dat03[,lapply(.SD,head,1),by=patient_num,.SDcols=v(c_patdata)[1:5]] %>%
-  # the [,-1] in the following line and at the end are needed to avoid 
+  # the [,-1] in the following line and at the end are needed to avoid
   # duplicates of patient_num
   cbind(dat03[,lapply(.SD,any),by=patient_num,.SDcol=v(c_response)][,-1]
         ,dat03[,.(Frailty=tail(a_efi,1),`Median Frailty`=median(a_efi,na.rm=T)
@@ -157,7 +157,7 @@ dat04 <- dat03[,lapply(.SD,head,1),by=patient_num,.SDcols=v(c_patdata)[1:5]] %>%
   paste0('`',.,'`',collapse='+') %>% paste('~',.,'|`Frailty Stage`') %>%
   formula;
 
-tb1 <- table1(.tb1formula,data=dat04) %>% 
+tb1 <- table1(.tb1formula,data=dat04) %>%
   submulti(dct0[,c('colname','dispname')],'partial');
 
 tb1;
@@ -165,15 +165,15 @@ tb1;
 # Response vars ----
 #' *****
 #' ## Which variables are common enough to analyze?
-#' 
+#'
 #' Which events are most common (by distinct patient) in this dataset?
 pander(.resps <- dat04[
   ,lapply(.SD,any),by=patient_num
-  ,.SDcols=v(c_response)] %>% select(-patient_num) %>% 
-    colSums() %>% sort() %>% rev() %>% 
+  ,.SDcols=v(c_response)] %>% select(-patient_num) %>%
+    colSums() %>% sort() %>% rev() %>%
     setNames(.,submulti(names(.),dct0[,c('colname','dispname')])) %>%
     cbind(`N Patients`=.
-          ,`Fraction Patients`=(.)/length(unique(dat04$patient_num)))); 
+          ,`Fraction Patients`=(.)/length(unique(dat04$patient_num))));
 
 # Reproducibility ----
 reproducibility <- tidbits:::git_status(print=F);
@@ -187,25 +187,25 @@ if(identical(reproducibility$status,'')){
 .repinfo0 <- with(reproducibility
                   ,sprintf(.repinfo0,branch,tracking,githost,repo,hash));
 #' ## Reproducibility of these results.
-#' 
-#' This report was automatically generated using scripts and lookup tables 
-#' publicly shared in the `r .repinfo0`. In addition you will need the following 
+#'
+#' This report was automatically generated using scripts and lookup tables
+#' publicly shared in the `r .repinfo0`. In addition you will need the following
 #' data files (at minimum either the first two of them or just the third one)
 #' which we are not able to publicly share:
-inputdata[1:3] %>% cbind(file=basename(.),MD5sum=tools::md5sum(.)) %>% 
+inputdata[1:3] %>% cbind(file=basename(.),MD5sum=tools::md5sum(.)) %>%
   `[`(,-1) %>% pander;
 
-#' If you run the version of the R scripts linked above on the files whose MD5 
-#' sums are identical to the ones shown in the above table, then `r .repinfo1`. 
-#' If you are already part of our grant-writing team and/or our IRB 
-#' determination, please contact me (Alex Bokov, bokov 'at' uthscsa 'dot' edu) 
-#' directly to get the data. All others please contact (_Kathleen, may I put 
+#' If you run the version of the R scripts linked above on the files whose MD5
+#' sums are identical to the ones shown in the above table, then `r .repinfo1`.
+#' If you are already part of our grant-writing team and/or our IRB
+#' determination, please contact me (Alex Bokov, bokov 'at' uthscsa 'dot' edu)
+#' directly to get the data. All others please contact (_Kathleen, may I put
 #' your email address here?_).
-#' 
+#'
 # Save results ----
-# 
+#
 # Now the results are saved and available for use by other scriports if you
-# place `r sprintf("\x60'%s'\x60",.currentscript)` among the values in their 
+# place `r sprintf("\x60'%s'\x60",.currentscript)` among the values in their
 # `.deps` variables.
 save(file=paste0(.currentscript,'.rdata'),list=setdiff(ls(),.origfiles));
 #+ echo=FALSE, results='hide'
