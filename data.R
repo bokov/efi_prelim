@@ -1,10 +1,10 @@
 #' ---
 #' title: "Read in Data"
-#' author: 
+#' author:
 #' - "Alex F. Bokov^[UT Health, Department of Epidemiology and Biostatistics]"
 #' date: "09/14/2018"
 #' ---
-#' 
+#'
 #+ message=F,echo=F
 # init ----
 debug <- 0;
@@ -18,7 +18,7 @@ if(debug>0) source(.globalpath,chdir = TRUE) else {
   .junk<-capture.output(source(.globalpath,chdir=TRUE, echo=FALSE))};
 #.currentscript <- parent.frame(2)$ofile;
 .currentscript <- current_scriptname('data.R');
-#' Saving original file-list so we don't keep exporting functions and 
+#' Saving original file-list so we don't keep exporting functions and
 #' environment variables to other scripts
 .origfiles <- ls();
 #+ echo=FALSE,message=FALSE
@@ -34,7 +34,7 @@ tf_merge <- c(tf_psi,tf_other);
 
 # read data dictionaries ----
 #' Reading data dictionary
-#' 
+#'
 #' If `varmap.csv` doesn't exist, run `dictionary.R`
 .srcenv <- new.env();
 if(!file.exists('varmap.csv')) source('dictionary.R',local=.srcenv);
@@ -43,7 +43,7 @@ dct0 <- import('varmap.csv');
 # read data ----
 #' ### read data
 message('About to read');
-# filtering out patients with two or fewer visits with `if(.N>2)0` and 
+# filtering out patients with two or fewer visits with `if(.N>2)0` and
 set.seed(project_seed);
 dat01 <- fread(unzip(inputdata['dat01']))[-1,][age_at_visit_days >= 18*362.25,][
   ,if(.N>2) .SD, by=patient_num][
@@ -60,14 +60,14 @@ set.seed(project_seed);
 dat01[.sample,on = 'patient_num',z_subsample:=subsample];
 
 #' Aggregate the outcomes indicators
-for(ii in tf_merge) eval(substitute(dat01[,paste0('vi_',ii) := 
+for(ii in tf_merge) eval(substitute(dat01[,paste0('vi_',ii) :=
                                            do.call(pmax,.SD) %>% as.logical()
                                          ,.SDcols=v(ii)],env=list(ii=ii)));
 #' Blow away the info-only columns, labs, and PSI components
 dat01[,unique(c(v(c_info),v(c_loinc),v(c_psi))) := NULL];
 
 #' Rename columns to more easily recognizable names along with dct0 entries
-names(dat01) <- dct0[,c('colname','rename')] %>% na.omit %>% 
+names(dat01) <- dct0[,c('colname','rename')] %>% na.omit %>%
   submulti(names(dat01),.,method='exact');
 #' Update the dictionary to match renamed columns
 dct0 <- sync_dictionary(dat01);
@@ -76,6 +76,14 @@ dct0 <- sync_dictionary(dat01);
 dat01$v_vitalstatnaaccr <- grepl('NAACCR|1760:0',dat01$v_vitalstatnaaccr);
 dat01$v_dischdsp <- grepl('DischDisp:E',dat01$v_dischdsp);
 dat01$v_dischst <- grepl('DischStat:EX',dat01$v_dischst);
+#' Recode visit-related columns
+dat01$vi_icu <- grepl('VISITDETAIL\\|SPEC:80',dat01$v_department);
+#' `vi_emergdept` is emergency department as per provider specialty
+#' for now not using this, using the one below
+dat01$vi_emergdept <- grepl('VISITDETAIL\\|SPEC:45',dat01$v_department);
+dat01$vi_ip <- grepl('ENC\\|TYPE:IP',dat01$v_enctype);
+#' `vi_ed` is emergency department as per encounter type.
+dat01$vi_ed <- grepl('ENC\\|TYPE:ED',dat01$v_enctype);
 
 #' Simplify `race_cd`
 dat01$race_cd <- forcats::fct_collapse(dat01$race_cd,White='white',Black='black'
@@ -90,21 +98,21 @@ dat01$race_cd <- forcats::fct_collapse(dat01$race_cd,White='white',Black='black'
 .debug_birth <- subset(dat01,age_at_visit_days < 0);
 nrow(.debug_birth);
 #' Number of patients with such visits
-length(unique(.debug_birth$patient_num)) %>% 
+length(unique(.debug_birth$patient_num)) %>%
   c(number=.,fraction=(.)/length(unique(dat01$patient_num)));
 #' Distribution of number of visits per patient
-if(nrow(.debug_birth)) .debug_birth[,.N,by=patient_num]$N %>% table %>% 
+if(nrow(.debug_birth)) .debug_birth[,.N,by=patient_num]$N %>% table %>%
   as.data.frame %>% setNames(c('number suspect visits','patients'));
 
-#' Check the death dates. This is how many visits there are that seem to occur 
+#' Check the death dates. This is how many visits there are that seem to occur
 #' after the patients' date of death:
 .debug_death00 <- subset(dat01,age_at_visit_days>age_at_death_days);
 nrow(.debug_death00);
 #' Number of patients with such visits
-length(unique(.debug_death00$patient_num)) %>% 
+length(unique(.debug_death00$patient_num)) %>%
   c(number=.,fraction=(.)/length(unique(dat01$patient_num)));
 #' Distribution of number of visits per patient
-.debug_death00[,.N,by=patient_num]$N %>% table %>% as.data.frame %>% 
+.debug_death00[,.N,by=patient_num]$N %>% table %>% as.data.frame %>%
   setNames(c('number suspect visits','patients'));
 #' Does discharge status ever disagree with discharge disposition for death?
 with(dat01,table(v_dischst,v_dischdsp));
@@ -116,7 +124,7 @@ with(dat01,table(v_vitalstatnaaccr,v_dischdsp));
   ,d_death:=age_at_visit_days >= age_at_death_days];
 .debug_death01$patient_num %>% unique %>% length;
 #' How many of those patients lack an `age_at_death_days`?
-subset(.debug_death01,is.na(age_at_death_days))$patient_num %>% 
+subset(.debug_death01,is.na(age_at_death_days))$patient_num %>%
   unique %>% length;
 #' Deceased patients
 .debug_decpt <- subset(dat01,!is.na(age_at_death_days))$patient_num %>% unique;
@@ -133,11 +141,11 @@ length(.debug_postdodpt);
 .debug_postdodonlypt <- setdiff(.debug_decpt,.debug_predodpt);
 length(.debug_postdodonlypt);
 
-#' Anyway, long story short we know that date of death probably not ready to 
+#' Anyway, long story short we know that date of death probably not ready to
 #' be a first-priority response variable, but can still be a censoring variable
-#' 
-#' FOR NOW: If we get to competing risks before resolving death dates, just 
-#' censor on earliest death date suggested by the minimum of 
+#'
+#' FOR NOW: If we get to competing risks before resolving death dates, just
+#' censor on earliest death date suggested by the minimum of
 #' NAACCR, discharge status/disposition, and nominal date of death.
 # dat01[,c('z_deathmin','z_deathmax') := list(
 #   pmin(age_at_death_days,age_at_visit_days[match(1,do.call(pmax,.SD))]
@@ -145,13 +153,13 @@ length(.debug_postdodonlypt);
 #   ,pmax(age_at_death_days,age_at_visit_days[match(1,do.call(pmax,.SD))]
 #         ,na.rm = TRUE)-z_ixvis)
 #   ,by=patient_num,.SDcols=v(c_death)];
-#' 
+#'
 
 
 #' Load the eFI values
 dat02 <- fread(inputdata['dat02'])[,START_DATE := as.Date(START_DATE)] %>%
   setNames(.,tolower(names(.)));
-#' Join the eFI values to patient-visits (eFIs go into a new column named 
+#' Join the eFI values to patient-visits (eFIs go into a new column named
 #' `a_efi`)
 dat01[dat02,on = c('patient_num','start_date'),a_efi := i.nval_num];
 
@@ -166,8 +174,8 @@ sapply(ls(patt='dat01'),function(xx) {
   yy<-get(xx); c(encounters=nrow(yy),patients=length(unique(yy$patient_num)))});
 
 # save out ----
-#' ## Save all the processed data to tsv files 
-#' 
+#' ## Save all the processed data to tsv files
+#'
 .outfile <- export(dat01,tempfile(),format='tsv');
 file.rename(.outfile,paste0(format(Sys.time(),'%y%m%d%H%M'),'_'
                            ,substr(tools::md5sum(.outfile),1,5),'_'
