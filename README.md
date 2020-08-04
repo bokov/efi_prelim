@@ -16,7 +16,9 @@ Analysis of Electronic Frailty Index pilot data.
   the raw data for that code and encounter).
 * `vi_something`: Generated during post-processing and is an *i*ndicator 
   variable that aggregates a collection of raw indicator variables (i.e. is 
-  true if any of its components are true during an encounter)
+  true if any of its components are true during an encounter) or by filtering
+  a raw multi-values variable (e.g. picking out a specific department from a 
+  provider specialty column)
 * `v_something` is a renamed variable, because the original's name was too long
   or too obscure.
 * `z_something` is a derived variable for internal use, for processing other 
