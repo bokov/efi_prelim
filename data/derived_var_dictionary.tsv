@@ -1,10 +1,13 @@
 colname	durablename	static	colid	dispname	name	c_mainresponse	c_response	c_truefalse	c_predictor	c_integer	c_numeric	c_special	components	comment_persistant
+vi_ed	vi_ed	derived_index	vi_ed	Emergency Department	vi_ed	TRUE	TRUE	TRUE						
+vi_ip	vi_ip	derived_index	vi_ip	Hospitalization	vi_ip	TRUE	TRUE	TRUE						
+vi_icu	vi_icu	derived_index	vi_icu	ICU	vi_icu		TRUE	TRUE						
 vi_c_respillness	vi_c_respillness	derived_index	vi_c_respillness	Respiratory Illness (ICD10: J00-J99)	vi_c_respillness	TRUE	TRUE	TRUE					c_respillness	
-vi_c_psi	vi_c_psi	derived_index	vi_c_psi	Any Patient Safety Event	vi_c_psi	TRUE	TRUE	TRUE					c_psi	
 vi_c_hospinfect	vi_c_hospinfect	derived_index	vi_c_hospinfect	Hospital Acquired Infections	vi_c_hospinfect	TRUE	TRUE	TRUE					c_hospinfect	
 vi_c_hosptrauma	vi_c_hosptrauma	derived_index	vi_c_hosptrauma	Hospital Acquired Trauma	vi_c_hosptrauma	TRUE	TRUE	TRUE					c_hosptrauma	
 vi_c_cardiac	vi_c_cardiac	derived_index	vi_c_cardiac	Cardiac Complications	vi_c_cardiac	TRUE	TRUE	TRUE					c_cardiac	
 vi_c_falls	vi_c_falls	derived_index	vi_c_falls	Falls	vi_c_falls	TRUE	TRUE	TRUE					c_falls	
+vi_c_psi	vi_c_psi	derived_index	vi_c_psi	Any Patient Safety Event	vi_c_psi	TRUE	TRUE	TRUE					c_psi	
 vi_c_severe	vi_c_severe	derived_index	vi_c_severe	Severe Patient Safety Event	vi_c_severe	TRUE	TRUE	TRUE					c_severe	
 vi_c_drugadverse	vi_c_drugadverse	derived_index	vi_c_drugadverse	Drug Adverse Event	vi_c_drugadverse	TRUE	TRUE	TRUE					c_drugadverse	
 vi_c_decubulcer	vi_c_decubulcer	derived_index	vi_c_decubulcer	Pressure Ulcer	vi_c_decubulcer		TRUE	TRUE					c_decubulcer	
