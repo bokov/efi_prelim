@@ -87,6 +87,8 @@ dct0 <- sync_dictionary(dat01);
 dat01$v_vitalstatnaaccr <- grepl('NAACCR|1760:0',dat01$v_vitalstatnaaccr);
 dat01$vi_dischdsp_death <- grepl('DischDisp:E',dat01$v_dischdsp);
 dat01$vi_dischst_death <- grepl('DischStat:EX',dat01$v_dischst);
+dat01[,vi_c_death := do.call(pmax,.SD) %>% as.logical()
+                          ,.SDcols=v(c_death)];
 #' Recode visit-related columns
 dat01$vi_icu <- grepl('VISITDETAIL\\|SPEC:80',dat01$v_department);
 #' `vi_emergdept` is emergency department as per provider specialty

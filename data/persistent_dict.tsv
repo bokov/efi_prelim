@@ -1,4 +1,4 @@
-durablename	nval_num	dispname	name	comment_persistant	rename	c_patdata	c_vitals	c_visdata	c_death	c_respillness	c_falls	c_exposescreen	c_corona	c_vent	c_multicode	c_info_keep
+durablename	nval_num	dispname	name	comment_persistant	rename	c_patdata	c_vitals	c_visdata	c_death	c_respillness	c_falls	c_exposescreen	c_corona	c_vent	c_multicode	c_override_keep
 sex_cd		Sex	sex_cd			TRUE										
 language_cd		Language	language_cd			TRUE										
 race_cd		Race	race_cd			TRUE										
@@ -14,8 +14,8 @@ _Indx__ptnts_mn	1		Body Mass Index				TRUE
 _fcts_ptnts_cd			COVID-19 RFV BASE	Not sure if RFV means suspected COVID-19 or confirmed	v_covid_rfv											
 _Dprtmnt__ptnts_cd			Clinical Service Department					TRUE								
 _Prsr__ptnts_mn	1		Diastolic Blood Pressure		v_diastolic		TRUE									
-_Dspstn__ptnts_cd			Discharge Disposition	DischDisp:E = deceased (expired)	v_dischdsp			TRUE	TRUE						TRUE	TRUE
-_Sts__ptnts_cd			Discharge Status	DischStat:EX = deceased (expired)	v_dischst			TRUE	TRUE						TRUE	TRUE
+_Dspstn__ptnts_cd			Discharge Disposition	DischDisp:E = deceased (expired)	v_dischdsp			TRUE							TRUE	TRUE
+_Sts__ptnts_cd			Discharge Status	DischStat:EX = deceased (expired)	v_dischst			TRUE							TRUE	TRUE
 _ACCDNTL_ptnts_tf			E880-E888.9 - ACCIDENTAL FALLS								TRUE					
 _undtrmnd_acdntl_tf			E987 - Falling from high place, undetermined whether accidentally or purposely inflicted								TRUE					
 _Encntr_ptnts_cd			Encounter Type					TRUE								
