@@ -129,6 +129,11 @@ dat01$race_cd <- forcats::fct_collapse(dat01$race_cd,White='white',Black='black'
                                        ,Unknown=c('@','unknown','i choose not')
                                        ,Asian='asian') %>% forcats::fct_infreq();
 
+#' Discharge to intermediate care or skilled nursin (for patients originally
+#' admitted from home)
+dat01$vi_snf <- grepl('DischStat:(SN|ICF)',dat01$v_dischst) &
+  grepl('ADMIT|SOURCE:HO',dat01$v_admitsrc);
+
 # debug/QC ----
 #' ### QC
 #' Number of visits seeming to occur prior to date of birth
