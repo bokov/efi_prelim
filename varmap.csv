@@ -626,8 +626,10 @@ v425_spctd_cmncbl,_spctd_cmncbl,,14,1,2,,312329,3,16,14830,v425_spctd_cmncbl,3,1
 v426_Dpndnc_rsprtr_tf,_Dpndnc_rsprtr_tf,v426_Dpndnc_rsprtr,5,1,2,,312332,2,13,14839,v426_Dpndnc_rsprtr,2,1,Z99.1 - Dependence on respirator,426,ICD10,2,,,v426,,FALSE,ICD10:Z99.1,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,,,,,,,,,,,,TRUE,,,,,,,,,,
 v426_Dpndnc_rsprtr,_Dpndnc_rsprtr,,5,1,2,,312332,2,13,14839,v426_Dpndnc_rsprtr,2,1,Z99.1 - Dependence on respirator,426,ICD10,2,,,v426,,TRUE,ICD10:Z99.1,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,,,,,,,,,,,,,,,,,,,,,,
 vi_ed,vi_ed,derived_index,,,,,,,,,vi_ed,,,vi_ed,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Emergency Department,,,,,,,,,,,,,,TRUE,TRUE,TRUE,,,,,
+vi_emergdept,vi_emergdept,derived_index,,,,,,,,,vi_emergdept,,,vi_emergdept,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,"emergency department as per provider specialty for now not using this, using the one below",,,,,,,,,,,,,,,TRUE,,,,,
 vi_ip,vi_ip,derived_index,,,,,,,,,vi_ip,,,vi_ip,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hospitalization,,,,,,,,,,,,,,TRUE,TRUE,TRUE,,,,,
-vi_readm30,vi_readm30,derived_index,,,,,,,,,vi_readm30,,,vi_readm30,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Readmission Within 30 Days,True at first day of stay if previous discharge was 30 or fewer days before,,,,,,,,,,,,,TRUE,TRUE,TRUE,,,,,a_t_since_disch
+vi_readm30,vi_readm30,derived_index,,,,,,,,,vi_readm30,,,vi_readm30,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Readmission Within 30 Days of a Previous Discharge,True at first day of stay if previous discharge was 30 or fewer days before,,,,,,,,,,,,,TRUE,TRUE,TRUE,,,,,a_t_since_disch
+vi_snf,vi_snf,derived_index,,,,,,,,,vi_snf,,,vi_snf,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Discharge to ICF or SNF,,,,,,,,,,,,,,TRUE,TRUE,TRUE,,,,,
 vi_icu,vi_icu,derived_index,,,,,,,,,vi_icu,,,vi_icu,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,ICU,,,,,,,,,,,,,,,TRUE,TRUE,,,,,
 vi_dischdsp_death,vi_dischdsp_death,derived_index,,,,,,,,,vi_dischdsp_death,,,vi_dischdsp_death,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Discharge Disposition: Deceased,,,,,,,,,,,,,,,,TRUE,,,,,
 vi_dischst_death,vi_dischst_death,derived_index,,,,,,,,,vi_dischst_death,,,vi_dischst_death,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Discharge Status: Deceased,,,,,,,,,,,,,,,TRUE,TRUE,,,,,
@@ -639,15 +641,15 @@ vi_c_falls,vi_c_falls,derived_index,,,,,,,,,vi_c_falls,,,vi_c_falls,,,,,,,,,,,,,
 vi_c_drugadverse,vi_c_drugadverse,derived_index,,,,,,,,,vi_c_drugadverse,,,vi_c_drugadverse,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Drug Adverse Event,,,,,,,,,,,,,,TRUE,TRUE,TRUE,,,,,c_drugadverse
 vi_c_decubulcer,vi_c_decubulcer,derived_index,,,,,,,,,vi_c_decubulcer,,,vi_c_decubulcer,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Pressure Ulcer,,,,,,,,,,,,,,,TRUE,TRUE,,,,,c_decubulcer
 vi_c_endometab,vi_c_endometab,derived_index,,,,,,,,,vi_c_endometab,,,vi_c_endometab,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Endocrine and Metabolic Complications,,,,,,,,,,,,,,,TRUE,TRUE,,,,,c_endometab
-vi_c_thromb,vi_c_thromb,derived_index,,,,,,,,,vi_c_thromb,,,vi_c_thromb,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Venous Thromboembolism,,,,,,,,,,,,,,,TRUE,TRUE,,,,,c_thromb
+vi_c_thromb,vi_c_thromb,derived_index,,,,,,,,,vi_c_thromb,,,vi_c_thromb,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Venous Thromboembolism,,,,,,,,,,,,,,TRUE,TRUE,TRUE,,,,,c_thromb
 vi_c_respiratory,vi_c_respiratory,derived_index,,,,,,,,,vi_c_respiratory,,,vi_c_respiratory,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Respiratory Complications,"Vital status according to NAACCR, 0 = deceased, 1 = alive",,,,,,,,,,,,,,TRUE,TRUE,,,,,c_respiratory
 vi_c_hemorrhage,vi_c_hemorrhage,derived_index,,,,,,,,,vi_c_hemorrhage,,,vi_c_hemorrhage,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Hemorrhage,,,,,,,,,,,,,,,TRUE,TRUE,,,,,c_hemorrhage
-vi_c_fluidmgmt,vi_c_fluidmgmt,derived_index,,,,,,,,,vi_c_fluidmgmt,,,vi_c_fluidmgmt,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Fluid Management Events,,,,,,,,,,,,,,,TRUE,TRUE,,,,,c_fluidmgmt
+vi_c_fluidmgmt,vi_c_fluidmgmt,derived_index,,,,,,,,,vi_c_fluidmgmt,,,vi_c_fluidmgmt,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Fluid Management Events,,,,,,,,,,,,,,TRUE,TRUE,TRUE,,,,,c_fluidmgmt
 vi_c_surgcomp,vi_c_surgcomp,derived_index,,,,,,,,,vi_c_surgcomp,,,vi_c_surgcomp,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Post-Surgical Complications,,,,,,,,,,,,,,,TRUE,TRUE,,,,,c_surgcomp
 vi_c_anaesthesia,vi_c_anaesthesia,derived_index,,,,,,,,,vi_c_anaesthesia,,,vi_c_anaesthesia,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Anaesthesia Complications,,,,,,,,,,,,,,,TRUE,TRUE,,,,,c_anaesthesia
 vi_c_delirium,vi_c_delirium,derived_index,,,,,,,,,vi_c_delirium,,,vi_c_delirium,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Delirium,,,,,,,,,,,,,,,TRUE,TRUE,,,,,c_delirium
-vi_c_cns,vi_c_cns,derived_index,,,,,,,,,vi_c_cns,,,vi_c_cns,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CNS Complications,Not sure if RFV means suspected COVID-19 or confirmed,,,,,,,,,,,,,,TRUE,TRUE,,,,,c_cns
-vi_c_gastro,vi_c_gastro,derived_index,,,,,,,,,vi_c_gastro,,,vi_c_gastro,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,GI Complications,,,,,,,,,,,,,,,TRUE,TRUE,,,,,c_gastro
+vi_c_cns,vi_c_cns,derived_index,,,,,,,,,vi_c_cns,,,vi_c_cns,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,CNS Complications,Not sure if RFV means suspected COVID-19 or confirmed,,,,,,,,,,,,,TRUE,TRUE,TRUE,,,,,c_cns
+vi_c_gastro,vi_c_gastro,derived_index,,,,,,,,,vi_c_gastro,,,vi_c_gastro,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,GI Complications,,,,,,,,,,,,,,TRUE,TRUE,TRUE,,,,,c_gastro
 vi_c_vent,vi_c_vent,derived_index,,,,,,,,,vi_c_vent,,,vi_c_vent,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Need for Ventilator,,,,,,,,,,,,,,,TRUE,TRUE,,,,,c_vent
 vi_c_psi,vi_c_psi,derived_index,,,,,,,,,vi_c_psi,,,vi_c_psi,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Any Patient Safety Event,,,,,,,,,,,,,,TRUE,TRUE,TRUE,,,,,c_psi
 vi_c_severe,vi_c_severe,derived_index,,,,,,,,,vi_c_severe,,,vi_c_severe,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,Severe Patient Safety Event,,,,,,,,,,,,,,TRUE,TRUE,TRUE,,,,,c_severe
