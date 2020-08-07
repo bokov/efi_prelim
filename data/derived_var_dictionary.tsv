@@ -1,7 +1,9 @@
 colname	durablename	static	colid	dispname	name	c_mainresponse	c_response	c_truefalse	c_predictor	c_integer	c_numeric	c_special	components	comment_persistant
 vi_ed	vi_ed	derived_index	vi_ed	Emergency Department	vi_ed	TRUE	TRUE	TRUE						
+vi_emergdept	vi_emergdept	derived_index	vi_emergdept		vi_emergdept			TRUE						emergency department as per provider specialty for now not using this, using the one below
 vi_ip	vi_ip	derived_index	vi_ip	Hospitalization	vi_ip	TRUE	TRUE	TRUE						
-vi_readm30	vi_readm30	derived_index	vi_readm30	Readmission Within 30 Days	vi_readm30	TRUE	TRUE	TRUE					a_t_since_disch	True at first day of stay if previous discharge was 30 or fewer days before
+vi_readm30	vi_readm30	derived_index	vi_readm30	Readmission Within 30 Days of a Previous Discharge	vi_readm30	TRUE	TRUE	TRUE					a_t_since_disch	True at first day of stay if previous discharge was 30 or fewer days before
+vi_snf	vi_snf	derived_index	vi_snf	Discharge to ICF or SNF	vi_snf	TRUE	TRUE	TRUE						
 vi_icu	vi_icu	derived_index	vi_icu	ICU	vi_icu		TRUE	TRUE						
 vi_dischdsp_death	vi_dischdsp_death	derived_index	vi_dischdsp_death	Discharge Disposition: Deceased	vi_dischdsp_death			TRUE						
 vi_dischst_death	vi_dischst_death	derived_index	vi_dischst_death	Discharge Status: Deceased	vi_dischst_death		TRUE	TRUE						
@@ -13,15 +15,15 @@ vi_c_falls	vi_c_falls	derived_index	vi_c_falls	Falls	vi_c_falls	TRUE	TRUE	TRUE		
 vi_c_drugadverse	vi_c_drugadverse	derived_index	vi_c_drugadverse	Drug Adverse Event	vi_c_drugadverse	TRUE	TRUE	TRUE					c_drugadverse	
 vi_c_decubulcer	vi_c_decubulcer	derived_index	vi_c_decubulcer	Pressure Ulcer	vi_c_decubulcer		TRUE	TRUE					c_decubulcer	
 vi_c_endometab	vi_c_endometab	derived_index	vi_c_endometab	Endocrine and Metabolic Complications	vi_c_endometab		TRUE	TRUE					c_endometab	
-vi_c_thromb	vi_c_thromb	derived_index	vi_c_thromb	Venous Thromboembolism	vi_c_thromb		TRUE	TRUE					c_thromb	
+vi_c_thromb	vi_c_thromb	derived_index	vi_c_thromb	Venous Thromboembolism	vi_c_thromb	TRUE	TRUE	TRUE					c_thromb	
 vi_c_respiratory	vi_c_respiratory	derived_index	vi_c_respiratory	Respiratory Complications	vi_c_respiratory		TRUE	TRUE					c_respiratory	Vital status according to NAACCR, 0 = deceased, 1 = alive
 vi_c_hemorrhage	vi_c_hemorrhage	derived_index	vi_c_hemorrhage	Hemorrhage	vi_c_hemorrhage		TRUE	TRUE					c_hemorrhage	
-vi_c_fluidmgmt	vi_c_fluidmgmt	derived_index	vi_c_fluidmgmt	Fluid Management Events	vi_c_fluidmgmt		TRUE	TRUE					c_fluidmgmt	
+vi_c_fluidmgmt	vi_c_fluidmgmt	derived_index	vi_c_fluidmgmt	Fluid Management Events	vi_c_fluidmgmt	TRUE	TRUE	TRUE					c_fluidmgmt	
 vi_c_surgcomp	vi_c_surgcomp	derived_index	vi_c_surgcomp	Post-Surgical Complications	vi_c_surgcomp		TRUE	TRUE					c_surgcomp	
 vi_c_anaesthesia	vi_c_anaesthesia	derived_index	vi_c_anaesthesia	Anaesthesia Complications	vi_c_anaesthesia		TRUE	TRUE					c_anaesthesia	
 vi_c_delirium	vi_c_delirium	derived_index	vi_c_delirium	Delirium	vi_c_delirium		TRUE	TRUE					c_delirium	
-vi_c_cns	vi_c_cns	derived_index	vi_c_cns	CNS Complications	vi_c_cns		TRUE	TRUE					c_cns	Not sure if RFV means suspected COVID-19 or confirmed
-vi_c_gastro	vi_c_gastro	derived_index	vi_c_gastro	GI Complications	vi_c_gastro		TRUE	TRUE					c_gastro	
+vi_c_cns	vi_c_cns	derived_index	vi_c_cns	CNS Complications	vi_c_cns	TRUE	TRUE	TRUE					c_cns	Not sure if RFV means suspected COVID-19 or confirmed
+vi_c_gastro	vi_c_gastro	derived_index	vi_c_gastro	GI Complications	vi_c_gastro	TRUE	TRUE	TRUE					c_gastro	
 vi_c_vent	vi_c_vent	derived_index	vi_c_vent	Need for Ventilator	vi_c_vent		TRUE	TRUE					c_vent	
 vi_c_psi	vi_c_psi	derived_index	vi_c_psi	Any Patient Safety Event	vi_c_psi	TRUE	TRUE	TRUE					c_psi	
 vi_c_severe	vi_c_severe	derived_index	vi_c_severe	Severe Patient Safety Event	vi_c_severe	TRUE	TRUE	TRUE					c_severe	
