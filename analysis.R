@@ -91,6 +91,8 @@ dct0<-sync_dictionary(dat03);
 #'
 fits <- list();
 for(ii in v(c_mainresponse)){
+  # note: the cumsum(cumsum(%s))<=1 expression below is the part that cuts off
+  # each patient at their first post-index event for the respective events
   .iidata <- gsub('%s',ii,"copy(dat03)[,c('keep','xx','Frail') :=
   list(cumsum(cumsum(%s))<=1, %s, a_efi>0.2) ,by=patient_num][,xx:=%s][(keep)
                      ,c('patient_num','a_t0','a_t1','xx','Frail','a_efi'
