@@ -223,6 +223,7 @@ inputdata[1:2] %>% c(.dat03new) %>% cbind(file=basename(.),MD5sum=tools::md5sum(
 #' directly to get the data. All others please contact (_Kathleen, may I put
 #' your email address here?_).
 #'
+#+ echo=FALSE, results='hide'
 #
 # Save results ----
 #
@@ -241,5 +242,4 @@ file.rename(.outfile,paste0('dictionary_'
 # place `r sprintf("\x60'%s'\x60",.currentscript)` among the values in their
 # `.deps` variables.
 save(file=paste0(.currentscript,'.rdata'),list=setdiff(ls(),.origfiles));
-#+ echo=FALSE, results='hide'
 c()
