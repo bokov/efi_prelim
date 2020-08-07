@@ -83,7 +83,7 @@ dct0<-sync_dictionary(dat03);
 #' predictors. The **p.value.wald** is the hypothesis test (the lower it is,
 #' the greater the confidence with which we can reject the null hypothesis). The
 #' concordance is the agreement between the predictions of the respective models
-#' an actual outcomes-- the higher it is, the better the model. The
+#' and actual outcomes-- the higher it is, the better the model. The
 #' log-likelihood is the goodness-of-fit (the less negative, the better the
 #' fit, all the models here have one degree of freedom). Finally the AIC is
 #' Akaike's Information Criterion, another goodness-of-fit metric that adjusts
