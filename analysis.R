@@ -132,7 +132,27 @@ for(jj in fits) {
   cat("\n******\n");
   };
 
+#' ## Length of stay
 #'
+.losdat03 <- copy(dat03)[,Frail:=a_efi>0.2][,c('age_at_visit_days','a_efi'
+                                               ,'Frail','a_los')];
+survfit(Surv(a_los)~Frail,.losdat03) %>%
+  ggsurv(plot.cens=F,surv.col=c('#00BFC4','#F8766D')
+         ,xlab='Days since inpatient admission'
+         ,ylab='% Patients still in hospital'
+         ,main='Length of Stay') +
+  geom_ribbon(aes(ymin=low,ymax=up,fill=group),alpha=0.3,show.legend=F);
+.coxlosefi <- coxph(Surv(a_los)~a_efi,.losdat03);
+.coxlosage <- update(.coxlosefi,.~age_at_visit_days);
+#+ los_stats
+panderOptions('knitr.auto.asis',TRUE);
+rbind(Frailty=c(glance(.coxlosefi)[,c('statistic.wald','p.value.wald'
+                                      ,'concordance','logLik','AIC')])
+      ,`Patient Age`=c(glance(.coxlosage)[,c('statistic.wald','p.value.wald'
+                                             ,'concordance','logLik'
+                                             ,'AIC')])) %>% pander;
+#'
+#' ******
 #'
 # Table 1 ----
 panderOptions('knitr.auto.asis',TRUE);
@@ -145,6 +165,7 @@ dat04 <- dat03[,lapply(.SD,head,1),by=patient_num,.SDcols=v(c_patdata)[1:5]] %>%
   # duplicates of patient_num
   cbind(dat03[,lapply(.SD,any),by=patient_num,.SDcol=v(c_response)][,-1]
         ,dat03[,.(Frailty=tail(a_efi,1),`Median Frailty`=median(a_efi,na.rm=T)
+                  ,a_los=as.numeric(median(a_los,na.rm=T))
                   ,`Frailty Stage`=cut(tail(a_efi,1),c(0,0.1,0.2,1)
                                        ,include.lowest = T
                                        ,labels=c('Nonfrail, < 0.1'
