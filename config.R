@@ -21,7 +21,7 @@
 inputdata <- c(
   dat01 = 'data/testefi.csv'
   ,dat02 = 'data/testefi.csv'
-  ,dat03 = '2008031907_871ac_fef01ac_EFI_dev.tsv'
+  ,dat03 = '2008070328_59178_fef01ac_EFI_dev.tsv'
   # a bunch of information about the raw variables from DataFinisher & i2b2
   ,map0 = 'data/autosugg02_dict_349c1d4c3250.csv'
   # manual mappings intended to persist from one refresh to the next
