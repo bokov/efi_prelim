@@ -47,7 +47,7 @@ dct0 <- import('varmap.csv');
 
 # data
 if(file.exists(inputdata['dat03'])){
-  dat03 <- fread(inputdata['dat03']) } else {
+  dat03 <- fread(.dat03new<-inputdata['dat03']) } else {
     .infilepatt <- paste0('^[0-9]{10}_[a-z0-9]{4,12}_'
                           ,gsub('^[0-9]*_|\\.[^.]*$',''
                                 ,basename(inputdata['dat01'])),'_dev.tsv$');
@@ -213,7 +213,7 @@ if(identical(reproducibility$status,'')){
 #' publicly shared in the `r .repinfo0`. In addition you will need the following
 #' data files (at minimum either the first two of them or just the third one)
 #' which we are not able to publicly share:
-inputdata[1:3] %>% cbind(file=basename(.),MD5sum=tools::md5sum(.)) %>%
+inputdata[1:2] %>% c(.dat03new) %>% cbind(file=basename(.),MD5sum=tools::md5sum(.)) %>%
   `[`(,-1) %>% pander;
 
 #' If you run the version of the R scripts linked above on the files whose MD5
