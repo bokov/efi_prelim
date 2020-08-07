@@ -223,7 +223,19 @@ inputdata[1:2] %>% c(.dat03new) %>% cbind(file=basename(.),MD5sum=tools::md5sum(
 #' directly to get the data. All others please contact (_Kathleen, may I put
 #' your email address here?_).
 #'
+#
 # Save results ----
+#
+# Export trimmed-down version of current data dictionary
+.dctout <- subset(dct0,dct0[[getOption('tb.retcol')]] %in% names(dat03));
+
+.outfile <- export(.dctout,tempfile(),format='csv');
+file.rename(.outfile,paste0('dictionary_'
+                            ,substr(tools::md5sum(.outfile),1,5),'_'
+                            ,submulti(basename(inputdata['dat01'])
+                                      ,rbind(c('\\.[^.]*$','.csv')
+                                             ,c('^[0-9]{11,13}_','')))));
+
 #
 # Now the results are saved and available for use by other scriports if you
 # place `r sprintf("\x60'%s'\x60",.currentscript)` among the values in their
