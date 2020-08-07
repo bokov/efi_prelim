@@ -8,7 +8,7 @@
 #+ message=F,echo=F
 # init ----
 debug <- 0;
-.projpackages <- c('dplyr','data.table','forcats');
+.projpackages <- c('dplyr','data.table','forcats','pander');
 .globalpath <- c(list.files(patt='^global.R$',full=T)
                  ,list.files(path='scripts',patt='^global.R$',full=T)
                  ,list.files(rec=T,pattern='^global.R$',full=T)
@@ -41,7 +41,7 @@ if(!file.exists('varmap.csv')) source('dictionary.R',local=.srcenv);
 #' Then load `varmap.csv`
 dct0 <- import('varmap.csv');
 # read data ----
-#' ### read data
+#' # Read data
 message('About to read');
 # filtering out patients with two or fewer visits with `if(.N>2)0` and
 set.seed(project_seed);
@@ -54,28 +54,39 @@ dat01 <- fread(unzip(inputdata['dat01']))[-1,][age_at_visit_days >= 18*362.25,][
           # converting `start_date` to a proper date column for subsequent join
           ,start_date := as.Date(start_date)];
 # transform data ----
-#' assign random subsets
+#' # Transform data
+#'
+#' ## assign random subsets
 set.seed(project_seed);
 .sample <- dat01[,.(subsample=sample(c('devel','test'),1)),by=patient_num];
 dat01[.sample,on = 'patient_num',z_subsample:=subsample];
 
-#' Aggregate the outcomes indicators
+#'
+#' ## Aggregate the outcomes indicators
 for(ii in tf_merge) eval(substitute(dat01[,paste0('vi_',ii) :=
                                            do.call(pmax,.SD) %>% as.logical()
                                          ,.SDcols=v(ii)],env=list(ii=ii)));
-#' Blow away the info-only columns, labs, and PSI components
-dat01[,unique(c(v(c_info),v(c_loinc),v(c_psi))) := NULL];
 
+#' ## Remove unused columns
+#'
+#' Blow away the info-only columns, labs, and PSI components except those named
+#' in c_override_keep
+dat01[,setdiff(c(v(c_info),v(c_loinc),v(c_psi)),v(c_override_keep)) := NULL];
+
+#' ## Rename columns
+#'
 #' Rename columns to more easily recognizable names along with dct0 entries
 names(dat01) <- dct0[,c('colname','rename')] %>% na.omit %>%
   submulti(names(dat01),.,method='exact');
 #' Update the dictionary to match renamed columns
 dct0 <- sync_dictionary(dat01);
 
+#' ## Recode or derive variables
+#'
 #' Recode the death-related columns
 dat01$v_vitalstatnaaccr <- grepl('NAACCR|1760:0',dat01$v_vitalstatnaaccr);
-dat01$v_dischdsp <- grepl('DischDisp:E',dat01$v_dischdsp);
-dat01$v_dischst <- grepl('DischStat:EX',dat01$v_dischst);
+dat01$vi_dischdsp_death <- grepl('DischDisp:E',dat01$v_dischdsp);
+dat01$vi_dischst_death <- grepl('DischStat:EX',dat01$v_dischst);
 #' Recode visit-related columns
 dat01$vi_icu <- grepl('VISITDETAIL\\|SPEC:80',dat01$v_department);
 #' `vi_emergdept` is emergency department as per provider specialty
@@ -84,6 +95,32 @@ dat01$vi_emergdept <- grepl('VISITDETAIL\\|SPEC:45',dat01$v_department);
 dat01$vi_ip <- grepl('ENC\\|TYPE:IP',dat01$v_enctype);
 #' `vi_ed` is emergency department as per encounter type.
 dat01$vi_ed <- grepl('ENC\\|TYPE:ED',dat01$v_enctype);
+
+#' Create hospital stay variables
+#'
+#' `z_ipv` : Which inpatient stay is it for this patient?
+dat01[,z_ipv := cumsum(vi_ip),by=patient_num];
+#' `z_inip` : Does this row of data represent a day that's part of
+#'            an inpatient stay?
+dat01[,z_inip := any(vi_ip) &
+        seq_len(.N) <= rle(vi_ip|is.na(v_enctype) &
+                             diff(c(NA,age_at_visit_days))==1)$length[1]
+      ,by=list(patient_num,z_ipv)];
+#' `a_los` : Length of stay
+dat01[,a_los := -1][,a_los := ifelse(vi_ip,sum(as.numeric(z_inip)),NA)
+      ,by=list(patient_num,z_ipv)];
+#' `z_age_at_disch_days` : age at discharge (needed for readmission calc)
+dat01[,z_age_at_disch_days := -1 ][
+  ,z_age_at_disch_days := age_at_visit_days[1]+a_los[1]-1
+  , by=list(patient_num,z_ipv)];
+#' `a_t_since_disch` : at admission, days since previous discharge
+dat01[,a_t_since_disch := -1][
+  ,a_t_since_disch := ifelse(vi_ip & z_ipv > 1
+                             ,age_at_visit_days - shift(z_age_at_disch_days
+                                                        ,fill=-1E6),NA)
+  ,by=patient_num];
+#' `vi_readm30` : 30-day readmission
+dat01$vi_readm30 <- !is.na(dat01$a_t_since_disch) & dat01$a_t_since_disch <=30;
 
 #' Simplify `race_cd`
 dat01$race_cd <- forcats::fct_collapse(dat01$race_cd,White='white',Black='black'
@@ -115,11 +152,13 @@ length(unique(.debug_death00$patient_num)) %>%
 .debug_death00[,.N,by=patient_num]$N %>% table %>% as.data.frame %>%
   setNames(c('number suspect visits','patients'));
 #' Does discharge status ever disagree with discharge disposition for death?
-with(dat01,table(v_dischst,v_dischdsp));
+with(dat01,table(vi_dischst_death,vi_dischdsp_death));
 #' Does NAACCR vital status ever disagree with discharge disposition for death?
-with(dat01,table(v_vitalstatnaaccr,v_dischdsp));
+with(dat01,table(v_vitalstatnaaccr,vi_dischdsp_death));
 #' How many patients have death records from additional sources?
-.debug_death01 <- subset(dat01,v_dischdsp|v_dischst|v_vitalstatnaaccr|
+#' TODO: Update c_death and use that
+.debug_death01 <- subset(dat01,vi_dischdsp_death|vi_dischst_death|
+                           v_vitalstatnaaccr|
                            age_at_visit_days>=age_at_death_days)[
   ,d_death:=age_at_visit_days >= age_at_death_days];
 .debug_death01$patient_num %>% unique %>% length;
@@ -169,9 +208,15 @@ dat01 <- dat01[a_t0>=0 & !is.na(a_efi),][,if(.N>1) .SD,by=patient_num];
 dat01devel <- dat01[z_subsample=='devel',];
 dat01test <- dat01[z_subsample=='test',];
 
+#' # Diagnostic Summary
+#'
 #' ## Final encounter and patient counts in each dataset
 sapply(ls(patt='dat01'),function(xx) {
-  yy<-get(xx); c(encounters=nrow(yy),patients=length(unique(yy$patient_num)))});
+  yy<-get(xx); c(encounters=nrow(yy)
+                 ,patients=length(unique(yy$patient_num)))}) %>% pander;
+#' ## Undocumented variables
+setdiff(names(dat01),dct0$colname) %>% select(dat01,.) %>% sapply(class) %>%
+  cbind %>% pander(col.names='class');
 
 # save out ----
 #' ## Save all the processed data to tsv files
