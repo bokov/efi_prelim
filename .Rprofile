@@ -43,3 +43,18 @@ clean_slate <- function(command="",removepatt='^\\.RData$|.*\\.[Rr]\\.rdata$|.*\
   if(requireNamespace('rstudioapi') && rstudioapi::isAvailable()){
     rstudioapi::restartSession(command)};
 }
+
+renameoutput <- function(file=get('.currentscript')
+                         ,fromdata=basename(get('inputdata')['dat03'])
+                         ,suffix='.html'){
+  fromdata <- gsub('^[0-9]{10,12}_[0-9a-z]{5,7}',''
+                   ,fromdata) %>% gsub('\\.[^.]*$','',.);
+  file <- file.path(dirname(file),gsub('\\.[^.]*$','',basename(file)));
+  newfile <- file.path(dirname(file)
+                       ,paste0(basename(file),'_'
+                               ,substr(tools::md5sum(paste0(file,suffix)),1,5)
+                               ,fromdata,suffix));
+  file.symlink(paste0(file,suffix),newfile);
+  if(file.exists(newfile)) sprintf('Linked %s to %s',paste0(file,suffix)
+                                   ,newfile);
+}
