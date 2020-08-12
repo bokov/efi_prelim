@@ -58,8 +58,10 @@ if(file.exists(inputdata['dat03'])){
       message(inputdata['dat03'],' not found, loading most recent available: '
               ,.dat03new);
     } else {
-      .srcenv1 <- new.env();
-      source('data.R',local=.srcenv1);
+      #.srcenv1 <- new.env();
+      unlink('data.R.rdata',force = T);
+      .loadedobjects <- load_deps2('data.R',cachedir = .workdir,debug=.debug);
+      #source('data.R',local=.srcenv1);
       .dat03candidates <- list.files(patt=.infilepatt);
       .dat03new <- file.info(.dat03candidates,extra_cols = F)[
         ,'mtime',drop=F] %>% arrange(desc(mtime)) %>% rownames %>% head(1);
