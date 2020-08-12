@@ -246,5 +246,12 @@ file.rename(.outfile,paste0(format(Sys.time(),'%y%m%d%H%M'),'_'
                             ,submulti(basename(inputdata['dat01'])
                                       ,rbind(c('\\.[^.]*$','_test.tsv')
                                              ,c('^[0-9]{11,13}_','')))));
+
+.savelist <- if(debug>0) setdiff(ls(),.origfiles) else c();
+suppressWarnings(save(file=file.path(.workdir
+                                     ,paste0(basename(.currentscript)
+                                             ,'.rdata'))
+                      ,list=.savelist));
+
 #+ echo=F,eval=F
 c()
