@@ -189,7 +189,7 @@ tb2 <- sapply(fits,function(xx){
 #' visit histories, those who had fewer than two visit-dates after index
 #' visit assignment were removed from the sample as were patients whose EFI
 #' was never higher than 0. Finally, the patients were randomly assigned to
-#' a develpoment cohort (N=2,497 patients, 52,372 visit-days) or a testing
+#' a development cohort (N=2,497 patients, 52,372 visit-days) or a testing
 #' cohort (N=3,220 patients, 56,320 visit-days). Sensitivity analysis was
 #' done to see the effect of leaving in data from all visits by adult
 #' patients and the overall direction of EFI's effect was the same but
@@ -390,7 +390,7 @@ for(jj in fits) {
 #'
 #' There is no gold standard method to assess Frailty in clinical practice.
 #' Currently available frailty assessment tools used in geriatric practice have
-#' good validity ( example Linda Fried’s phenotype method) but these are time
+#' good validity (for example @fried1a) but these are time
 #' intensive and often difficult to implement in a busy general practice.
 #' Assessing frailty helps clinicians identify high risk patients and tailor
 #' interventions to prevent health decline and poor outcomes. Because of the
