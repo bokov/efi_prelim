@@ -173,6 +173,9 @@ p.abstract:after {
     font-weight: 800;
 }
 
+
+table.Rtable1 { font-family:  Georgia, Palatino, 'Palatino Linotype', Times, 'Times New Roman', serif;}
+
 @media print {
   #TOC { display: none;}
 
