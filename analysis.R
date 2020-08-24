@@ -22,7 +22,7 @@
 # packages and scriports). The recommended value to start with is the one shown
 # here. You can add more if the need arises later. For more information, please
 # see the [overview](overview.html) scriport.
-.projpackages <- c('GGally','tableone','pander','dplyr','ggplot2','data.table'
+.projpackages <- c('GGally','pander','dplyr','ggplot2','data.table'
                    ,'survival','broom','forcats','table1');
 .deps <- c( '' );
 .debug <- 0;
@@ -71,6 +71,9 @@ if(file.exists(inputdata['dat03'])){
     }
   }
 
+efi_pats <- unique(subset(dat03,a_efi>0)$patient_num);
+dat03 <- subset(dat03,patient_num %in% efi_pats);
+
 # syncronize dictionary with newly-loaded data
 dct0<-sync_dictionary(dat03);
 
@@ -103,15 +106,17 @@ for(ii in v(c_mainresponse)){
   fits[[ii]]$dispname <- dct0[dct0$colname==ii,'dispname'];
   fits[[ii]]$plot <- survfit(Surv(a_t0,a_t1,xx)~Frail,data=.iidata) %>%
     ggsurv(plot.cens=F, main=fits[[ii]]$dispname
-           ,surv.col = c('#00BFC4','#F8766D')
+           #,surv.col = c('#00BFC4','#F8766D')
            ,ylab='% Patients event-free'
-           ,xlab='Days since randomly selected index visit') +
+           ,xlab='Days since randomly selected index visit'
+           ,order.legend=F) +
     #scale_x_continuous(limits=c(0,1096)) +
     scale_y_continuous(labels=scales::percent_format(1)) +
     geom_ribbon(aes(ymin=low,ymax=up,fill=group),alpha=0.3,show.legend = F) +
-    scale_fill_manual(values=c('#00BFC4','#F8766D')) +
+    scale_fill_discrete(type=c('#00BFC4','#F8766D'),breaks=c('FALSE','TRUE')) +
+    scale_color_discrete(type=c('#00BFC4','#F8766D'),breaks=c('FALSE','TRUE')) +
     coord_cartesian(ylim=c(.5,1),xlim=c(0,1096));
-  fits[[ii]]$models$Frailty <- coxph(Surv(a_t0,a_t1,xx)~a_efi,data=.iidata);
+  fits[[ii]]$models$Frailty <- coxph(Surv(a_t0,a_t1,xx)~I(10*a_efi),data=.iidata);
   fits[[ii]]$models$`Patient Age` <- update(fits[[ii]]$models$Frailty,. ~age_at_visit_days);
   # getting rid of efiage because it doesn't really add anything new beyond
   # what comparing EFI to age univariate models gets us, and on the vi_c_severe
@@ -119,6 +124,7 @@ for(ii in v(c_mainresponse)){
   #fits[[ii]]$models$efiage <- update(fits[[ii]]$models$Frailty
   #                                   ,.~.+age_at_visit_days);
 };
+
 
 #+ survcurves,message=FALSE,results='asis'
 panderOptions('knitr.auto.asis', FALSE);
@@ -155,20 +161,31 @@ rbind(Frailty=c(glance(.coxlosefi)[,c('statistic.wald','p.value.wald'
       ,`Patient Age`=c(glance(.coxlosage)[,c('statistic.wald','p.value.wald'
                                              ,'concordance','logLik'
                                              ,'AIC')])) %>% pander;
+# Aging fits ----
 #'
 #' ******
 #'
+#' ## Fits for Aging Paper
+#+ agingfigures, fig.show="hold", out.width="50%"
+for(jj in fits[v(c_agingpaper)]) print(jj$plot);
+#'
 # Table 1 ----
-panderOptions('knitr.auto.asis',TRUE);
+#'
+#' ******
+#'
 #' ## Cohort table
 #'
 #' The obligatory 'table-1': key variables stratified by frailty status.
 #'
+#+ tb1
 dat04 <- dat03[,lapply(.SD,head,1),by=patient_num,.SDcols=v(c_patdata)[1:5]] %>%
   # the [,-1] in the following line and at the end are needed to avoid
   # duplicates of patient_num
   cbind(dat03[,lapply(.SD,any),by=patient_num,.SDcol=v(c_response)][,-1]
-        ,dat03[,.(Frailty=tail(a_efi,1),`Median Frailty`=median(a_efi,na.rm=T)
+        ,dat03[,.(`Patient age (years)`=max(age_at_visit_days)/365.25
+                  ,Frailty=tail(a_efi,1)
+                  ,`Median Frailty`=median(a_efi,na.rm=T)
+                  ,`Number of visit-days`=.N
                   ,a_los=as.numeric(median(a_los,na.rm=T))
                   ,`Frailty Stage`=cut(tail(a_efi,1),c(0,0.1,0.2,1)
                                        ,include.lowest = T
@@ -178,7 +195,11 @@ dat04 <- dat03[,lapply(.SD,head,1),by=patient_num,.SDcols=v(c_patdata)[1:5]] %>%
                ,by=patient_num][,-1]);
 
 .tb1formula <- setdiff(names(dat04),c('language_cd','Frailty Stage'
-                                      ,'Median Frailty','patient_num')) %>%
+                                      ,'Median Frailty','patient_num'
+                                      ,'age_at_death_days'
+                                      ,'age_at_visit_days'
+                                      ,setdiff(v(c_response)
+                                               ,v(c_agingpaper)))) %>%
   paste0('`',.,'`',collapse='+') %>% paste('~',.,'|`Frailty Stage`') %>%
   formula;
 
@@ -186,6 +207,43 @@ tb1 <- table1(.tb1formula,data=dat04) %>%
   submulti(dct0[,c('colname','dispname')],'partial');
 
 tb1;
+
+# Table 2 ----
+#'
+#' *****
+#'
+#' ## Statistical results
+#'
+#+ tb2
+tb2 <- sapply(fits[v(c_agingpaper)],function(xx){
+  with(xx$models,cbind(tidy(Frailty,conf.int=T)
+                       ,exp=tidy(Frailty,expon=T,conf.int=T)[
+                         ,c('estimate','conf.low','conf.high')]))}
+  ,simplify=F) %>% bind_rows(.id='Outcome') %>%
+  mutate(betahat=sprintf('%.2f (%.2f, %.2f)',estimate,conf.low,conf.high)
+         ,foldchange=sprintf('%.2f (%.2f, %.2f)',exp.estimate,exp.conf.low
+                             ,exp.conf.high),P=p.adjust(p.value)
+         ,Outcome=submulti(Outcome,dct0[,c('colname','dispname')])) %>%
+  rename(SE=std.error,Z=statistic);
+
+tb2[,c('Outcome','betahat','foldchange','SE','Z','P')] %>%
+  rename(`β^ (95% CI)`=betahat,`fold-change (95% CI)`=foldchange ) %>%
+  pander(digits=3);
+
+# Model performance for aging paper ----
+#' ## Model Performance, Aging Paper
+#'
+#' Table 3.
+#+ tb3
+bind_rows(sapply(fits[v(c_agingpaper)],function(xx){
+  do.call(bind_rows,c(sapply(xx$models,function(yy){
+    glance(yy)[,c('concordance','logLik','AIC')]
+    },simplify=F),.id='Predictor'))
+  },simplify=F),.id='Outcome') %>%
+  mutate(Outcome=ifelse(Predictor=='Frailty'
+                        ,submulti(Outcome,dct0[,c('colname','dispname')])
+                        ,' ')) %>%
+  rename(Concordance=concordance,`Log Likelihood`=logLik) %>% pander;
 
 # Response vars ----
 #' *****
