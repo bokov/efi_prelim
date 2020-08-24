@@ -161,13 +161,6 @@ rbind(Frailty=c(glance(.coxlosefi)[,c('statistic.wald','p.value.wald'
       ,`Patient Age`=c(glance(.coxlosage)[,c('statistic.wald','p.value.wald'
                                              ,'concordance','logLik'
                                              ,'AIC')])) %>% pander;
-# Aging fits ----
-#'
-#' ******
-#'
-#' ## Fits for Aging Paper
-#+ agingfigures, fig.show="hold", out.width="50%"
-for(jj in fits[v(c_agingpaper)]) print(jj$plot);
 #'
 # Table 1 ----
 #'
@@ -197,9 +190,7 @@ dat04 <- dat03[,lapply(.SD,head,1),by=patient_num,.SDcols=v(c_patdata)[1:5]] %>%
 .tb1formula <- setdiff(names(dat04),c('language_cd','Frailty Stage'
                                       ,'Median Frailty','patient_num'
                                       ,'age_at_death_days'
-                                      ,'age_at_visit_days'
-                                      ,setdiff(v(c_response)
-                                               ,v(c_agingpaper)))) %>%
+                                      ,'age_at_visit_days')) %>%
   paste0('`',.,'`',collapse='+') %>% paste('~',.,'|`Frailty Stage`') %>%
   formula;
 
@@ -215,7 +206,7 @@ tb1;
 #' ## Statistical results
 #'
 #+ tb2
-tb2 <- sapply(fits[v(c_agingpaper)],function(xx){
+tb2 <- sapply(fits[v(c_mainresponse)],function(xx){
   with(xx$models,cbind(tidy(Frailty,conf.int=T)
                        ,exp=tidy(Frailty,expon=T,conf.int=T)[
                          ,c('estimate','conf.low','conf.high')]))}
@@ -230,12 +221,12 @@ tb2[,c('Outcome','betahat','foldchange','SE','Z','P')] %>%
   rename(`β^ (95% CI)`=betahat,`fold-change (95% CI)`=foldchange ) %>%
   pander(digits=3);
 
-# Model performance for aging paper ----
-#' ## Model Performance, Aging Paper
+# Model performance  ----
+#' ## Model Performance
 #'
 #' Table 3.
 #+ tb3
-bind_rows(sapply(fits[v(c_agingpaper)],function(xx){
+bind_rows(sapply(fits[v(c_mainresponse)],function(xx){
   do.call(bind_rows,c(sapply(xx$models,function(yy){
     glance(yy)[,c('concordance','logLik','AIC')]
     },simplify=F),.id='Predictor'))
