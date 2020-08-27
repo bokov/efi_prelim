@@ -356,6 +356,12 @@ tb2[,c('Outcome','betahat','foldchange','SE','Z','P')] %>%
   pander(digits=3, caption='(\\#tab:tb2) Cox-proportional hazards with EFI as a predictor');
 #'
 #'
+#' In Table \@ref(tab:tb3) we compare the performance of EFI and age as
+#' predictors for each of the `r as.english(nrow(tb2)) %>% as.character`
+#' outcomes. In all cases, the EFI models has a robustly lower AIC and
+#' log-likelihood than the respective patient-age models, as well as a higher
+#' concordance (in all cases greater than 0.7).
+#'
 # . table 3, age vs efi ----
 #+ tb3
 bind_rows(sapply(fits,function(xx){
@@ -368,12 +374,6 @@ bind_rows(sapply(fits,function(xx){
                         ,' ')) %>%
   rename(Concordance=concordance,`Log Likelihood`=logLik) %>%
   pander(caption='(\\#tab:tb3) Comparing EFI and age as predictors');
-#'
-#' In Table \@ref(tab:tb3) we compare the performance of EFI and age as
-#' predictors for each of the `r as.english(nrow(tb2)) %>% as.character`
-#' outcomes. In all cases, the EFI models has a robustly lower AIC and
-#' log-likelihood than the respective patient-age models, as well as a higher
-#' concordance (in all cases greater than 0.7).
 #'
 #' In figures \@ref(fig:kmplots) a-k we show Kaplan-Meier plots for each of the
 #' outcomes stratified by whether EFI is greater than 0.19 (Frail=TRUE) or less
