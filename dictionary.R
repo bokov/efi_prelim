@@ -38,6 +38,18 @@ psi <- try_import(inputdata['psi']);
 #' Do some cleanup
 map0$c_info[is.na(map0$c_info)] <- FALSE;
 
+#' Create code-groups
+#' Diagnoses
+map0$c_icd9 <- map0$ddomain == 'ICD9';
+map0$c_icd10 <- map0$ddomain == 'ICD10';
+# Procedures
+map0$c_icd9pcs <- map0$ddomain == 'ICD9PCS';
+map0$c_icd10pcs <- map0$ddomain == 'ICD10PCS';
+map0$c_cpt <- map0$ddomain == 'CPT';
+#' Labs
+map0$c_loinc <- map0$ddomain == 'LOINC';
+
+
 #' Create a column to bind by (unstable solution, might stop working)
 map0$standard_code <- paste0(map0$ddomain,':',gsub(' - .*$','',map0$name));
 
@@ -52,8 +64,6 @@ for(ii in (psinames<-unique(psi$shortname))) {
 #' Columns that participate in any PSI category
 map0$c_psi <- map0[,paste0('c_',unique(psinames))] %>% rowSums > 0;
 
-#' Labs
-map0$c_loinc <- map0$ddomain == 'LOINC';
 
 #' Join on map1 and add rows from map2
 map3 <- left_join(map0,map1) %>% bind_rows(map2);
