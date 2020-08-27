@@ -47,7 +47,7 @@ theme_set(theme_bw(base_family = 'serif',base_size=14));
 knitr::opts_chunk$set(echo=.debug>0, warning=.debug>0, message=.debug>0);
 
 
-.currentscript <- current_scriptname('analysis.R');
+.currentscript <- current_scriptname('efi_aging.R');
 .figcount <- 0;
 
 # Load files ----
@@ -390,7 +390,7 @@ for(jj in fits) {
 #'
 #' There is no gold standard method to assess Frailty in clinical practice.
 #' Currently available frailty assessment tools used in geriatric practice have
-#' good validity (for example @fried1a) but these are time
+#' good validity (for example @fried01a) but these are time
 #' intensive and often difficult to implement in a busy general practice.
 #' Assessing frailty helps clinicians identify high risk patients and tailor
 #' interventions to prevent health decline and poor outcomes. Because of the
@@ -403,16 +403,11 @@ for(jj in fits) {
 #'     move to methods/theory paper?)
 #'
 #' -   What agrees and what disagrees with previous work?
-#'
 #' -   What is new?
-#'
 #'     -   Per-visit EFI allows plotting an EFI trajectory over time
-#'
 #'     -   Strictly limiting data elements to those we can count on being
 #'         available in any EHR system, at any site
-#'
 #' -   future work
-#'
 #' -   theoretical and practical implications
 #'
 #'
