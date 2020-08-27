@@ -6,10 +6,10 @@
 #' css: "production.css"
 #' abstract: 'We have found that the electronic frailty index (EFI), a risk
 #'   score developed using the Rockwood deficit-accumulation framework, is
-#'   a strong predictor of healthcare-associated non-procedural trauma, cardiac
-#'   complications, adverse drug events, venous thromboembolism, fluid
-#'   management complications, as well as patient safety events in general and
-#'   severe patient safety events (defined as xxx, Southern et al. 2017).'
+#'   a strong predictor of ED visits, 30-day readmissions, healthcare-associated
+#'   non-procedural trauma, cardiac complications, adverse drug events, venous
+#'   thromboembolism, fluid management complications, as well as patient safety
+#'   events in general and severe patient safety events.'
 #' documentclass: article
 #' clean: false
 #' bibliography: efi_paper.bib
@@ -45,8 +45,15 @@ panderOptions('graph.fontfamily','serif');
 theme_set(theme_bw(base_family = 'serif',base_size=14));
 knitr::opts_chunk$set(echo=.debug>0, warning=.debug>0, message=.debug>0);
 
+# What format are we rendering the output?
+.outfmt <- knitr::opts_knit$get('rmarkdown.pandoc.to');
+if(is.null(.outfmt)){
+  if(knitr::is_html_output()) .outfmt <- 'html' else {
+    if(knitr::is_latex_output()) .outfmt <- 'latex' else {
+      .outfmt <- 'unknown';
+    }}};
 
-.currentscript <- current_scriptname('analysis.R');
+.currentscript <- current_scriptname('efi_quality.R');
 .figcount <- 0;
 
 # Load files ----
@@ -165,18 +172,31 @@ tb2 <- sapply(fits,function(xx){
 #' assessments yet offers similar [@malmstrom14] or possibly better
 #' [@kulminski08] predictive accuracy.
 #'
-#' Possible points still left to cover:
+#' `r fs('Possible points left to cover:')`
 #'
-#' -   outcomes important to clinical care of older patients
+#+ n2s0, results='asis'
+fs(c(
+  'frailty measures as an emerging best practice?'
+  ,'Do we have any remarks about how quality improvement relates to implementation science?'
+  ,'outcomes important for improving quality and reducing costs'
+  ,'how care could be improved with better modeling of these outcomes'
+  ,'information about our site'
+)) %>% paste('*',.) %>% cat(sep='\n');
+
 #'
-#' -   how care could be improved with better modeling of these outcomes
-#'
-#' -   information about our site
 #'
 # methods ----
 #' # Methods
 #'
 #' ## Population
+#'
+#' ::: {.note2self custom-style="bnote2self"}
+#' Yes, I realize at the moment this is identical to the corresponding section
+#' in the aging paper. The phrasing will naturally diverge from the
+#' aging paper over subsequent edits. For now I left it all here
+#' because these facts are relevant to this paper as well and I didn't want to
+#' lose any of them.
+#' :::
 #'
 #' A random 1% sample (N=14,844) was drawn from the deidentified patient
 #' records of a large academic health center and its teaching hospital
@@ -189,17 +209,17 @@ tb2 <- sapply(fits,function(xx){
 #' visit assignment were removed from the sample as were patients whose EFI
 #' was never higher than 0. Finally, the patients were randomly assigned to
 #' a development cohort (N=2,497 patients, 52,372 visit-days) or a testing
-#' cohort (N=3,220 patients, 56,320 visit-days). Sensitivity analysis was
-#' done to see the effect of leaving in data from all visits by adult
+#' cohort `r fs('(N=3,220 patients, 56,320 visit-days)')`. Sensitivity analysis
+#' was done to see the effect of leaving in data from all visits by adult
 #' patients and the overall direction of EFI's effect was the same but
-#' [the performance improvement relative to patient age was inflated].
+#' `r fs('[the performance improvement relative to patient age was inflated]')`.
 #' All decisions about data processing and statistical analysis were made
 #' using only the development cohort and blinded to the testing cohort. For
 #' publication, the same analysis scripts were run on the testing cohort
 #' and used to create all results reported here (the development version of
 #' each table and figure is available in the supplemental materials). The
 #' baseline characteristics of the testing cohort are shown in Table
-#' \@ref(tab:table1).
+#' \@ref(tab:table1)
 #'
 #' ***
 # . table 1 ----
@@ -231,53 +251,71 @@ dat04 <- dat03[,lapply(.SD,head,1),by=patient_num,.SDcols=v(c_patdata)[1:5]] %>%
 #+ table1,results='asis'
 tb1 <- table1(.tb1formula,data=dat04) %>%
   submulti(dct0[,c('colname','dispname')],'partial');
-
-tb1;
-cat("\n\nTable: (\\#tab:table1) Cohort demographics");
+if(.outfmt == 'html'){
+  print(tb1);
+  cat("\n\nTable: (\\#tab:table1) Cohort demographics")
+  } else {
+    pander(data.frame(X='placeholder',row.names = 'Y')
+           ,caption='(\\#tab:table1) Cohort demographics');
+  };
 
 #'
 #' ## Electronic Frailty Index
 #'
 #' @clegg16a developed an electronic frailty index (EFI) for UK health systems
 #' following the methodology of Mitnitsky, Rockwood, et al.
-#' [@mitnitski01a; @song10; @searle08a]. Recently, @pajewski19 adapted the EFI
-#' to use ICD10 and ICD9. We further built on this work by also mapping
-#' laboratory tests to specific LOINC codes. For each patient visit, all
-#' distinct diagnoses and abnormal lab results over the preceding two-year
-#' window for that patient were aggregated into a single EFI, a numeric value
-#' that can range from 0 to 1 (but in practice seldom exceeded 0.6). As
-#' mentioned above, we omitted all visits prior to a randomly select index
-#' visit for each patient. This did not interfere with EFI calculation because
-#' those EFI values were calculated separately for every distinct patient-date
-#' in our health system, and then joined to the EHR data.
+#' [@mitnitski01a; @song10; @searle08a].
 #'
+#' ::: {.note2self custom-style="bnote2self"}
+#' Alex TODO: Points which were omitted or briefly covered in aging paper and
+#' might be appropriate here (probably more diplomatically phrased though):
+#' :::
+#'
+#+ n2s2, results='asis'
+fs(c(
+'EFI has been used in the UK for several years [@clegg16a], and has only recently been adapted to a US EHR system, [@pajewski19]'
+,'Our version has fewer EHR-specific dependencies'
+,'Ours is easier to maintain because it uses value-flags instead of manually curated threshold values'
+,'Our EFI is longitudinal, compare our results to those of [@stow18a]'
+,'The importance of an open software license-- not only lower costs but also greater transparency and easier for stakeholders to contribute improvements.'
+),retfun=function(xx) cat(paste('*',xx),sep='\n'))
+
+#'
+# . outcomes ----
 #' ## Outcomes
 #'
-#' The primary outcomes we predicted with EFI were falls (any ICD9 codes in
-#' E880-E888.9, E987.x, V00.x, or ICD10 codes in W00-W19), hospital
-#' admissions (EHR encounter type = 'inpatient'), hospital-acquired
-#' infections (having any ICD10 code associated with hospital-acquired
-#' infections per Southern et al. @southern17 ), discharge to
-#' intermediate care facilities (ICF) or skilled nursing facilities (SNF)
-#' (using discharge disposition codes, for patients whose admit-source for
-#' that encounter was 'Home'), and all-cause mortality insofar as it can be
-#' ascertained from the EHR discharge disposition or vital status (which,
-#' in the absence of linkage to external death indexes are likely to
-#' under-report the actual mortality and so should be interpreted with
-#' caution).
+#' The primary outcomes we predicted with EFI were ED visits, readmission
+#' within 30 days of a prior discharge from an inpatient stay, non-procedural
+#' hospital trauma, cardiac complications, adverse drug events, venous
+#' thromboembolisms, fluid management events, CNS complications, and GI
+#' complications. All outcomes except ED visits and readmissions were
+#' defined as visits during which at least one ICD10 code was recorded from the
+#' corresponding patient safety indicator (PSI) groups published by @southern17 .
+#' Of the other 10 PSIs defined by @southern17, 2 were excluded
+#' because pregnancies were outside the scope of our protocol, 1 (hospital
+#' infections) we report in a separate publications
+#' `r fs('(manuscript in preparation)')` and the remaining
+#' 7 had prevalences too low to reliably analyze in this sample size. However,
+#' all the diagnoses from @southern17 except maternal and infant
+#' complications contributed to the 'any patient safety event' outcome. A subset
+#' of these were aggregated into the 'severe patient safety' event defined as
+#' "proximally threatening to life or to major vital organs" [@southern17].
+#'
+#' ::: {.note2self custom-style="bnote2self"}
+#' If anybody has any context to contribute on any of the above , you are most
+#' welcome to do so. Also welcome are suggestions for refining outcomes by
+#' changing the combinations of raw diagnoses/vitals/labs/etc. that are
+#' criteria for those outcomes.
+#' :::
 #'
 # . stats ----
 #' ## Statistical Analysis
 #'
 #' For each outcome of interest, we used a Cox proportional hazard model to
 #' estimate the risk of the first occurrences of the outcome after the
-#' patients' respective index visits using EFI as the predictor. Unlike
-#' earlier studies, we treated EFI as a time-varying numeric predictor with
-#' multiple followups per patient. Since only the first occurrence was
-#' being predicted, a recurring event model was not necessary. As a
-#' comparison, for each outcome a second analysis was done that was
-#' identical to the first except that patient age at visit (in days) was
-#' used as the predictor.
+#' patients' respective index visits using EFI as a time-varying predictor.
+#' For each outcome we compared the predictive performance of EFI to that
+#' patient age at visit.
 #'
 # results ----
 .resultsfold <- subset(tb2,outcomevar %in% v(c_truefalse)) %>%
@@ -293,14 +331,15 @@ cat("\n\nTable: (\\#tab:table1) Cohort demographics");
 #' stays were observed in patients with an EFI > 0.19.
 #' The p-values shown have been adjusted for multiple comparisons
 #' (`r as.english(nrow(tb2)) %>% as.character` outcomes reported in
-#' one study) using the @holm79 method and in all cases are highly
-#' significant. It is well established in gerontology that an enormous and
-#' diverse range of poor health outcomes are correlated with an individual's
-#' age, but chronological age provides no information about the progression of
-#' biological age in an individual. It has long been a priority in aging
-#' research to find a metric for aging that is subject to individual variation
-#' and intervention. Rockford et al. have pointed out {ref} that deficit
-#' accumulation has the hallmarks of such a measure.
+#' this study) using the @holm79 method and remain significant.
+#'
+#' Older patients trend toward frailty and one might ask whether EFI merely
+#' reflect patient age. To test this we compared the predictive
+#' accuracy of the EFI to that of patient age. For each outcome, we fit an
+#' additional Cox proportional hazard model using age at visit as the
+#' predictor instead of EFI. We found that EFI predicts all outcomes better
+#' than patient age. Models using both patient age and EFI offered no
+#' significant improvement over EFI alone `r fs('[not shown?]')`.
 #'
 # . coxph fits ----
 #'
@@ -316,12 +355,6 @@ tb2[,c('Outcome','betahat','foldchange','SE','Z','P')] %>%
   rename(`β^ (95% CI)`=betahat,`fold-change (95% CI)`=foldchange ) %>%
   pander(digits=3, caption='(\\#tab:tb2) Cox-proportional hazards with EFI as a predictor');
 #'
-#' Therefore, we compared the predictive accuracy of the EFI to that of
-#' patient age. For each outcome, we fit an additional Cox proportional
-#' hazard model, this time using age at visit as the predictor variable. It
-#' appears, at least in this population, that not only can EFI accurately
-#' predict mortality and poor patient outcomes without any knowledge of
-#' patient age but it does so better than patient age.
 #'
 # . table 3, age vs efi ----
 #+ tb3
@@ -340,23 +373,25 @@ bind_rows(sapply(fits,function(xx){
 #' predictors for each of the `r as.english(nrow(tb2)) %>% as.character`
 #' outcomes. In all cases, the EFI models has a robustly lower AIC and
 #' log-likelihood than the respective patient-age models, as well as a higher
-#' concordance (in all cases greater than 0.7). Cox models incorporating EFI
-#' together with age, with or without an interaction term, did not have a
-#' significantly better fit than the univariate EFI model (not shown, available
-#' in supplement).
+#' concordance (in all cases greater than 0.7).
 #'
-#' In figures \@ref(fig:kmplots) a-f we show Kaplan-Meier plots for each of the
+#' In figures \@ref(fig:kmplots) a-k we show Kaplan-Meier plots for each of the
 #' outcomes stratified by whether EFI is greater than 0.19 (Frail=TRUE) or less
 #' (Frail=FALSE) [@stow18].
+#' `r fs('[Let\'s talk about whether to put length of stay here or aging paper]')`
 #'
-#+ kmplots, fig.show="hold", out.width="50%", fig.cap=" - "
+#+ kmplots, fig.show="hold", out.width=if(.outfmt=='docx') "2.75in" else "50%", fig.cap=" - "
 # . kmplots ----
-.subfig <- 0;
-for(jj in fits) {
-  .subfig <- .subfig + 1;
-  print(jj$plot + labs(caption=paste0('Figure 1 ',letters[.subfig],'. \n')) +
-          theme(plot.caption=element_text(size=15)) );
-}
+# if(.outfmt != 'docx'){
+  .subfig <- 0;
+  for(jj in fits) {
+    .subfig <- .subfig + 1;
+    print(jj$plot + labs(caption=paste0('Figure 1 ',letters[.subfig],'. \n')) +
+            theme(plot.caption=element_text(size=15)) )};
+  # } else {
+  #   matrix(rep_len('placeholder',length(fits)),ncol=2) %>% pander();
+  #
+  # };
 #'
 # discussion ----
 #' # Discussion
@@ -378,46 +413,40 @@ for(jj in fits) {
 #' genuinely non-frail patients from those who get most of their care
 #' outside the researchers' health system.
 #'
-#' Vital status is often out of date in EHR systems if the patient did not
-#' die in the hospital or shortly after their visit, so our data may
-#' under-represent the true mortality rates. Nevertheless, the relationship
-#' between EFI and mortality risk observed here agrees with previous EFI
-#' studies. Unlike previous studies we sampled all adults rather than just
-#' older adults so we could assess the performance of EFI across the
-#' lifespan and include individuals who might have early-onset frailty.
-#'
-#' There is no gold standard method to assess Frailty in clinical practice.
-#' Currently available frailty assessment tools used in geriatric practice have
-#' good validity (for example @fried1a) but these are time
-#' intensive and often difficult to implement in a busy general practice.
 #' Assessing frailty helps clinicians identify high risk patients and tailor
-#' interventions to prevent health decline and poor outcomes. Because of the
-#' simplicity of the Rockwood Frailty Index, it is more likely to be adopted by
-#' clinicians in a busy practice.
+#' interventions to prevent health decline and poor outcomes. Currently
+#' available frailty assessment tools used in geriatric practice have good
+#' validity (for example @fried01a) but these are time intensive and often
+#' difficult to implement in a busy general practice. Because EFI can be
+#' calculated automatically it is more likely to be adopted by clinicians in a
+#' busy practice. Also, EFI can be calculated retroactively
+#' on historic records of patients who never received in-person assessments,
+#' giving a clearer picture of a health system's overall performance.
+#' Furthermore, our version of the EFI algorithm can be made vendor-independent
+#' since it relies only on diagnoses, medications, lab codes, and vitals which
+#' are data in modern EHR systems. This, together with the fact that this
+#' algorithm is publicly available under an open-source license, is intended
+#' to facilitate adoption and enhancement by diverse health systems.
 #'
-#' Other possible points to cover:
+#' `r fs('Other possible points to cover:')`
 #'
-#' -   What we learned by not restricting the sample to older adults (or
-#'     move to methods/theory paper?)
-#'
-#' -   What agrees and what disagrees with previous work?
-#'
-#' -   What is new?
-#'
-#'     -   Per-visit EFI allows plotting an EFI trajectory over time
-#'
-#'     -   Strictly limiting data elements to those we can count on being
-#'         available in any EHR system, at any site
-#'
-#' -   future work
-#'
-#' -   theoretical and practical implications
-#'
+#+ n2s1, results='asis'
+fs(c(
+ 'Tie-in to implementation science'
+,'What agrees and what disagrees with previous work but from a more quantitative
+    point of view than in the aging paper: distributions and prevalences compared
+    to [@southern17], [@clegg16a], [@stow18], and [@stow18a] for trajectories, maybe.'
+,'Maybe examples from other industries of how open source software
+    encourages collaboration and innovation, and that healthcare field lags
+    in understanding how to leverage open source.'
+,'Future work'
+,'Theoretical and practical implications'
+)) %>% paste('*',.) %>% cat(sep='\n')
 #'
 # conclusions ----
 #' # Conclusions
 #'
-#' TBD
+#' `r fs('TBD')`
 #'
 #' # Acknowledgments
 #'
