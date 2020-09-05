@@ -8,7 +8,11 @@
 #+ message=F,echo=F
 # init ----
 debug <- 0;
-.projpackages <- c('dplyr','data.table','forcats','pander');
+# note: the `icdcoder` library might be needed in the future, and it has to be
+# manually downloaded and installed from https://github.com/wtcooper/icdcoder/
+# (package hasn't been updated in 5 years, but only existing way to map ICD9 to
+# ICD10
+.projpackages <- c('dplyr','data.table','forcats','pander','icd');
 .globalpath <- c(list.files(patt='^global.R$',full=T)
                  ,list.files(path='scripts',patt='^global.R$',full=T)
                  ,list.files(rec=T,pattern='^global.R$',full=T)
@@ -66,6 +70,19 @@ dat01[.sample,on = 'patient_num',z_subsample:=subsample];
 for(ii in tf_merge) eval(substitute(dat01[,paste0('vi_',ii) :=
                                            do.call(pmax,.SD) %>% as.logical()
                                          ,.SDcols=v(ii)],env=list(ii=ii)));
+
+#' ## Comorbidity scores
+#'
+#' ### Get all distinct ICD10 numbers
+daticd10 <- dat01[
+  ,.(patient_num,start_date,icd10=sapply(.SD,function(xx){
+    if(is.na(xx)) return() else {
+      sapply(jsonlite::fromJSON(gsub('""','"',xx)),function(yy){
+        as.list(yy)$cc})}}) %>%unlist %>% as.character %>% unique %>%
+      gsub('ICD10:','',.))
+  ,.SDcols=v(c_icd10),by=seq_len(nrow(dat01))][icd10!=''];
+
+datcharlson <- charlson(daticd10,return_df=TRUE);
 
 #' ## Remove unused columns
 #'
