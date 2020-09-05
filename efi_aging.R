@@ -92,7 +92,13 @@ dct0<-sync_dictionary(dat03);
 
 #+ fits
 # fits ----
-fits <- list();
+fits <- yfits <- ofits <- list();
+kmplotlayers <- list(
+  scale_y_continuous(labels=scales::percent_format(1))
+  ,geom_ribbon(aes(ymin=low,ymax=up,fill=group),alpha=0.3,show.legend = F)
+  ,scale_fill_discrete(type=c('#00BFC4','#F8766D'),breaks=c('FALSE','TRUE'))
+  ,scale_color_discrete(type=c('#00BFC4','#F8766D'),breaks=c('FALSE','TRUE'))
+);
 for(ii in v(c_agingpaper)){
   # note: the cumsum(cumsum(%s))<=1 expression below is the part that cuts off
   # each patient at their first post-index event for the respective events
@@ -102,19 +108,34 @@ for(ii in v(c_agingpaper)){
                   ,'age_at_visit_days')]") %>%
     parse(text=.) %>% eval;
   fits[[ii]]$dispname <- dct0[dct0$colname==ii,'dispname'];
-  fits[[ii]]$plot <- survfit(Surv(a_t0,a_t1,xx)~Frail,data=.iidata) %>%
-    ggsurv(plot.cens=F, main=fits[[ii]]$dispname
+  yfits[[ii]]$dispname <- paste0(fits[[ii]]$dispname,', Younger than 45');
+  ofits[[ii]]$dispname <- paste0(fits[[ii]]$dispname,', 45 and up');
+  .iifit <- survfit(Surv(a_t0,a_t1,xx)~Frail,data=.iidata);
+  fits[[ii]]$plot <-  .iifit %>%
+    ggsurv(plot.cens=F, main=fits[[ii]]$dispname, order.legend=F
            ,ylab='% Patients event-free'
-           ,xlab='Days since randomly selected index visit'
-           ,order.legend=F) +
-    #scale_x_continuous(limits=c(0,1096)) +
-    scale_y_continuous(labels=scales::percent_format(1)) +
-    geom_ribbon(aes(ymin=low,ymax=up,fill=group),alpha=0.3,show.legend = F) +
-    scale_fill_discrete(type=c('#00BFC4','#F8766D'),breaks=c('FALSE','TRUE')) +
-    scale_color_discrete(type=c('#00BFC4','#F8766D'),breaks=c('FALSE','TRUE')) +
+           ,xlab='Days since randomly selected index visit') + kmplotlayers +
     coord_cartesian(ylim=c(.5,1),xlim=c(0,1096));
-  fits[[ii]]$models$Frailty <- coxph(Surv(a_t0,a_t1,xx)~I(10*a_efi),data=.iidata);
-  fits[[ii]]$models$`Patient Age` <- update(fits[[ii]]$models$Frailty,. ~age_at_visit_days);
+  yfits[[ii]]$plot <-  update(.iifit,subset=age_at_visit_days<45*365.25) %>%
+    ggsurv(plot.cens=F, main=yfits[[ii]]$dispname, order.legend=F
+           ,ylab='% Patients event-free'
+           ,xlab='Days since randomly selected index visit') + kmplotlayers +
+    coord_cartesian(ylim=c(.5,1),xlim=c(0,1096));
+  ofits[[ii]]$plot <-  update(.iifit,subset=age_at_visit_days>=45*365.25) %>%
+    ggsurv(plot.cens=F, main=ofits[[ii]]$dispname, order.legend=F
+           ,ylab='% Patients event-free'
+           ,xlab='Days since randomly selected index visit') + kmplotlayers +
+    coord_cartesian(ylim=c(.5,1),xlim=c(0,1096));
+  #scale_x_continuous(limits=c(0,1096)) +
+    # scale_y_continuous(labels=scales::percent_format(1)) +
+    # geom_ribbon(aes(ymin=low,ymax=up,fill=group),alpha=0.3,show.legend = F) +
+    # scale_fill_discrete(type=c('#00BFC4','#F8766D'),breaks=c('FALSE','TRUE')) +
+    # scale_color_discrete(type=c('#00BFC4','#F8766D'),breaks=c('FALSE','TRUE')) +
+    # coord_cartesian(ylim=c(.5,1),xlim=c(0,1096));
+  fits[[ii]]$models$Frailty <- coxph(Surv(a_t0,a_t1,xx)~I(10*a_efi)
+                                     ,model=TRUE,data=.iidata);
+  fits[[ii]]$models$`Patient Age` <- update(fits[[ii]]$models$Frailty
+                                            ,. ~age_at_visit_days);
 };
 
 #+ los
