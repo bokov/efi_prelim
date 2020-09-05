@@ -38,17 +38,11 @@ psi <- try_import(inputdata['psi']);
 #' Do some cleanup
 map0$c_info[is.na(map0$c_info)] <- FALSE;
 
-#' Create code-groups
-#' Diagnoses
-map0$c_icd9 <- map0$ddomain == 'ICD9';
-map0$c_icd10 <- map0$ddomain == 'ICD10';
-# Procedures
-map0$c_icd9pcs <- map0$ddomain == 'ICD9PCS';
-map0$c_icd10pcs <- map0$ddomain == 'ICD10PCS';
-map0$c_cpt <- map0$ddomain == 'CPT';
-#' Labs
-map0$c_loinc <- map0$ddomain == 'LOINC';
-
+#' Create code-groups (the info column only, because that's where actual codes
+#' are stored)
+for(ii in c('ICD9','ICD10','ICD9PCS','ICD10PCS','CPT','LOINC')){
+  map0[[paste0('c_',tolower(ii))]] <- map0$ddomain == ii & map0$c_info;
+}
 
 #' Create a column to bind by (unstable solution, might stop working)
 map0$standard_code <- paste0(map0$ddomain,':',gsub(' - .*$','',map0$name));
