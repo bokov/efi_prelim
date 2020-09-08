@@ -74,15 +74,15 @@ for(ii in tf_merge) eval(substitute(dat01[,paste0('vi_',ii) :=
 #' ## Comorbidity scores
 #'
 #' ### Get all distinct ICD10 numbers
-daticd10 <- dat01[
-  ,.(patient_num,start_date,icd10=sapply(.SD,function(xx){
-    if(is.na(xx)) return() else {
-      sapply(jsonlite::fromJSON(gsub('""','"',xx)),function(yy){
-        as.list(yy)$cc})}}) %>%unlist %>% as.character %>% unique %>%
-      gsub('ICD10:','',.))
-  ,.SDcols=v(c_icd10),by=seq_len(nrow(dat01))][icd10!=''];
-
-datcharlson <- charlson(daticd10,return_df=TRUE);
+# daticd10 <- dat01[
+#   ,.(patient_num,start_date,icd10=sapply(.SD,function(xx){
+#     if(is.na(xx)) return() else {
+#       sapply(jsonlite::fromJSON(gsub('""','"',xx)),function(yy){
+#         as.list(yy)$cc})}}) %>%unlist %>% as.character %>% unique %>%
+#       gsub('ICD10:','',.))
+#   ,.SDcols=v(c_icd10),by=seq_len(nrow(dat01))][icd10!=''];
+#
+# datcharlson <- charlson(daticd10,return_df=TRUE);
 
 #' ## Remove unused columns
 #'
