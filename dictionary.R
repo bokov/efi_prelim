@@ -14,8 +14,8 @@ debug <- 0;
                  ,list.files(rec=T,pattern='^global.R$',full=T)
                  ,list.files(path='..',patt='^global.R$',full=T)
                  ,list.files(path='..',rec=T,pattern='^global.R$',full=T))[1];
-if(debug>0) source(.globalpath,chdir = TRUE) else {
-  .junk<-capture.output(source(.globalpath,chdir=TRUE, echo=FALSE))};
+if(debug>0) source(.globalpath,chdir = TRUE, local=TRUE) else {
+  .junk<-capture.output(source(.globalpath,chdir=TRUE, echo=FALSE, local=TRUE))};
 .currentscript <- current_scriptname('dictionary.R');
 #' Setting default arguments
 
