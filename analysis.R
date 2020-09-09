@@ -26,24 +26,19 @@
                    ,'survival','broom','forcats','table1');
 .deps <- c( '' );
 .debug <- 0;
-.junk<-capture.output(source('./scripts/global.R',chdir=TRUE,echo=FALSE));
+.junk<-capture.output(source('./scripts/global.R',chdir=TRUE,echo=FALSE
+                             ,local=TRUE));
 # Set some formatting options for this document
-panderOptions('table.alignment.default','right');
-panderOptions('table.alignment.rownames','right');
-panderOptions('table.split.table',Inf);
-panderOptions('p.wrap','');
-panderOptions('p.copula',', and ');
+pander::panderOptions('table.alignment.default','right');
+pander::panderOptions('table.alignment.rownames','right');
+pander::panderOptions('table.split.table',Inf);
+pander::panderOptions('p.wrap','');
+pander::panderOptions('p.copula',', and ');
 knitr::opts_chunk$set(echo=.debug>0, warning=.debug>0, message=.debug>0);
 
 
 .currentscript <- current_scriptname('analysis.R');
 # Load files ----
-
-# data dictionary
-.srcenv0 <- new.env();
-if(!file.exists('varmap.csv')) source('dictionary.R',local=.srcenv0);
-# Then load `varmap.csv`
-dct0 <- import('varmap.csv');
 
 # data
 if(file.exists(inputdata['dat03'])){
@@ -70,6 +65,13 @@ if(file.exists(inputdata['dat03'])){
               ,'Ran data.R and loaded the resulting ',.dat03new,' file.')
     }
   }
+
+# data dictionary
+.srcenv0 <- new.env();
+if(!file.exists('varmap.csv')) source('dictionary.R',local=.srcenv0);
+# Then load `varmap.csv`
+dct0 <- import('varmap.csv');
+
 
 efi_pats <- unique(subset(dat03,a_efi>0)$patient_num);
 dat03 <- subset(dat03,patient_num %in% efi_pats);
