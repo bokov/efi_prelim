@@ -157,8 +157,8 @@ inputdata[1:2] %>% c(prepared_data_file) %>% cbind(file=basename(.),MD5sum=tools
 #' sums are identical to the ones shown in the above table, then `r .repinfo1`.
 #' If you are already part of our grant-writing team and/or our IRB
 #' determination, please contact me (Alex Bokov, bokov 'at' uthscsa 'dot' edu)
-#' directly to get the data. All others please contact (_Kathleen, may I put
-#' your email address here?_).
+#' directly to get the data. All others please contact (Kathleen Stevens,
+#' stevens 'at' uthscsa.edu).
 #'
 #+ echo=FALSE, results='hide'
 #
