@@ -127,8 +127,29 @@ for(ii in v(c_mainresponse)){
   #                                   ,.~.+age_at_visit_days);
 };
 
+# length of stay ----
+#'
+.losdat03 <- copy(dat03)[,Frail:=a_efi>0.19][,c('age_at_visit_days','a_efi'
+                                                ,'Frail','a_los'
+                                                ,'patient_num')][
+                                                  ,.SD[1],by=patient_num];
+fits$a_los$dispname <- 'Length of Stay';
+fits$a_los$plot <- survfit(Surv(a_los)~Frail,.losdat03) %>%
+  ggsurv(plot.cens=F, main='Length of Stay'
+         ,xlab='Days since inpatient admission'
+         ,ylab='% Patients still in hospital'
+         ,order.legend = F) +
+  scale_y_continuous(labels=scales::percent_format(1)) +
+  geom_ribbon(aes(ymin=low,ymax=up,fill=group),alpha=0.3,show.legend=F) +
+  scale_fill_discrete(type=c('#00BFC4','#F8766D'),breaks=c('FALSE','TRUE')) +
+  scale_color_discrete(type=c('#00BFC4','#F8766D'),breaks=c('FALSE','TRUE')) +
+  coord_cartesian(ylim=c(0,1),xlim=c(0,40));
+fits$a_los$models$Frailty <- coxph(Surv(a_los)~I(10*a_efi),.losdat03);
+fits$a_los$models$`Patient Age` <- update(fits$a_los$models$Frailty
+                                          ,.~age_at_visit_days);
 
 #+ survcurves,message=FALSE,results='asis'
+# survival curves and results ----
 panderOptions('knitr.auto.asis', FALSE);
 for(jj in fits) {
   message(jj$dispname);
@@ -144,25 +165,6 @@ for(jj in fits) {
   cat("\n******\n");
   };
 
-#' ## Length of stay
-#'
-.losdat03 <- copy(dat03)[,Frail:=a_efi>0.2][,c('age_at_visit_days','a_efi'
-                                               ,'Frail','a_los')];
-survfit(Surv(a_los)~Frail,.losdat03) %>%
-  ggsurv(plot.cens=F,surv.col=c('#00BFC4','#F8766D')
-         ,xlab='Days since inpatient admission'
-         ,ylab='% Patients still in hospital'
-         ,main='Length of Stay') +
-  geom_ribbon(aes(ymin=low,ymax=up,fill=group),alpha=0.3,show.legend=F);
-.coxlosefi <- coxph(Surv(a_los)~a_efi,.losdat03);
-.coxlosage <- update(.coxlosefi,.~age_at_visit_days);
-#+ los_stats
-panderOptions('knitr.auto.asis',TRUE);
-rbind(Frailty=c(glance(.coxlosefi)[,c('statistic.wald','p.value.wald'
-                                      ,'concordance','logLik','AIC')])
-      ,`Patient Age`=c(glance(.coxlosage)[,c('statistic.wald','p.value.wald'
-                                             ,'concordance','logLik'
-                                             ,'AIC')])) %>% pander;
 #'
 # Table 1 ----
 #'
@@ -172,7 +174,8 @@ rbind(Frailty=c(glance(.coxlosefi)[,c('statistic.wald','p.value.wald'
 #'
 #' The obligatory 'table-1': key variables stratified by frailty status.
 #'
-#+ tb1
+#+ tb1, results='asis'
+panderOptions('knitr.auto.asis', TRUE);
 dat04 <- dat03[,lapply(.SD,head,1),by=patient_num,.SDcols=v(c_patdata)[1:5]] %>%
   # the [,-1] in the following line and at the end are needed to avoid
   # duplicates of patient_num
@@ -208,7 +211,7 @@ tb1;
 #' ## Statistical results
 #'
 #+ tb2
-tb2 <- sapply(fits[v(c_mainresponse)],function(xx){
+tb2 <- sapply(fits[c(v(c_mainresponse),'a_los')],function(xx){
   with(xx$models,cbind(tidy(Frailty,conf.int=T)
                        ,exp=tidy(Frailty,expon=T,conf.int=T)[
                          ,c('estimate','conf.low','conf.high')]))}
@@ -216,6 +219,7 @@ tb2 <- sapply(fits[v(c_mainresponse)],function(xx){
   mutate(betahat=sprintf('%.2f (%.2f, %.2f)',estimate,conf.low,conf.high)
          ,foldchange=sprintf('%.2f (%.2f, %.2f)',exp.estimate,exp.conf.low
                              ,exp.conf.high),P=p.adjust(p.value)
+         ,orig_outcome=Outcome
          ,Outcome=submulti(Outcome,dct0[,c('colname','dispname')])) %>%
   rename(SE=std.error,Z=statistic);
 
@@ -228,7 +232,7 @@ tb2[,c('Outcome','betahat','foldchange','SE','Z','P')] %>%
 #'
 #' Table 3.
 #+ tb3
-bind_rows(sapply(fits[v(c_mainresponse)],function(xx){
+bind_rows(sapply(fits[c(v(c_mainresponse),'a_los')],function(xx){
   do.call(bind_rows,c(sapply(xx$models,function(yy){
     glance(yy)[,c('concordance','logLik','AIC')]
     },simplify=F),.id='Predictor'))
@@ -296,5 +300,6 @@ file.rename(.outfile,paste0('dictionary_'
 # Now the results are saved and available for use by other scriports if you
 # place `r sprintf("\x60'%s'\x60",.currentscript)` among the values in their
 # `.deps` variables.
+prepared_data_file <- .dat03new;
 save(file=paste0(.currentscript,'.rdata'),list=setdiff(ls(),.origfiles));
 c()
