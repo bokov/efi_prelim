@@ -106,7 +106,8 @@ for(ii in v(c_mainresponse)){
                   ,'age_at_visit_days')]") %>%
     parse(text=.) %>% eval;
   fits[[ii]]$dispname <- dct0[dct0$colname==ii,'dispname'];
-  fits[[ii]]$plot <- survfit(Surv(a_t0,a_t1,xx)~Frail,data=.iidata) %>%
+  fits[[ii]]$data <- .iidata;
+  fits[[ii]]$plot <- survfit(Surv(a_t0,a_t1,xx)~Frail,data=fits[[ii]]$data) %>%
     ggsurv(plot.cens=F, main=fits[[ii]]$dispname
            #,surv.col = c('#00BFC4','#F8766D')
            ,ylab='% Patients event-free'
@@ -118,7 +119,11 @@ for(ii in v(c_mainresponse)){
     scale_fill_discrete(type=c('#00BFC4','#F8766D'),breaks=c('FALSE','TRUE')) +
     scale_color_discrete(type=c('#00BFC4','#F8766D'),breaks=c('FALSE','TRUE')) +
     coord_cartesian(ylim=c(.5,1),xlim=c(0,1096));
-  fits[[ii]]$models$Frailty <- coxph(Surv(a_t0,a_t1,xx)~I(10*a_efi),data=.iidata);
+  fits[[ii]]$models$Frailty <- coxph(Surv(a_t0,a_t1,xx)~I(10*a_efi)
+                                     ,data=fits[[ii]]$data);
+  fits[[ii]]$models$Frailty$call$data <- substitute(fits[[ii]]$data,list(ii=ii));
+  #fits[[ii]]$models$Frailty <- update(fits[[ii]]$models$Frailty
+  #                                    ,data=substitute(fits[[ii]]))
   fits[[ii]]$models$`Patient Age` <- update(fits[[ii]]$models$Frailty,. ~age_at_visit_days);
   # getting rid of efiage because it doesn't really add anything new beyond
   # what comparing EFI to age univariate models gets us, and on the vi_c_severe
@@ -129,12 +134,12 @@ for(ii in v(c_mainresponse)){
 
 # length of stay ----
 #'
-.losdat03 <- copy(dat03)[,Frail:=a_efi>0.19][,c('age_at_visit_days','a_efi'
-                                                ,'Frail','a_los'
-                                                ,'patient_num')][
-                                                  ,.SD[1],by=patient_num];
+.losdat03 <- copy(dat03)[,Frail:=a_efi>0.19][
+  ,c('age_at_visit_days','a_efi','Frail','a_los','patient_num')][!is.na(a_los)][
+    ,.SD[1],by='patient_num'];
+fits$a_los$data <- .losdat03;
 fits$a_los$dispname <- 'Length of Stay';
-fits$a_los$plot <- survfit(Surv(a_los)~Frail,.losdat03) %>%
+fits$a_los$plot <- survfit(Surv(a_los)~Frail,fits$a_los$data) %>%
   ggsurv(plot.cens=F, main='Length of Stay'
          ,xlab='Days since inpatient admission'
          ,ylab='% Patients still in hospital'
@@ -142,9 +147,9 @@ fits$a_los$plot <- survfit(Surv(a_los)~Frail,.losdat03) %>%
   scale_y_continuous(labels=scales::percent_format(1)) +
   geom_ribbon(aes(ymin=low,ymax=up,fill=group),alpha=0.3,show.legend=F) +
   scale_fill_discrete(type=c('#00BFC4','#F8766D'),breaks=c('FALSE','TRUE')) +
-  scale_color_discrete(type=c('#00BFC4','#F8766D'),breaks=c('FALSE','TRUE')) +
-  coord_cartesian(ylim=c(0,1),xlim=c(0,40));
-fits$a_los$models$Frailty <- coxph(Surv(a_los)~I(10*a_efi),.losdat03);
+  scale_color_discrete(type=c('#00BFC4','#F8766D'),breaks=c('FALSE','TRUE'))
+  #coord_cartesian(ylim=c(0,1),xlim=c(0,40));
+fits$a_los$models$Frailty <- coxph(Surv(a_los)~I(10*a_efi),fits$a_los$data);
 fits$a_los$models$`Patient Age` <- update(fits$a_los$models$Frailty
                                           ,.~age_at_visit_days);
 
