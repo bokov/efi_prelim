@@ -231,9 +231,12 @@ dat02 <- fread(inputdata['dat02'])[,START_DATE := as.Date(START_DATE)] %>%
 #' Join the eFI values to patient-visits (eFIs go into a new column named
 #' `a_efi`)
 dat01[dat02,on = c('patient_num','start_date'),a_efi := i.nval_num];
-
 #' Delete the rows prior to each patient's `z_ixvis` randomly chosen index visit
 dat01 <- dat01[a_t0>=0 & !is.na(a_efi),][,if(.N>1) .SD,by=patient_num];
+#' Mark all the trailing 0's ... these might be patients who have not even been
+#' seen for their last few visits
+dat01[,z_trailing:=seq_len(.N) > Position(function(xx) xx>0,a_efi,right=T
+                                          ,nomatch=0),by=patient_num];
 
 dat01devel <- dat01[z_subsample=='devel',];
 dat01test <- dat01[z_subsample=='test',];
