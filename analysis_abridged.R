@@ -101,7 +101,7 @@ for(jj in fits[.outcomenames]) {
 #'
 #+ tb2
 panderOptions('knitr.auto.asis', TRUE);
-subset(tb2,orig_outcome %in% .outcomenames)[,c('Outcome','betahat','foldchange'
+subset(tb2,outcomevar %in% .outcomenames)[,c('Outcome','betahat','foldchange'
                                                ,'SE','Z','P')] %>%
   rename(`β^ (95% CI)`=betahat,`fold-change (95% CI)`=foldchange ) %>%
   pander(digits=3,row.names=FALSE);
