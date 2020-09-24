@@ -226,6 +226,7 @@ length(.debug_postdodonlypt);
 
 
 #' Load the eFI values
+# EFI values ----
 dat02 <- fread(inputdata['dat02'])[,START_DATE := as.Date(START_DATE)] %>%
   setNames(.,tolower(names(.)));
 #' Join the eFI values to patient-visits (eFIs go into a new column named
@@ -238,6 +239,15 @@ dat01 <- dat01[a_t0>=0 & !is.na(a_efi),][,if(.N>1) .SD,by=patient_num];
 dat01[,z_trailing:=seq_len(.N) > Position(function(xx) xx>0,a_efi,right=T
                                           ,nomatch=0),by=patient_num];
 
+# make binned variables ----
+#' Maked binned versions of certain variables
+#' age
+dat01$a_agegrp <- cut(dat01$age_at_visit_days,365.25*c(-Inf,45,65,Inf)
+                      ,labels=c(' 18-45 ',' 45-65 ',' 65+ '));
+#' frailty
+dat01$a_frailtf <- dat01$a_efi>0.19;
+
+# subsamples ----
 dat01devel <- dat01[z_subsample=='devel',];
 dat01test <- dat01[z_subsample=='test',];
 
