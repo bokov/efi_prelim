@@ -74,7 +74,7 @@ dct0 <- import('varmap.csv');
 
 
 efi_pats <- unique(subset(dat03,a_efi>0)$patient_num);
-dat03 <- subset(dat03,patient_num %in% efi_pats);
+dat03 <- subset(dat03,patient_num %in% efi_pats & !z_trailing);
 
 # syncronize dictionary with newly-loaded data
 dct0<-sync_dictionary(dat03);
@@ -96,79 +96,137 @@ dct0<-sync_dictionary(dat03);
 #' Akaike's Information Criterion, another goodness-of-fit metric that adjusts
 #' for the number of parameters (the smaller it is, the better the fit).
 #'
+#'
+# Local functions ----
+# summarizing coxph results
+summsurv00 <- function(fit
+                       # simultaneously set columns to choose from glance and
+                       # what to rename them to. To leave a name as-is, leave
+                       # out the label (e.g. AIC)
+                       ,columns=c(statistic.wald='Wald Statistic'
+                                  ,p.value.wald='P'
+                                  ,concordance='Concordance'
+                                  ,logLik='Log Likelihood'
+                                  ,'AIC'
+                                  ,nevent='Events'
+                                  ,n='Visits'
+                                  ,subjects='Patients')
+                       # number at risk
+                      ,subjects=nrow(unique(select(eval(fit$call$data)
+                                                   ,'patient_num')))
+                      # function to post-process result. Set to return,
+                      # identity, or hidden to do nothing
+                      ,postprocess=identity){
+  if(!is(fit,'coxph')) return(NULL);
+  searchrep <- cbind(names(columns),columns);
+  searchrep[,1] <- ifelse(searchrep[,1] %in% c(NA,'')
+                          ,searchrep[,2],searchrep[,1]);
+  out <- c(glance(fit),subjects=subjects);
+  out <- out[intersect(searchrep[,1],names(out))] %>%
+    setNames(.,submulti(names(.),searchrep,'startsends')) %>%
+    data.frame(check.names=FALSE);
+  postprocess(out);
+}
+
+# reusable code for plotting survival curves in this project
+plotsurv00 <- function(data,dispname
+                       ,formula=Surv(a_t0,a_t1,xx)~Frail
+                       ,xlim=c(0,1096),ylim=c(.5,1)
+                       ,ylab='% Patients event-free'
+                       ,xlab='Days since randomly selected index visit'
+                       ,ribbonalpha=0.3,colors=c('#00BFC4','#F8766D')
+                       ,colorbreaks=c('FALSE','TRUE')
+                       ,scaley=scale_y_continuous(labels=scales::percent_format(1))
+                       ,confint=geom_ribbon(aes(ymin=low,ymax=up,fill=group)
+                                            ,alpha=ribbonalpha,show.legend = F)
+                       ,sfill=scale_fill_discrete(type=colors,breaks=colorbreaks)
+                       ,scolor=scale_color_discrete(type=colors,breaks=colorbreaks)
+                       ,coords=coord_cartesian(ylim=ylim,xlim=xlim)
+                       ,...){
+  survfit(formula=formula,data=data) %>%
+    ggsurv(plot.cens=F, main=fits[[ii]]$dispname,ylab=ylab,xlab=xlab
+           ,order.legend=F) + scaley + confint + sfill + scolor + coords +
+    list(...)
+};
+
 fits <- list();
 for(ii in v(c_mainresponse)){
   # note: the cumsum(cumsum(%s))<=1 expression below is the part that cuts off
   # each patient at their first post-index event for the respective events
   .iidata <- gsub('%s',ii,"copy(dat03)[,c('keep','xx','Frail') :=
-  list(cumsum(cumsum(%s))<=1, %s, a_efi>0.2) ,by=patient_num][,xx:=%s][(keep)
+  list(cumsum(cumsum(%s))<=1, %s, a_frailtf), by=patient_num][,xx:=%s][(keep)
                      ,c('patient_num','a_t0','a_t1','xx','Frail','a_efi'
-                  ,'age_at_visit_days')]") %>%
+                  ,'age_at_visit_days','a_agegrp')]") %>%
     parse(text=.) %>% eval;
   fits[[ii]]$dispname <- dct0[dct0$colname==ii,'dispname'];
   fits[[ii]]$data <- .iidata;
-  fits[[ii]]$plot <- survfit(Surv(a_t0,a_t1,xx)~Frail,data=fits[[ii]]$data) %>%
-    ggsurv(plot.cens=F, main=fits[[ii]]$dispname
-           #,surv.col = c('#00BFC4','#F8766D')
-           ,ylab='% Patients event-free'
-           ,xlab='Days since randomly selected index visit'
-           ,order.legend=F) +
-    #scale_x_continuous(limits=c(0,1096)) +
-    scale_y_continuous(labels=scales::percent_format(1)) +
-    geom_ribbon(aes(ymin=low,ymax=up,fill=group),alpha=0.3,show.legend = F) +
-    scale_fill_discrete(type=c('#00BFC4','#F8766D'),breaks=c('FALSE','TRUE')) +
-    scale_color_discrete(type=c('#00BFC4','#F8766D'),breaks=c('FALSE','TRUE')) +
-    coord_cartesian(ylim=c(.5,1),xlim=c(0,1096));
+  fits[[ii]]$plot <- with(fits[[ii]],plotsurv00(data,dispname));
+  fits[[ii]]$multidata <- with(fits[[ii]],split(data,data$a_agegrp));
+  fits[[ii]]$multiplot <-  with(fits[[ii]],lapply(multidata,plotsurv00
+                                                  ,dispname));
   fits[[ii]]$models$Frailty <- coxph(Surv(a_t0,a_t1,xx)~I(10*a_efi)
                                      ,data=fits[[ii]]$data);
   fits[[ii]]$models$Frailty$call$data <- substitute(fits[[ii]]$data,list(ii=ii));
-  #fits[[ii]]$models$Frailty <- update(fits[[ii]]$models$Frailty
-  #                                    ,data=substitute(fits[[ii]]))
-  fits[[ii]]$models$`Patient Age` <- update(fits[[ii]]$models$Frailty,. ~age_at_visit_days);
-  # getting rid of efiage because it doesn't really add anything new beyond
-  # what comparing EFI to age univariate models gets us, and on the vi_c_severe
-  # cox.zph() crashes the R session!
-  #fits[[ii]]$models$efiage <- update(fits[[ii]]$models$Frailty
-  #                                   ,.~.+age_at_visit_days);
+  for(jj in names(fits[[ii]]$multidata)){
+    jjlabel <- paste0('Frailty, age:',jj);
+    fits[[ii]]$models[[jjlabel]] <-
+      update(fits[[ii]]$models$Frailty,data=fits[[ii]]$multidata[[jj]]);
+    fits[[ii]]$models[[jjlabel]]$call$data <-
+      substitute(fits[[ii]]$multidata[[jj]],list(jj=jj));
+  }
+  fits[[ii]]$models$`Patient Age` <- update(fits[[ii]]$models$Frailty
+                                            ,. ~age_at_visit_days);
+  fits[[ii]]$modelsummary <- sapply(fits[[ii]]$models,summsurv00) %>% t;
+  fits[[ii]]$modelsummary[,'P'] <- p.adjust(fits[[ii]]$modelsummary[,'P']);
 };
 
 # length of stay ----
 #'
-.losdat03 <- copy(dat03)[,Frail:=a_efi>0.19][
-  ,c('age_at_visit_days','a_efi','Frail','a_los','patient_num')][!is.na(a_los)][
-    ,.SD[1],by='patient_num'];
+.losdat03 <- copy(dat03)[,c('age_at_visit_days','a_efi','a_los','patient_num'
+                            ,'a_agegrp','a_frailtf')][
+                              ,Frail:=a_frailtf][!is.na(a_los)][
+                                ,.SD[1],by='patient_num'];
 fits$a_los$data <- .losdat03;
 fits$a_los$dispname <- 'Length of Stay';
-fits$a_los$plot <- survfit(Surv(a_los)~Frail,fits$a_los$data) %>%
-  ggsurv(plot.cens=F, main='Length of Stay'
-         ,xlab='Days since inpatient admission'
-         ,ylab='% Patients still in hospital'
-         ,order.legend = F) +
-  scale_y_continuous(labels=scales::percent_format(1)) +
-  geom_ribbon(aes(ymin=low,ymax=up,fill=group),alpha=0.3,show.legend=F) +
-  scale_fill_discrete(type=c('#00BFC4','#F8766D'),breaks=c('FALSE','TRUE')) +
-  scale_color_discrete(type=c('#00BFC4','#F8766D'),breaks=c('FALSE','TRUE'))
-  #coord_cartesian(ylim=c(0,1),xlim=c(0,40));
+fits$a_los$plot <- with(fits$a_los
+                        ,plotsurv00(data,dispname,Surv(a_los)~Frail
+                                    ,xlab = 'Days since first admission'
+                                    ,ylab='% Patients still in hospital'
+                                    ,coords = NULL));
+fits$a_los$multidata <- with(fits$a_los,split(data,data$a_agegrp));
+fits$a_los$multiplot <-  with(fits$a_los
+                              ,lapply(multidata,plotsurv00,dispname
+                                      ,Surv(a_los)~Frail
+                                      ,xlab = 'Days since first admission'
+                                      ,ylab='% Patients still in hospital'
+                                      ,ylim=c(0,1),xlim=c(0,20)));
 fits$a_los$models$Frailty <- coxph(Surv(a_los)~I(10*a_efi),fits$a_los$data);
 fits$a_los$models$`Patient Age` <- update(fits$a_los$models$Frailty
                                           ,.~age_at_visit_days);
+for(jj in names(fits$a_los$multidata)){
+  jjlabel <- paste0('Frailty, age:',jj);
+  fits$a_los$models[[jjlabel]] <-
+    update(fits$a_los$models$Frailty,data=fits$a_los$multidata[[jj]]);
+  fits$a_los$models[[jjlabel]]$call$data <-
+    substitute(fits$a_los$multidata[[jj]],list(jj=jj));
+}
+fits$a_los$modelsummary <- sapply(fits$a_los$models,summsurv00) %>% t;
+fits$a_los$modelsummary[,'P'] <- p.adjust(fits$a_los$modelsummary[,'P']);
 
 #+ survcurves,message=FALSE,results='asis'
 # survival curves and results ----
 panderOptions('knitr.auto.asis', FALSE);
-for(jj in fits) {
-  message(jj$dispname);
-  cat('\n###',jj$dispname,'\n\n');
-  print(jj$plot);
-  .jjresult <- sapply(jj$models,function(xx){
-    c(glance(xx)[,c('statistic.wald','p.value.wald','concordance','logLik'
-                    ,'AIC')]
-      #,zph=cox.zph(xx)$table['GLOBAL',c('chisq','p')]
-  )} %>% data.frame ) %>% t;
+for(jj in fits) {with(jj,{
+  message(dispname);
+  cat('\n###',dispname,'\n\n');
+  print(ggmatrix(multiplot,nrow=1,ncol=3,legend=grab_legend(plot),title=dispname
+           ,xAxisLabels = names(multidata)
+           ,xlab=plot$label$x
+           ,ylab=plot$label$y));
   cat('\n\n\n');
-  pander(.jjresult);
+  pander(modelsummary);
   cat("\n******\n");
-  };
+  })};
 
 #'
 # Table 1 ----
@@ -220,17 +278,23 @@ tb2 <- sapply(fits[c(v(c_mainresponse),'a_los')],function(xx){
   with(xx$models,cbind(tidy(Frailty,conf.int=T)
                        ,exp=tidy(Frailty,expon=T,conf.int=T)[
                          ,c('estimate','conf.low','conf.high')]))}
-  ,simplify=F) %>% bind_rows(.id='Outcome') %>%
+  ,simplify=F) %>% bind_rows(.id='outcomevar') %>%
   mutate(betahat=sprintf('%.2f (%.2f, %.2f)',estimate,conf.low,conf.high)
          ,foldchange=sprintf('%.2f (%.2f, %.2f)',exp.estimate,exp.conf.low
                              ,exp.conf.high),P=p.adjust(p.value)
-         ,orig_outcome=Outcome
-         ,Outcome=submulti(Outcome,dct0[,c('colname','dispname')])) %>%
+         ,Outcome=submulti(outcomevar,dct0[,c('colname','dispname')])) %>%
   rename(SE=std.error,Z=statistic);
 
 tb2[,c('Outcome','betahat','foldchange','SE','Z','P')] %>%
   rename(`β^ (95% CI)`=betahat,`fold-change (95% CI)`=foldchange ) %>%
   pander(digits=3);
+
+# snip: resultsfold ----
+snip_resultsfold <- subset(tb2,outcomevar %in% v(c_truefalse)) %>%
+  with(paste0(round(exp(estimate),1),'-fold for ',Outcome)) %>% tolower %>%
+  submulti(cbind(c('icf','snf')
+                 ,c('ICF','SNF after having been admitted from home'))) %>%
+  setNames(intersect(tb2$outcomevar,v(c_truefalse)));
 
 # Model performance  ----
 #' ## Model Performance
