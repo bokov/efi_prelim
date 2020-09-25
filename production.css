@@ -160,6 +160,10 @@ p.abstract:after {
   background-color: #FF0;
 }
 
+.note2team {
+  background-color: #FCC;
+}
+
 .table caption {
     color: #777;
     margin-top: 15px;
