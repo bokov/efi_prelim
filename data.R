@@ -67,6 +67,7 @@ set.seed(project_seed);
 .sample <- dat01[,.(subsample=sample(c('devel','test'),1)),by=patient_num];
 dat01[.sample,on = 'patient_num',z_subsample:=subsample];
 
+# aggregate ----
 #'
 #' ## Aggregate the outcomes indicators
 if(debug) message('Aggregating indicators');
@@ -74,6 +75,18 @@ for(ii in tf_merge) eval(substitute(dat01[,paste0('vi_',ii) :=
                                            do.call(pmax,.SD) %>% as.logical()
                                          ,.SDcols=v(ii,dictionary=dct0)]
                                     ,env=list(ii=ii)));
+#' ## Missingness
+#'
+#' ### Any diagnoses at all during visit?
+dat01$a_anydiagtf <- apply(dat01[,.SD,.SDcols=setdiff(c(v(c_icd10),v(c_icd9))
+                                                      ,v(c_info))],1,any);
+#' ### Any procedures at all during visit?
+dat01$a_anyproctf <- apply(dat01[,.SD,.SDcols=setdiff(c(v(c_icd10pcs),v(c_cpt))
+                                                      ,v(c_info))],1,any);
+#' ### Any labs at all during visit?
+dat01$a_anylabstf <- apply(dat01[,.SD,.SDcols=setdiff(v(c_loinc),v(c_info))],1
+                           ,function(xx) any(!is.na(xx)));
+dat01$a_anythingtf <- with(dat01,a_anydiagtf|a_anyproctf|a_anylabstf);
 
 #' ## Comorbidity scores
 #'
@@ -88,6 +101,7 @@ for(ii in tf_merge) eval(substitute(dat01[,paste0('vi_',ii) :=
 #
 # datcharlson <- charlson(daticd10,return_df=TRUE);
 
+# remove unused ----
 #' ## Remove unused columns
 #'
 #' Blow away the info-only columns, labs, and PSI components except those named
@@ -236,8 +250,15 @@ dat01[dat02,on = c('patient_num','start_date'),a_efi := i.nval_num];
 dat01 <- dat01[a_t0>=0 & !is.na(a_efi),][,if(.N>1) .SD,by=patient_num];
 #' Mark all the trailing 0's ... these might be patients who have not even been
 #' seen for their last few visits
-dat01[,z_trailing:=seq_len(.N) > Position(function(xx) xx>0,a_efi,right=T
-                                          ,nomatch=0),by=patient_num];
+# dat01[,z_trailing_old:=seq_len(.N) > Position(function(xx) xx>0
+#                                               ,a_efi,right=T,nomatch=0)
+#       ,by=patient_num];
+#
+dat01[,z_trailing:=seq_len(.N) > max(Position(function(xx) xx>0
+                                              ,a_efi,right=T,nomatch=0)
+                                     ,Position(function(xx) xx,a_anythingtf
+                                               ,right=T,nomatch=0))
+      ,by=patient_num];
 
 # make binned variables ----
 #' Maked binned versions of certain variables
