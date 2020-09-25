@@ -37,7 +37,7 @@ pander::panderOptions('p.wrap','');
 pander::panderOptions('p.copula',', and ');
 knitr::opts_chunk$set(echo=.debug>0, warning=.debug>0, message=.debug>0);
 .outcomenames <- v(c_mainresponse);
-.currentscript <- current_scriptname('analysis_abridged.R');
+.currentscript <- current_scriptname('clinstar_prelim.Rmd');
 # limit the data to items of interest
 tb2 <- subset(tb2,predictor == 'Frailty, age:65+');
 tb3 <- subset(tb3,Predictor == 'Frailty, age:65+');
