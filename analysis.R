@@ -135,12 +135,14 @@ summsurv00 <- function(fit
 summsurv01 <- function(fit){
   cbind(tidy(fit,conf.int=T)
         ,exp=tidy(fit,expon=TRUE,conf.int=TRUE)[
-          ,c('estimate','conf.low','conf.high')]) %>%
+          ,c('estimate','conf.low','conf.high')]
+        ,glance(fit)[,c('n','nevent','nobs')]) %>%
     mutate(betahat=sprintf('%.2f (%.2f, %.2f)',estimate,conf.low,conf.high)
            ,foldchange=sprintf('%.2f (%.2f, %.2f)',exp.estimate,exp.conf.low
                                ,exp.conf.high)) %>%
     rename(SE=std.error,Z=statistic,`β^ (95% CI)`=betahat
-           ,`fold-change (95% CI)`=foldchange)};
+           ,`fold-change (95% CI)`=foldchange,`# Events`=nevent
+           ,`# Visits`=nobs)};
 
 # reusable code for plotting survival curves in this project
 plotsurv00 <- function(data,dispname
@@ -246,8 +248,9 @@ for(jj in names(fits$a_los$multidata)){
   fits$a_los$models[[jjlabel]]$call$data <-
     substitute(fits$a_los$multidata[[jj]],list(jj=jj));
 }
-fits$a_los$modelsummary <- sapply(fits$a_los$models,summsurv00) %>% t;
-fits$a_los$modelsummary[,'P'] <- p.adjust(fits$a_los$modelsummary[,'P']);
+fits$a_los$modelsummary <- sapply(fits$a_los$models,summsurv00) %>%
+  apply(2,unlist) %>% t %>% data.frame(check.names=FALSE);
+fits$a_los$modelsummary[,'P adjusted'] <- p.adjust(fits$a_los$modelsummary[,'P']);
 
 #+ survcurves,message=FALSE,results='asis',fig.height=4,fig.width=12
 # survival curves and results ----
@@ -333,16 +336,12 @@ tb2[,c('predictor','Outcome','β^ (95% CI)','fold-change (95% CI)','SE','Z'
 #'
 #' Table 3.
 #+ tb3
-tb3 <- bind_rows(sapply(fits,function(xx){
-  do.call(bind_rows,c(sapply(xx$models,function(yy){
-    glance(yy)[,c('concordance','logLik','AIC')]
-    },simplify=F),.id='Predictor'))
-  },simplify=F),.id='Outcome') %>%
-  # mutate(Outcome=ifelse(Predictor=='Frailty'
-  #                       ,submulti(Outcome,dct0[,c('colname','dispname')])
-  #                       ,' ')) %>%
-  rename(Concordance=concordance,`Log Likelihood`=logLik);
-pander(tb3);
+tb3 <- lapply(fits,function(xx) cbind(Predictor=rownames(xx$modelsummary)
+                                      ,xx$modelsummary[,c('Concordance'
+                                                          ,'Log Likelihood'
+                                                          ,'AIC')])) %>%
+  bind_rows(.id='Outcome');
+pander(tb3, row.names=FALSE);
 
 # Response vars ----
 #' *****
