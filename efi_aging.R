@@ -47,6 +47,13 @@ panderOptions('graph.fontfamily','serif');
 theme_set(theme_bw(base_family = 'serif',base_size=14));
 knitr::opts_chunk$set(echo=.debug>0, warning=.debug>0, message=.debug>0);
 
+# detect current output format
+.outfmt <- knitr::opts_knit$get('rmarkdown.pandoc.to');
+if(is.null(.outfmt)){
+  if(knitr::is_html_output()) .outfmt <- 'html' else {
+    if(knitr::is_latex_output()) .outfmt <- 'latex' else {
+      .outfmt <- 'unknown';
+    }}};
 
 .currentscript <- current_scriptname('efi_aging.R');
 .figcount <- 0;
@@ -256,8 +263,13 @@ dat04 <- dat03[,lapply(.SD,head,1),by=patient_num,.SDcols=v(c_patdata)[1:5]] %>%
 tb1 <- table1(.tb1formula,data=dat04) %>%
   submulti(dct0[,c('colname','dispname')],'partial');
 
-tb1;
-cat("\n\nTable: (\\#tab:table1) Cohort demographics");
+if(.outfmt == 'html'){
+  print(tb1);
+  cat("\n\nTable: (\\#tab:table1) Cohort demographics")
+} else {
+  pander(data.frame(X='placeholder',row.names = 'Y')
+         ,caption='(\\#tab:table1) Cohort demographics');
+};
 
 #'
 #' ## Electronic Frailty Index
