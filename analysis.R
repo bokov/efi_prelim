@@ -12,7 +12,7 @@
 #' ---
 #'
 #+ load_deps, echo=FALSE, message=FALSE, warning=FALSE,results='hide'
-# Settings ----
+# Init ----
 #
 # In the below two lines are the minimum script-level settings you need.
 # The `.projpackages` object has the names of the packages you need installed
@@ -28,12 +28,16 @@
 .debug <- 0;
 .junk<-capture.output(source('./scripts/global.R',chdir=TRUE,echo=FALSE
                              ,local=TRUE));
+# Settings ----
 # Set some formatting options for this document
 pander::panderOptions('table.alignment.default','right');
 pander::panderOptions('table.alignment.rownames','right');
 pander::panderOptions('table.split.table',Inf);
 pander::panderOptions('p.wrap','');
 pander::panderOptions('p.copula',', and ');
+theme_set(theme_bw(base_family = 'serif',base_size=14) +
+            theme(strip.background = element_rect(fill=NA,color=NA)
+                  ,strip.text = element_text(size=15)));
 knitr::opts_chunk$set(echo=.debug>0, warning=.debug>0, message=.debug>0);
 
 
@@ -79,7 +83,6 @@ dat03 <- subset(dat03,patient_num %in% efi_pats & !z_trailing);
 # syncronize dictionary with newly-loaded data
 dct0<-sync_dictionary(dat03);
 
-# Fits ----
 #' ## Univariate survival models
 #'
 #' For each of the response variables below, the survival curve represents
@@ -128,6 +131,17 @@ summsurv00 <- function(fit
   postprocess(out);
 }
 
+# more detailed analysis of univariate survival results
+summsurv01 <- function(fit){
+  cbind(tidy(fit,conf.int=T)
+        ,exp=tidy(fit,expon=TRUE,conf.int=TRUE)[
+          ,c('estimate','conf.low','conf.high')]) %>%
+    mutate(betahat=sprintf('%.2f (%.2f, %.2f)',estimate,conf.low,conf.high)
+           ,foldchange=sprintf('%.2f (%.2f, %.2f)',exp.estimate,exp.conf.low
+                               ,exp.conf.high)) %>%
+    rename(SE=std.error,Z=statistic,`β^ (95% CI)`=betahat
+           ,`fold-change (95% CI)`=foldchange)};
+
 # reusable code for plotting survival curves in this project
 plotsurv00 <- function(data,dispname
                        ,formula=Surv(a_t0,a_t1,xx)~Frail
@@ -149,6 +163,25 @@ plotsurv00 <- function(data,dispname
     list(...)
 };
 
+# text snippets
+#
+# The 'table' argument must have the following columns: 'estimate','outcome',
+# and 'Outcome'
+resultsfold00 <- function(table){
+  data.table(table)[,.(paste(paste0(round(exp(unique(range(estimate))),1)
+                                    ,collapse=' to '),'fold for',Outcome[1]))
+                    ,by=outcome][[2]] %>%
+    submulti(cbind(c('icf','snf')
+                   ,c('ICF','SNF after having been admitted from home')))};
+
+# resultsfold00 <- . %>% with(.,{
+#   paste0(round(exp(estimate),1),'-fold for ',Outcome) %>% tolower %>%
+#     submulti(cbind(c('icf','snf')
+#                    ,c('ICF','SNF after having been admitted from home'))) %>%
+#     setNames(outcome)}) %>% unname;
+
+
+# Fits ----
 fits <- list();
 for(ii in v(c_mainresponse)){
   # note: the cumsum(cumsum(%s))<=1 expression below is the part that cuts off
@@ -176,8 +209,11 @@ for(ii in v(c_mainresponse)){
   }
   fits[[ii]]$models$`Patient Age` <- update(fits[[ii]]$models$Frailty
                                             ,. ~age_at_visit_days);
-  fits[[ii]]$modelsummary <- sapply(fits[[ii]]$models,summsurv00) %>% t;
-  fits[[ii]]$modelsummary[,'P'] <- p.adjust(fits[[ii]]$modelsummary[,'P']);
+  fits[[ii]]$models$`Patient Age, 65+` <-
+    update(fits[[ii]]$models$`Frailty, age:65+`,. ~age_at_visit_days);
+  fits[[ii]]$modelsummary <- sapply(fits[[ii]]$models,summsurv00) %>%
+    apply(2,unlist) %>% t %>% data.frame(check.names=FALSE);
+  fits[[ii]]$modelsummary[,'P adjusted'] <- p.adjust(fits[[ii]]$modelsummary[,'P']);
 };
 
 # length of stay ----
@@ -213,7 +249,7 @@ for(jj in names(fits$a_los$multidata)){
 fits$a_los$modelsummary <- sapply(fits$a_los$models,summsurv00) %>% t;
 fits$a_los$modelsummary[,'P'] <- p.adjust(fits$a_los$modelsummary[,'P']);
 
-#+ survcurves,message=FALSE,results='asis'
+#+ survcurves,message=FALSE,results='asis',fig.height=4,fig.width=12
 # survival curves and results ----
 panderOptions('knitr.auto.asis', FALSE);
 for(jj in fits) {with(jj,{
@@ -274,55 +310,51 @@ tb1;
 #' ## Statistical results
 #'
 #+ tb2
-tb2 <- sapply(fits[c(v(c_mainresponse),'a_los')],function(xx){
-  with(xx$models,cbind(tidy(Frailty,conf.int=T)
-                       ,exp=tidy(Frailty,expon=T,conf.int=T)[
-                         ,c('estimate','conf.low','conf.high')]))}
-  ,simplify=F) %>% bind_rows(.id='outcomevar') %>%
-  mutate(betahat=sprintf('%.2f (%.2f, %.2f)',estimate,conf.low,conf.high)
-         ,foldchange=sprintf('%.2f (%.2f, %.2f)',exp.estimate,exp.conf.low
-                             ,exp.conf.high),P=p.adjust(p.value)
-         ,Outcome=submulti(outcomevar,dct0[,c('colname','dispname')])) %>%
-  rename(SE=std.error,Z=statistic);
 
-tb2[,c('Outcome','betahat','foldchange','SE','Z','P')] %>%
-  rename(`β^ (95% CI)`=betahat,`fold-change (95% CI)`=foldchange ) %>%
+# tb2 <- sapply(fits[c(v(c_mainresponse),'a_los')],summsurv01,simplify=F) %>%
+#   bind_rows(.id='outcomevar') %>%
+#   mutate(betahat=sprintf('%.2f (%.2f, %.2f)',estimate,conf.low,conf.high)
+#          ,foldchange=sprintf('%.2f (%.2f, %.2f)',exp.estimate,exp.conf.low
+#                              ,exp.conf.high),P=p.adjust(p.value)
+#          ,Outcome=submulti(outcomevar,dct0[,c('colname','dispname')])) %>%
+#   rename(SE=std.error,Z=statistic);
+tb2 <- sapply(fits,function(xx) sapply(xx$models,summsurv01,simplify=F) %>%
+                bind_rows(.id='predictor'),simplify=F) %>%
+  bind_rows(.id='outcome') %>%
+  mutate(Outcome = submulti(outcome,dct0[,c('colname','dispname')])
+         ,`P, adjusted`=p.adjust(p.value));
+tb2[,c('predictor','Outcome','β^ (95% CI)','fold-change (95% CI)','SE','Z'
+       ,'P, adjusted')] %>%
   pander(digits=3);
 
-# snip: resultsfold ----
-snip_resultsfold <- subset(tb2,outcomevar %in% v(c_truefalse)) %>%
-  with(paste0(round(exp(estimate),1),'-fold for ',Outcome)) %>% tolower %>%
-  submulti(cbind(c('icf','snf')
-                 ,c('ICF','SNF after having been admitted from home'))) %>%
-  setNames(intersect(tb2$outcomevar,v(c_truefalse)));
 
-# Model performance  ----
+# Table 3, Model performance  ----
 #' ## Model Performance
 #'
 #' Table 3.
 #+ tb3
-bind_rows(sapply(fits[c(v(c_mainresponse),'a_los')],function(xx){
+tb3 <- bind_rows(sapply(fits,function(xx){
   do.call(bind_rows,c(sapply(xx$models,function(yy){
     glance(yy)[,c('concordance','logLik','AIC')]
     },simplify=F),.id='Predictor'))
   },simplify=F),.id='Outcome') %>%
-  mutate(Outcome=ifelse(Predictor=='Frailty'
-                        ,submulti(Outcome,dct0[,c('colname','dispname')])
-                        ,' ')) %>%
-  rename(Concordance=concordance,`Log Likelihood`=logLik) %>% pander;
+  # mutate(Outcome=ifelse(Predictor=='Frailty'
+  #                       ,submulti(Outcome,dct0[,c('colname','dispname')])
+  #                       ,' ')) %>%
+  rename(Concordance=concordance,`Log Likelihood`=logLik);
+pander(tb3);
 
 # Response vars ----
 #' *****
 #' ## Which variables are common enough to analyze?
 #'
 #' Which events are most common (by distinct patient) in this dataset?
-pander(.resps <- dat04[
-  ,lapply(.SD,any),by=patient_num
-  ,.SDcols=v(c_response)] %>% select(-patient_num) %>%
-    colSums() %>% sort() %>% rev() %>%
-    setNames(.,submulti(names(.),dct0[,c('colname','dispname')])) %>%
-    cbind(`N Patients`=.
-          ,`Fraction Patients`=(.)/length(unique(dat04$patient_num))));
+resps <- dat04[,lapply(.SD,any),by=patient_num,.SDcols=v(c_response)] %>%
+  select(-patient_num) %>% colSums() %>% sort() %>% rev() %>%
+  cbind(Variable=names(.),`N Patients`=.
+        ,`Fraction Patients`=(.)/length(unique(dat04$patient_num)));
+rownames(resps) <- submulti(rownames(resps),dct0[,c('colname','dispname')]);
+pander(resps);
 
 # Reproducibility ----
 reproducibility <- tidbits:::git_status(print=F);
