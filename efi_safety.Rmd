@@ -1,16 +1,18 @@
 ---
-title: "Rockwood index outperforms patient age as a predictor of poor patient
-        outcomes."
+title: "The deficit-accumulation electronic frailty index can predict patient 
+        safety events even in younger patients using only structured data in 
+        the electronic health record."
 author: 'Alex Bokov ^1,✉^, Sara Espinoza ^1^, Chandana Tripathy ^1^,
   ..., ..., ..., and Kathleen R. Stevens ^1^'
 css: "production.css"
 abstract: 'We have found that the electronic frailty index (EFI), a risk
   score developed using the Rockwood deficit-accumulation framework, is
-  a strong predictor of falls, hospitalizations, hospital-acquired
-  infections, and loss of independence without relying on any predictors
-  including patient age. In fact, EFI outperformed patient age as a
-  predictor. EFI''s accuracy was not negated by the fact that we used
-  patients of all ages, not just older patients.'
+  a strong predictor of patient safety events without relying on any predictors
+  other than diagnoses, vital signs, and laboratory results from the electronic
+  health record. Previous studies using electronic frailty indexes on claims 
+  data or electronic health records focused on older patients, but we found that
+  for most of the patient safety outcomes we examined EFI is also predictive 
+  for patients in the 45-65 age range and even in the 18-45 age range.'
 documentclass: article
 clean: false
 bibliography: efi_paper.bib
@@ -62,15 +64,20 @@ message('.outfmt = ',.outfmt);
 .currentscript <- current_scriptname('efi_safety.Rmd');
 .outcomenames <- c('vi_c_psi','vi_c_hospinfect','vi_c_hosptrauma'
                    ,'vi_c_cardiac');
+snip_outcomes <- submulti(.outcomenames,dct0[,c('colname','dispname')]);
 
 # limit the data to items of interest
 tb2 <- subset(tb2,outcome %in% .outcomenames & predictor %in%
                 c('Frailty','Frailty, age:18-45','Frailty, age:45-65'
                   ,'Frailty, age:65+'));
 tb3 <- subset(tb3,Predictor %in% c('Frailty','Frailty, age:18-45'
-                                   ,'Frailty, age:45-65','Frailty, age:65+'));
+                                   ,'Frailty, age:45-65','Frailty, age:65+') &
+                Outcome %in% .outcomenames);
 fits <- fits[.outcomenames];
+# snippets ----
 snip_resultsfold <- unique(resultsfold00(tb2));
+snip_dat <- c(pat=length(unique(dat03$patient_num)),vis=nrow(dat03)) %>% 
+  format(big.mark=',');
 ```
 
 
@@ -79,26 +86,48 @@ snip_resultsfold <- unique(resultsfold00(tb2));
 Frailty is the lifelong erosion of stress resistance and accumulation of
 impairments across multiple physiological systems. Among older community
 dwelling adults 32% have been classified as pre-frail and 24% have been
-classified as frail [@hoover13]. Frailty predicts disability,
-injurious falls, and mortality [@pajewski19], emergency room visits
-and hospitalizations [@fried01a], and long-term care admissions
-[@pajewski19; @rockwood06; @rockwood05]. The Fried phenotype
-[@fried01a] and Rockwood deficit accumulation index
-[@rockwood07; @mitnitski01a], are the most commonly used methods for
-operationalizing frailty. There is reasonable convergence between these
-two approaches [@li15; @malmstrom14] but the deficit accumulation
-approach does not require individual questionnaires nor physical
-assessments yet offers similar [@malmstrom14] or possibly better
-[@kulminski08] predictive accuracy.
+classified as frail [@hoover13]. Frailty predicts disability, injurious falls,
+and mortality [@pajewski19], emergency room visits and hospitalizations
+[@fried01a], and long-term care admissions [@pajewski19; @rockwood06;
+@rockwood05]. The Fried phenotype [@fried01a] and Rockwood deficit accumulation
+index [@rockwood07; @mitnitski01a], are the most commonly used methods for
+operationalizing frailty. There is reasonable convergence between these two
+approaches [@li15; @malmstrom14] but the deficit accumulation approach does not
+require individual questionnaires nor physical assessments yet offers similar
+[@malmstrom14] or possibly better [@kulminski08] predictive accuracy. Recently
+Johnston et al. {Johnston, 2020} reported that frailty can improve the accuracy
+of predicted annualized Medicare costs over Centers for Medicare & Medicaid
+Services Hierarchical Condition Categories (CMS-HCC) alone. To be pro-active
+health systems need to be able to replicate such analysis on their own
+electronic medical record (EMR) data. Several groups have adapted the Rockwood
+index to EMR-derived data{Clegg, 2016}{Pajewski, 2019}{Stow, 2018}. However, so
+far only patients older than 65 have been studied. Yet value-based care is
+broader than Medicare as `r fs('private payers start moving to the ACO
+model',class='note2team')`, so it is important to understand whether EFI
+generalizes to outcomes such as
+preventable safety events in other age groups.
 
-Possible points still left to cover:
+::: {.note2team custom-style="bnote2team"}
+Transition from data to knowledge and then to clinical practice is slow.
+Learning health systems (LHS) are intended accelerate the movement of routinely
+gathered clinical data into knowledge and care decisions by leveraging and
+extending the relationship between care practice, research, and knowledge
+translation {Friedman, 2015}.
 
--   outcomes important to clinical care of older patients
+The IOM describes the LHS as a vision for an integrated health system “...in
+which progress in science, informatics, and care culture align to generate new
+knowledge as an ongoing, natural by-product of the care experience, and
+seamlessly refine and deliver best practices for continuous improvement in
+health and healthcare.” {Institute of Medicine (IOM). Digital infrastructure for
+the learning health system: the foundation for continuous improvement in health
+and health care. In: Grossman C, Powers B, McGinnis JM, eds. The foundation for
+continuous improvement in health and health care workshop series summary.
+National Academies Press, 2011: 1–311}.
 
--   how care could be improved with better modeling of these outcomes
-
--   information about our site
-
+Following principles of implementation science {xxx}, clinical stakeholders (SE,
+CT) were directly engaged in the research design to identify key outcomes that
+are meaningful, relevant, and useful in guiding clinical care planning.
+:::
 
 # Methods
 
@@ -113,12 +142,16 @@ visit date was chosen and only data recorded on or after that date was
 used in analysis. To avoid distorted results in patients with sparse
 visit histories, those who had fewer than two visit-dates after index
 visit assignment were removed from the sample as were patients whose EFI
-was never higher than 0. Finally, the patients were randomly assigned to
-a development cohort (N=2,497 patients, 52,372 visit-days) or a testing
+was never higher than 0. Most patients  had visits at the tails of their
+histories during which EFI was 0 and no diagnoses, procedures, nor lab results
+were recorded. These may have been missed appointments or accesses to patient
+data that did not physically involve the patient, so they were excluded also.
+Finally, the patients were randomly assigned to a development cohort 
+(N=`r snip_dat['pat']` patients, `r snip_dat['vis']` visit-days) or a testing
 cohort (N=3,220 patients, 56,320 visit-days). Sensitivity analysis was
 done to see the effect of leaving in data from all visits by adult
 patients and the overall direction of EFI's effect was the same but
-[the performance improvement relative to patient age was inflated].
+`r fs('[the performance improvement relative to patient age was inflated]')`.
 All decisions about data processing and statistical analysis were made
 using only the development cohort and blinded to the testing cohort. For
 publication, the same analysis scripts were run on the testing cohort
@@ -171,93 +204,78 @@ in our health system, and then joined to the EHR data.
 
 ## Outcomes
 
-The primary outcomes we predicted with EFI were falls (any ICD9 codes in
-E880-E888.9, E987.x, V00.x, or ICD10 codes in W00-W19), hospital
-admissions (EHR encounter type = 'inpatient'), hospital-acquired
-infections (having any ICD10 code associated with hospital-acquired
-infections per Southern et al. @southern17 ), discharge to
-intermediate care facilities (ICF) or skilled nursing facilities (SNF)
-(using discharge disposition codes, for patients whose admit-source for
-that encounter was 'Home'), and all-cause mortality insofar as it can be
-ascertained from the EHR discharge disposition or vital status (which,
-in the absence of linkage to external death indexes are likely to
-under-report the actual mortality and so should be interpreted with
-caution).
+The primary outcomes we predicted with EFI were hospital-acquired infections,
+non-operative hospital-acquired trauma, cardiac complications, and the occurence
+of one or more of these or any other patient safety events defined in
+@southern17. The advantage of using these PSI definitions is that they leverage
+the greater specificity of ICD10 codes (rather than a straight mapping of AHCR
+ICD9 codes) and the uniform denominator for all but maternal and fetal PSIs
+greatly simplifies calculation. Of the remaining PSIs defined by @southern17, 2
+were excluded because pregnancies were outside the scope of our protocol. Three
+(drug adverse event, CNS complications, and VTIs) were rare enough that they are
+difficult to interpret as survival curves but nevertheless are shown in `r
+fs('supplementary table S1')`. The remaining 10 patient safety indicators were
+too rare to reliably analyze in a sample this size taken from a _general_
+patient population, but it is likely that more targeted samples will be more
+enriched for these events.
+
 
 
 ## Statistical Analysis
 
 For each outcome of interest, we used a Cox proportional hazard model to
-estimate the risk of the first occurrences of the outcome after the
-patients' respective index visits using EFI as the predictor. Unlike
-earlier studies, we treated EFI as a time-varying numeric predictor with
-multiple followups per patient. Since only the first occurrence was
-being predicted, a recurring event model was not necessary. As a
-comparison, for each outcome a second analysis was done that was
-identical to the first except that patient age at visit (in days) was
-used as the predictor.
+estimate the risk of the first occurrences of the outcome after the patients'
+respective index visits using EFI as the predictor. Unlike earlier studies, we
+treated EFI as a time-varying numeric predictor with multiple followups per
+patient. Since only the first occurrence was being predicted, a recurring event
+model was not necessary. Patients were followed up to the first occurrences of
+the respective outcomes, so the standard form of the Cox model was sufficient.
+In order to determine whether predictive accuracy of EFI was only limited to
+some age subgroups, we repeated the analysis separately for the following age
+ranges: 18-45 years old, 45-65 years old, and 65 or above. These split the
+dataset into three roughly equal subgroups.
 
 # Results
 
 Table \@ref(tab:tb2) shows the results of Cox proportional hazard models for
 each of the responses, with EFI as the predictor. For each 0.1 increase in
 EFI, we found at least a doubling of risk: `r pander(snip_resultsfold)`.
-Furthermore, the probability of delayed discharge increased and thus longer
-stays were observed in patients with an EFI > 0.19.
 The p-values shown have been adjusted for multiple comparisons
 (`r as.english(nrow(tb2)) %>% as.character` outcomes reported in
 one study) using the @holm79 method and in all cases are highly
-significant. It is well established in gerontology that an enormous and
-diverse range of poor health outcomes are correlated with an individual's
-age, but chronological age provides no information about the progression of
-biological age in an individual. It has long been a priority in aging
-research to find a metric for aging that is subject to individual variation
-and intervention. Rockford et al. have pointed out {ref} that deficit
-accumulation has the hallmarks of such a measure.
+significant. 
 
 
 ```{r tb2}
 
-tb2[,c('predictor','Outcome','β^ (95% CI)','fold-change (95% CI)','SE','Z','P, adjusted')] %>%
+tb2[,c('predictor','Outcome','β^ (95% CI)','fold-change (95% CI)','SE','Z','P, adjusted','# Events','# Visits')] %>%
   pander(digits=3, row.names=FALSE,caption='(\\#tab:tb2) Cox-proportional hazards with EFI as a predictor');
 ```
 
-
-Therefore, we compared the predictive accuracy of the EFI to that of
-patient age. For each outcome, we fit an additional Cox proportional
-hazard model, this time using age at visit as the predictor variable. It
-appears, at least in this population, that not only can EFI accurately
-predict mortality and poor patient outcomes without any knowledge of
-patient age but it does so better than patient age.
-
+For each outcome, we re-fit the same Cox proportional on subsets of the data
+separated by age at visit: 18-45 years old, 45-65 years old, and 65 or older.
+We found that for most of the primary outcomes (as well as for most of the 
+analyzable outcomes, see supplementary table S1) EFI was a good predictor in
+all three age groups.
 
 ```{r tb3}
-pander(tb3,caption='(\\#tab:tb3) Performance of EFI models');
+tb3 %>% mutate(Outcome = submulti(Outcome,dct0[,c('colname','dispname')])) %>%
+         pander(caption='(\\#tab:tb3) Performance of EFI models');
 ```
 
 
-In Table \@ref(tab:tb3) we compare the performance of EFI and age as
-predictors for each of the `r as.english(nrow(tb2)) %>% as.character`
-outcomes. In all cases, the EFI models has a robustly lower AIC and
-log-likelihood than the respective patient-age models, as well as a higher
-concordance (in all cases greater than 0.7). Cox models incorporating EFI
-together with age, with or without an interaction term, did not have a
-significantly better fit than the univariate EFI model (not shown, available
-in supplement).
+In Table \@ref(tab:tb3) we report the performance of EFI as the predictor for
+each combination of age group and outcome, as well as for the cohort overall
+(Frailty). 
 
 In figures \@ref(fig:kmplots) a-`r letters[length(fits)]` we show Kaplan-Meier 
 plots for each of the outcomes stratified by whether EFI is greater than 0.19 
-(Frail=TRUE) or less (Frail=FALSE) [@stow18].
+(Frail=TRUE) or less (Frail=FALSE), the cut-point established by [@stow18].
 
 
 ```{r kmplots, fig.show="hold", fig.height=4, fig.width=12, fig.cap=" - "}
 # . kmplots ----
 .subfig <- 0;
-# for(jj in fits) {
-#   print(jj$plot + labs(caption=paste0('Figure 1 ',letters[.subfig],'. \n')) +
-#           theme(plot.caption=element_text(size=15)) );
-# }
-#panderOptions('knitr.auto.asis', FALSE);
 for(jj in fits) {.subfig <- .subfig + 1;
 with(jj,{
   message(dispname);
@@ -277,22 +295,21 @@ with(jj,{
 
 # Discussion
 
-Our data shares the fundamental limitation of the EHR system from which
-it was obtained: like all EHR systems, it only has information that
-providers and coders put into it. Events taking place outside the health
-system or at un-connected health systems are not visible to our analysis.
-On the other hand, providers who rely on EHR systems at point of care
-are also working under these limitations on. The data we used is
-representative of this scenario, and despite the limitations EFI
-provides accurate predictions of poor patient outcomes. Because our
-implementation of the Rockwood index real EHR data, it is more directly
-transferable to clinical use than implementations based on curated
-registries. This suggests that EFI is most accurate for patients who
-have accumulated a reasonable in-system visit-history. Further work is
-needed to find a more precise relationship between the length of a
-patient's visit-history and the accuracy of EFI and better distinguish
-genuinely non-frail patients from those who get most of their care
-outside the researchers' health system.
+Our data shares the fundamental limitation of the EHR system from which it was
+obtained: like all EHR systems, it only has information that providers and
+coders put into it. Events taking place outside the health system or at
+un-connected health systems are not visible to our analysis. On the other hand,
+providers who rely on EHR systems at point of care are also working under these
+limitations on. The data we used is representative of this scenario, and despite
+the limitations EFI provides accurate predictions of poor patient outcomes.
+Because our implementation of the Rockwood index real EHR data, it is more
+directly transferable to clinical use than implementations based on curated
+registries and more immediate than claims data. EFI is most accurate for
+patients who have accumulated a reasonable in-system visit-history but further
+work is needed to find a more precise relationship between the length of a
+patient's visit-history and the accuracy of EFI and to better distinguish
+genuinely non-frail patients from those who have a lot of missing data because
+they are often seen outside the researchers' health system.
 
 Vital status is often out of date in EHR systems if the patient did not
 die in the hospital or shortly after their visit, so our data may
