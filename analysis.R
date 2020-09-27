@@ -102,6 +102,19 @@ dct0<-sync_dictionary(dat03);
 #'
 # Local functions ----
 
+# rename variables
+rname <- function(xx,dispname='dispname'
+                  ,method='startsends'
+                  # can also be "partial", "full", "exact", "starts", or "ends"
+                  ,colname=getOption('tb.retcol','colname')
+                  ,dictionary=get('dct0')
+                  ,searchrep=na.omit(dictionary[,c(colname,dispname)])
+                  ,...){
+  submulti(xx,searchrep,method);
+}
+
+rnameshort <- rname; formals(rnameshort)$dispname <- 'dispname_short';
+
 # tb1 tweak
 table1cat00 <- function(xx,...) {
   if(identical(levels(xx),c('Yes','No'))) {
@@ -193,7 +206,7 @@ resultsfold00 <- function(table){
 
 # Fits ----
 fits <- list();
-for(ii in v(c_mainresponse)){
+for(ii in v(c_response)){
   # note: the cumsum(cumsum(%s))<=1 expression below is the part that cuts off
   # each patient at their first post-index event for the respective events
   .iidata <- gsub('%s',ii,"copy(dat03)[,c('keep','xx','Frail') :=
@@ -201,7 +214,7 @@ for(ii in v(c_mainresponse)){
                      ,c('patient_num','a_t0','a_t1','xx','Frail','a_efi'
                   ,'age_at_visit_days','a_agegrp')]") %>%
     parse(text=.) %>% eval;
-  fits[[ii]]$dispname <- dct0[dct0$colname==ii,'dispname'];
+  fits[[ii]]$dispname <- rname(ii); #coalesce(dct0[dct0$colname==ii,'dispname'],ii);
   fits[[ii]]$data <- .iidata;
   fits[[ii]]$plot <- with(fits[[ii]],plotsurv00(data,dispname));
   fits[[ii]]$multidata <- with(fits[[ii]],split(data,data$a_agegrp));
@@ -314,7 +327,8 @@ dat04 <- dat03[,lapply(.SD,head,1),by=patient_num,.SDcols=v(c_patdata)[1:5]] %>%
   formula;
 
 tb1 <- table1(.tb1formula,data=dat04,render.categorical=table1cat00) %>%
-  submulti(dct0[,c('colname','dispname')],'partial') %>% gsub('BLANK.','<br/>',.);
+  rnameshort(method='partial') %>% gsub('BLANK.','<br/>',.);
+  #submulti(na.omit(dct0[,c('colname','dispname')]),'partial') %>% gsub('BLANK.','<br/>',.);
 
 tb1;
 
@@ -335,9 +349,8 @@ tb1;
 #   rename(SE=std.error,Z=statistic);
 tb2 <- sapply(fits,function(xx) sapply(xx$models,summsurv01,simplify=F) %>%
                 bind_rows(.id='predictor'),simplify=F) %>%
-  bind_rows(.id='outcome') %>%
-  mutate(Outcome = submulti(outcome,dct0[,c('colname','dispname')])
-         ,`P, adjusted`=p.adjust(p.value));
+  bind_rows(.id='outcome') %>% mutate(Outcome = rnameshort(outcome)
+                                      ,`P, adjusted`=p.adjust(p.value));
 tb2[,c('predictor','Outcome','β^ (95% CI)','fold-change (95% CI)','SE','Z'
        ,'P, adjusted')] %>%
   pander(digits=3);
@@ -364,7 +377,7 @@ resps <- dat04[,lapply(.SD,any),by=patient_num,.SDcols=v(c_response)] %>%
   select(-patient_num) %>% colSums() %>% sort() %>% rev() %>%
   cbind(Variable=names(.),`N Patients`=.
         ,`Fraction Patients`=(.)/length(unique(dat04$patient_num)));
-rownames(resps) <- submulti(rownames(resps),dct0[,c('colname','dispname')]);
+rownames(resps) <- rname(rownames(resps));
 pander(resps);
 
 # Reproducibility ----
