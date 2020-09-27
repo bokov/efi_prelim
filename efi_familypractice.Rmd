@@ -165,20 +165,7 @@ then joined to the EHR data.
 
 ## Outcomes
 
-The primary outcomes we predicted with EFI were hospital-acquired infections,
-non-operative hospital-acquired trauma, cardiac complications, and the occurence
-of one or more of these or any other patient safety events defined in
-@southern17. The advantage of using these PSI definitions is that they leverage
-the greater specificity of ICD10 codes (rather than a straight mapping of AHCR
-ICD9 codes) and the uniform denominator for all but maternal and fetal PSIs
-greatly simplifies calculation. Of the remaining PSIs defined by @southern17, 2
-were excluded because pregnancies were outside the scope of our protocol. Three
-(drug adverse event, CNS complications, and VTIs) were rare enough that they are
-difficult to interpret as survival curves but nevertheless are shown in 
-`r fs('supplementary table S1')`. The remaining 10 patient safety indicators 
-were too rare to reliably analyze in a sample this size taken from a _general_
-patient population, but it is likely that more targeted samples will be more
-enriched for these events.
+The primary outcomes we predicted with EFI were `r pander(snip_outcomes)`.
 
 
 
@@ -272,14 +259,6 @@ patient's visit-history and the accuracy of EFI and to better distinguish
 genuinely non-frail patients from those who have a lot of missing data because
 they are often seen outside the researchers' health system.
 
-Vital status is often out of date in EHR systems if the patient did not
-die in the hospital or shortly after their visit, so our data may
-under-represent the true mortality rates. Nevertheless, the relationship
-between EFI and mortality risk observed here agrees with previous EFI
-studies. Unlike previous studies we sampled all adults rather than just
-older adults so we could assess the performance of EFI across the
-lifespan and include individuals who might have early-onset frailty.
-
 There is no gold standard method to assess Frailty in clinical practice.
 Currently available frailty assessment tools used in geriatric practice have
 good validity (for example @fried01a) but these are time
@@ -288,20 +267,6 @@ Assessing frailty helps clinicians identify high risk patients and tailor
 interventions to prevent health decline and poor outcomes. Because of the
 simplicity of the Rockwood Frailty Index, it is more likely to be adopted by
 clinicians in a busy practice.
-
-::: {.note2team custom-style="bnote2team"}
-Other possible points to cover:
-
--   What we learned by not restricting the sample to older adults?
--   What agrees and what disagrees with previous work?
--   What is new?
-    -   Publicly available code
-    -   Strictly limiting data elements to those we can count on being
-        available in any EHR system, at any site
--   future work
--   theoretical and practical implications
-:::
-
 
 # Conclusions
 
