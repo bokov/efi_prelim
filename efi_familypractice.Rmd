@@ -1,0 +1,324 @@
+---
+title: "The patient behind the illness: electronic frailty index as an early 
+        indicator of healthcare utilization."
+author: 'Alex Bokov ^1,✉^, Sara Espinoza ^1^, Chandana Tripathy ^1^,
+  ..., ..., ..., and Kathleen R. Stevens ^1^'
+css: "production.css"
+abstract: 'We have found that the electronic frailty index (EFI), a risk
+  score developed using the Rockwood deficit-accumulation framework, is
+  a strong predictor of patient safety events without relying on any predictors
+  other than diagnoses, vital signs, and laboratory results from the electronic
+  health record. Previous studies using electronic frailty indexes on claims 
+  data or electronic health records focused on older patients, but we found that
+  for most of the patient safety outcomes we examined EFI is also predictive 
+  for patients in the 45-65 age range and even in the 18-45 age range.'
+documentclass: article
+clean: false
+bibliography: efi_paper.bib
+csl: harvard-cite-them-right.csl
+output:
+  bookdown::html_document2:
+    fig_caption: true
+    self_contained: true
+    number_sections: false
+    keep_md: true
+    clean: false
+  bookdown::word_document2:
+    reference_docx: efi_template.docx
+    fig_caption: true
+    self_contained: true
+    number_sections: false
+---
+
+```{r load_deps, echo=FALSE, message=FALSE, warning=FALSE,results='hide'}
+.projpackages <- c('GGally','pander','dplyr','ggplot2','data.table'
+                   ,'survival','broom','forcats','table1','english');
+.deps <- c( 'analysis.R' );
+.debug <- 0;
+.junk<-capture.output(source('./scripts/global.R',chdir=TRUE,echo=FALSE
+                             ,local=TRUE));
+# Set some formatting options for this document
+panderOptions('table.alignment.default','right');
+panderOptions('table.alignment.rownames','right');
+panderOptions('table.split.table',Inf);
+panderOptions('p.wrap','');
+panderOptions('p.copula',', and ');
+panderOptions('graph.fontfamily','serif');
+# theme_get() gives default theme
+theme_set(theme_bw(base_family = 'serif',base_size=14) +
+            theme(strip.background = element_rect(fill=NA,color=NA)
+                  ,strip.text = element_text(size=15)));
+knitr::opts_chunk$set(echo=.debug>0, warning=.debug>0, message=.debug>0);
+
+# detect current output format
+.outfmt <- knitr::opts_knit$get('rmarkdown.pandoc.to');
+message('.outfmt = ',.outfmt);
+if(is.null(.outfmt)){
+  .outfmt <- if(knitr::is_html_output()) 'html' else {
+    if(knitr::is_latex_output()) 'latex' else {
+      if(interactive()) 'html' else {
+        'unknown';
+    }}}};
+message('.outfmt = ',.outfmt);
+
+.currentscript <- current_scriptname('efi_familypractice.Rmd');
+.outcomenames <- v(c_fampractice);
+snip_outcomes <- rname(.outcomenames);
+
+# limit the data to items of interest
+tb2 <- subset(tb2,outcome %in% .outcomenames & predictor %in%
+                c('Frailty','Frailty, age:18-45','Frailty, age:45-65'
+                  ,'Frailty, age:65+'));
+tb3 <- subset(tb3,Predictor %in% c('Frailty','Frailty, age:18-45'
+                                   ,'Frailty, age:45-65','Frailty, age:65+') &
+                Outcome %in% .outcomenames);
+fits <- fits[.outcomenames];
+# snippets ----
+snip_resultsfold <- unique(resultsfold00(tb2));
+snip_dat <- c(pat=length(unique(dat03$patient_num)),vis=nrow(dat03)) %>% 
+  format(big.mark=',');
+```
+
+
+# Introduction
+
+The primary diagnosis does not exist in a vacuum; it can interact in complex
+ways with the patient's overall physiological state. A promising approach are 
+frailty scores that use the deficit accumulation methodology 
+[@rockwood07; @mitnitski01a]. Such indexes has been used to predict disability, 
+injurious falls and mortality [@pajewski19], and long-term care admissions 
+[@pajewski19; @rockwood06; @rockwood05].
+
+
+
+# Methods
+
+## Population
+
+A random 1% sample (N=14,844) was drawn from the deidentified patient
+records of a large academic health center and its teaching hospital
+partner. Visits during which patient age was less than 18 years old were
+excluded and then patients who had fewer than three visits in the
+remaining data were excluded. To avoid bias, for each patient an index
+visit date was chosen and only data recorded on or after that date was
+used in analysis. To avoid distorted results in patients with sparse
+visit histories, those who had fewer than two visit-dates after index
+visit assignment were removed from the sample as were patients whose EFI
+was never higher than 0. Most patients  had visits at the tails of their
+histories during which EFI was 0 and no diagnoses, procedures, nor lab results
+were recorded. These may have been missed appointments or accesses to patient
+data that did not physically involve the patient, so they were excluded also.
+Finally, the patients were randomly assigned to a development cohort 
+(N=`r snip_dat['pat']` patients, `r snip_dat['vis']` visit-days) or a testing
+cohort (N=3,220 patients, 56,320 visit-days). Sensitivity analysis was
+done to see the effect of leaving in data from all visits by adult
+patients and the overall direction of EFI's effect was the same but
+`r fs('[the model performance was inflated, see supplement]')`.
+All decisions about data processing and statistical analysis were made
+using only the development cohort and blinded to the testing cohort. For
+publication, the same analysis scripts were run on the testing cohort
+and used to create all results reported here (the development version of
+each table and figure is available in the supplemental materials). The
+baseline characteristics of the testing cohort are shown in Table
+\@ref(tab:table1).
+
+***
+
+```{r table1header}
+    pander(rbind(c('.','','','','','','',''))
+           ,caption='(\\#tab:table1) Cohort demographics\n\n');
+```
+
+
+```{r table1,results='asis'}
+if(.outfmt == 'html'){
+  .tb1formula <- c('sex_cd','race_cd','BLANK0',.outcomenames
+                   ,'Patient age (years)','Frailty','Number of Visits') %>% 
+    paste0('`',.,'`',collapse='+') %>% paste('~',.,'|`Frailty Stage`') %>% 
+    formula;
+  
+  tb1 <- table1(.tb1formula,data=dat04,render.categorical=table1cat00) %>%
+    rnameshort(method='partial') %>% gsub('BLANK.','<br/>',.) %>%
+    gsub('BLANK.','</br>',.) %>% gsub('Patient age','<br/>Patient age',.);
+  
+  print(tb1);
+};
+```
+
+
+## Electronic Frailty Index
+
+@clegg16a developed an electronic frailty index (EFI) for UK health systems
+following the methodology of Mitnitsky, Rockwood, et al. [@mitnitski01a;
+@song10; @searle08a]. Recently, @pajewski19 adapted the EFI to use ICD10 and
+ICD9. We further built on this work by also mapping laboratory tests to specific
+LOINC codes, de-duplicating several items, and omitting data elements which are
+not available in some EMR systems. We made the mapping tables and sample SQL 
+code available for public use and discussion [@bokov20]. For each patient visit,
+all distinct diagnoses and abnormal lab results over the preceding two-year
+window for that patient were aggregated into a single EFI, a numeric value that
+can range from 0 to 1 (but in practice seldom exceeded 0.6). As mentioned above,
+we omitted all visits prior to a randomly select index visit for each patient.
+This did not interfere with EFI calculation because those EFI values were
+calculated separately for every distinct patient-date in our health system, and
+then joined to the EHR data.
+
+## Outcomes
+
+The primary outcomes we predicted with EFI were hospital-acquired infections,
+non-operative hospital-acquired trauma, cardiac complications, and the occurence
+of one or more of these or any other patient safety events defined in
+@southern17. The advantage of using these PSI definitions is that they leverage
+the greater specificity of ICD10 codes (rather than a straight mapping of AHCR
+ICD9 codes) and the uniform denominator for all but maternal and fetal PSIs
+greatly simplifies calculation. Of the remaining PSIs defined by @southern17, 2
+were excluded because pregnancies were outside the scope of our protocol. Three
+(drug adverse event, CNS complications, and VTIs) were rare enough that they are
+difficult to interpret as survival curves but nevertheless are shown in 
+`r fs('supplementary table S1')`. The remaining 10 patient safety indicators 
+were too rare to reliably analyze in a sample this size taken from a _general_
+patient population, but it is likely that more targeted samples will be more
+enriched for these events.
+
+
+
+## Statistical Analysis
+
+For each outcome of interest, we used a Cox proportional hazard model to
+estimate the risk of the first occurrences of the outcome after the patients'
+respective index visits using EFI as the predictor. Unlike earlier studies, we
+treated EFI as a time-varying numeric predictor with multiple followups per
+patient. Since only the first occurrence was being predicted, a recurring event
+model was not necessary. Patients were followed up to the first occurrences of
+the respective outcomes, so the standard form of the Cox model was sufficient.
+In order to determine whether predictive accuracy of EFI was only limited to
+some age subgroups, we repeated the analysis separately for the following age
+ranges: 18-45 years old, 45-65 years old, and 65 or above. These split the
+dataset into three roughly equal subgroups.
+
+# Results
+
+Table \@ref(tab:tb2) shows the results of Cox proportional hazard models for
+each of the responses, with EFI as the predictor. For each 0.1 increase in
+EFI, we found at least a doubling of risk: `r pander(snip_resultsfold)`.
+The p-values shown have been adjusted for multiple comparisons
+(`r as.english(nrow(tb2)) %>% as.character` outcomes reported in
+one study) using the @holm79 method and in all cases are highly
+significant. 
+
+
+```{r tb2}
+
+tb2[,c('predictor','Outcome','β^ (95% CI)','fold-change (95% CI)','SE','Z','P, adjusted','# Events','# Visits')] %>%
+  pander(digits=3, row.names=FALSE,caption='(\\#tab:tb2) Cox-proportional hazards with EFI as a predictor');
+```
+
+For each outcome, we re-fit the same Cox proportional on subsets of the data
+separated by age at visit: 18-45 years old, 45-65 years old, and 65 or older.
+We found that for most of the primary outcomes (as well as for most of the 
+analyzable outcomes, see supplementary table S1) EFI was a good predictor in
+all three age groups.
+
+```{r tb3}
+tb3 %>% mutate(Outcome = rname(Outcome)) %>%
+         pander(caption='(\\#tab:tb3) Performance of EFI models');
+```
+
+
+In Table \@ref(tab:tb3) we report the performance of EFI as the predictor for
+each combination of age group and outcome, as well as for the cohort overall
+(Frailty). 
+
+In figures \@ref(fig:kmplots) a-`r letters[length(fits)]` we show Kaplan-Meier 
+plots for each of the outcomes stratified by whether EFI is greater than 0.19 
+(Frail=TRUE) or less (Frail=FALSE), the cut-point established by [@stow18].
+
+
+```{r kmplots, fig.show="hold", fig.height=4, fig.width=12, fig.cap=" - "}
+# . kmplots ----
+.subfig <- 0;
+for(jj in fits) {.subfig <- .subfig + 1;
+with(jj,{
+  message(dispname);
+  print(ggmatrix(multiplot,nrow=1,ncol=3,legend=grab_legend(plot),title=dispname
+           ,xAxisLabels = names(multidata)
+           ,xlab=plot$label$x
+           ,ylab=plot$label$y) + 
+          labs(caption=paste0('Figure 1 ',letters[.subfig],'. \n')));
+  cat('\n\n\n');
+  # pander(modelsummary);
+  # cat("\n******\n");
+  })};
+
+```
+
+
+
+# Discussion
+
+Our data shares the fundamental limitation of the EHR system from which it was
+obtained: like all EHR systems, it only has information that providers and
+coders put into it. Events taking place outside the health system or at
+un-connected health systems are not visible to our analysis. On the other hand,
+providers who rely on EHR systems at point of care are also working under these
+limitations on. The data we used is representative of this scenario, and despite
+the limitations EFI provides accurate predictions of poor patient outcomes.
+Because our implementation of the Rockwood index real EHR data, it is more
+directly transferable to clinical use than implementations based on curated
+registries and more immediate than claims data. EFI is most accurate for
+patients who have accumulated a reasonable in-system visit-history but further
+work is needed to find a more precise relationship between the length of a
+patient's visit-history and the accuracy of EFI and to better distinguish
+genuinely non-frail patients from those who have a lot of missing data because
+they are often seen outside the researchers' health system.
+
+Vital status is often out of date in EHR systems if the patient did not
+die in the hospital or shortly after their visit, so our data may
+under-represent the true mortality rates. Nevertheless, the relationship
+between EFI and mortality risk observed here agrees with previous EFI
+studies. Unlike previous studies we sampled all adults rather than just
+older adults so we could assess the performance of EFI across the
+lifespan and include individuals who might have early-onset frailty.
+
+There is no gold standard method to assess Frailty in clinical practice.
+Currently available frailty assessment tools used in geriatric practice have
+good validity (for example @fried01a) but these are time
+intensive and often difficult to implement in a busy general practice.
+Assessing frailty helps clinicians identify high risk patients and tailor
+interventions to prevent health decline and poor outcomes. Because of the
+simplicity of the Rockwood Frailty Index, it is more likely to be adopted by
+clinicians in a busy practice.
+
+::: {.note2team custom-style="bnote2team"}
+Other possible points to cover:
+
+-   What we learned by not restricting the sample to older adults?
+-   What agrees and what disagrees with previous work?
+-   What is new?
+    -   Publicly available code
+    -   Strictly limiting data elements to those we can count on being
+        available in any EHR system, at any site
+-   future work
+-   theoretical and practical implications
+:::
+
+
+# Conclusions
+
+`r fs('TBD')`
+
+# Acknowledgments
+
+This work was supported by NIH/NCATS UL1TR001120 (AFB, KRS), the Long School
+of Medicine KL2 Award (AFB), `r fs('...',class='note2team')`
+
+
+
+# References
+
+
+
+---
+date: '2020-09-22'
+
+---
