@@ -62,6 +62,18 @@ map0$c_psi <- map0[,paste0('c_',unique(psinames))] %>% rowSums > 0;
 #' Join on map1 and add rows from map2
 map3 <- left_join(map0,map1) %>% bind_rows(map2);
 
+#' Insure no missing display names
+map3$dispname_short <- with(map3,coalesce(dispname_short,dispname));
+
+# QC ----
+#' # QC warnings (if any)
+#'
+#' `.missing_from_response` should be empty.
+.missing_from_response <- setdiff(v(c_mainresponse,dictionary=map3)
+                                  ,v(c_response,dictionary=map3));
+.missing_from_response;
+
+
 #### write varmap.csv ####
 export(map3,'varmap.csv');
 
