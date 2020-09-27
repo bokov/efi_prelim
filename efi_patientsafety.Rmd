@@ -18,17 +18,17 @@ clean: false
 bibliography: efi_paper.bib
 csl: harvard-cite-them-right.csl
 output:
+  bookdown::word_document2:
+    reference_docx: efi_template.docx
+    fig_caption: true
+    self_contained: true
+    number_sections: false
   bookdown::html_document2:
     fig_caption: true
     self_contained: true
     number_sections: false
     keep_md: true
     clean: false
-  bookdown::word_document2:
-    reference_docx: efi_template.docx
-    fig_caption: true
-    self_contained: true
-    number_sections: false
 ---
 
 ```{r load_deps, echo=FALSE, message=FALSE, warning=FALSE,results='hide'}
@@ -95,34 +95,29 @@ operationalizing frailty. There is reasonable convergence between these two
 approaches [@li15; @malmstrom14] but the deficit accumulation approach does not
 require individual questionnaires nor physical assessments yet offers similar
 [@malmstrom14] or possibly better [@kulminski08] predictive accuracy. Recently
-Johnston et al. {Johnston, 2020} reported that frailty can improve the accuracy
+Johnston et al. @johnston20 reported that frailty can improve the accuracy
 of predicted annualized Medicare costs over Centers for Medicare & Medicaid
 Services Hierarchical Condition Categories (CMS-HCC) alone. To be pro-active
 health systems need to be able to replicate such analysis on their own
 electronic medical record (EMR) data. Several groups have adapted the Rockwood
-index to EMR-derived data{Clegg, 2016}{Pajewski, 2019}{Stow, 2018}. However, so
+index to EMR-derived data [@clegg16a; @pajewski19; @stow18]. However, so
 far only patients older than 65 have been studied. Yet value-based care is
-broader than Medicare as `r fs('private payers start moving to the ACO
-model',class='note2team')`, so it is important to understand whether EFI
-generalizes to outcomes such as
-preventable safety events in other age groups.
+broader than Medicare as private payers start moving to the ACO model, so it is
+important to understand whether EFI generalizes to outcomes such as preventable
+safety events in other age groups.
 
 ::: {.note2team custom-style="bnote2team"}
 Transition from data to knowledge and then to clinical practice is slow.
 Learning health systems (LHS) are intended accelerate the movement of routinely
 gathered clinical data into knowledge and care decisions by leveraging and
 extending the relationship between care practice, research, and knowledge
-translation {Friedman, 2015}.
+translation [@friedman14].
 
-The IOM describes the LHS as a vision for an integrated health system “...in
+The IOM describes the LHS as a vision for an integrated health system "...in
 which progress in science, informatics, and care culture align to generate new
 knowledge as an ongoing, natural by-product of the care experience, and
 seamlessly refine and deliver best practices for continuous improvement in
-health and healthcare.” {Institute of Medicine (IOM). Digital infrastructure for
-the learning health system: the foundation for continuous improvement in health
-and health care. In: Grossman C, Powers B, McGinnis JM, eds. The foundation for
-continuous improvement in health and health care workshop series summary.
-National Academies Press, 2011: 1–311}.
+health and healthcare." [@grossmann11].
 
 Following principles of implementation science {xxx}, clinical stakeholders (SE,
 CT) were directly engaged in the research design to identify key outcomes that
@@ -151,7 +146,7 @@ Finally, the patients were randomly assigned to a development cohort
 cohort (N=3,220 patients, 56,320 visit-days). Sensitivity analysis was
 done to see the effect of leaving in data from all visits by adult
 patients and the overall direction of EFI's effect was the same but
-`r fs('[the performance improvement relative to patient age was inflated]')`.
+`r fs('[the model performance was inflated, see supplement]')`.
 All decisions about data processing and statistical analysis were made
 using only the development cohort and blinded to the testing cohort. For
 publication, the same analysis scripts were run on the testing cohort
@@ -190,17 +185,19 @@ if(.outfmt == 'html'){
 ## Electronic Frailty Index
 
 @clegg16a developed an electronic frailty index (EFI) for UK health systems
-following the methodology of Mitnitsky, Rockwood, et al.
-[@mitnitski01a; @song10; @searle08a]. Recently, @pajewski19 adapted the EFI
-to use ICD10 and ICD9. We further built on this work by also mapping
-laboratory tests to specific LOINC codes. For each patient visit, all
-distinct diagnoses and abnormal lab results over the preceding two-year
-window for that patient were aggregated into a single EFI, a numeric value
-that can range from 0 to 1 (but in practice seldom exceeded 0.6). As
-mentioned above, we omitted all visits prior to a randomly select index
-visit for each patient. This did not interfere with EFI calculation because
-those EFI values were calculated separately for every distinct patient-date
-in our health system, and then joined to the EHR data.
+following the methodology of Mitnitsky, Rockwood, et al. [@mitnitski01a;
+@song10; @searle08a]. Recently, @pajewski19 adapted the EFI to use ICD10 and
+ICD9. We further built on this work by also mapping laboratory tests to specific
+LOINC codes, de-duplicating several items, and omitting data elements which are
+not available in some EMR systems. We made the mapping tables and sample SQL 
+code available for public use and discussion [@bokov20]. For each patient visit,
+all distinct diagnoses and abnormal lab results over the preceding two-year
+window for that patient were aggregated into a single EFI, a numeric value that
+can range from 0 to 1 (but in practice seldom exceeded 0.6). As mentioned above,
+we omitted all visits prior to a randomly select index visit for each patient.
+This did not interfere with EFI calculation because those EFI values were
+calculated separately for every distinct patient-date in our health system, and
+then joined to the EHR data.
 
 ## Outcomes
 
@@ -328,29 +325,28 @@ interventions to prevent health decline and poor outcomes. Because of the
 simplicity of the Rockwood Frailty Index, it is more likely to be adopted by
 clinicians in a busy practice.
 
+::: {.note2team custom-style="bnote2team"}
 Other possible points to cover:
 
--   What we learned by not restricting the sample to older adults (or
-    move to methods/theory paper?)
-
+-   What we learned by not restricting the sample to older adults?
 -   What agrees and what disagrees with previous work?
 -   What is new?
-    -   Per-visit EFI allows plotting an EFI trajectory over time
+    -   Publicly available code
     -   Strictly limiting data elements to those we can count on being
         available in any EHR system, at any site
 -   future work
 -   theoretical and practical implications
-
+:::
 
 
 # Conclusions
 
-TBD
+`r fs('TBD')`
 
 # Acknowledgments
 
 This work was supported by NIH/NCATS UL1TR001120 (AFB, KRS), the Long School
-of Medicine KL2 Award (AFB), ...
+of Medicine KL2 Award (AFB), `r fs('...',class='note2team')`
 
 
 
