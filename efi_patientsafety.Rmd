@@ -18,17 +18,17 @@ clean: false
 bibliography: efi_paper.bib
 csl: harvard-cite-them-right.csl
 output:
-  bookdown::word_document2:
-    reference_docx: efi_template.docx
-    fig_caption: true
-    self_contained: true
-    number_sections: false
   bookdown::html_document2:
     fig_caption: true
     self_contained: true
     number_sections: false
     keep_md: true
     clean: false
+  bookdown::word_document2:
+    reference_docx: efi_template.docx
+    fig_caption: true
+    self_contained: true
+    number_sections: false
 ---
 
 ```{r load_deps, echo=FALSE, message=FALSE, warning=FALSE,results='hide'}
@@ -210,9 +210,9 @@ ICD9 codes) and the uniform denominator for all but maternal and fetal PSIs
 greatly simplifies calculation. Of the remaining PSIs defined by @southern17, 2
 were excluded because pregnancies were outside the scope of our protocol. Three
 (drug adverse event, CNS complications, and VTIs) were rare enough that they are
-difficult to interpret as survival curves but nevertheless are shown in `r
-fs('supplementary table S1')`. The remaining 10 patient safety indicators were
-too rare to reliably analyze in a sample this size taken from a _general_
+difficult to interpret as survival curves but nevertheless are shown in 
+`r fs('supplementary table S1')`. The remaining 10 patient safety indicators 
+were too rare to reliably analyze in a sample this size taken from a _general_
 patient population, but it is likely that more targeted samples will be more
 enriched for these events.
 
