@@ -206,7 +206,7 @@ resultsfold00 <- function(table){
 
 # Fits ----
 fits <- list();
-for(ii in v(c_response)){
+for(ii in intersect(v(c_response),v(c_truefalse))){
   # note: the cumsum(cumsum(%s))<=1 expression below is the part that cuts off
   # each patient at their first post-index event for the respective events
   .iidata <- gsub('%s',ii,"copy(dat03)[,c('keep','xx','Frail') :=
