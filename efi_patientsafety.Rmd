@@ -62,10 +62,10 @@ if(is.null(.outfmt)){
     }}}};
 message('.outfmt = ',.outfmt);
 
-.currentscript <- current_scriptname('efi_safety.Rmd');
+.currentscript <- current_scriptname('efi_patientsafety.Rmd');
 .outcomenames <- c('vi_c_psi','vi_c_hospinfect','vi_c_hosptrauma'
                    ,'vi_c_cardiac');
-snip_outcomes <- submulti(.outcomenames,dct0[,c('colname','dispname')]);
+snip_outcomes <- rname(.outcomenames);
 
 # limit the data to items of interest
 tb2 <- subset(tb2,outcome %in% .outcomenames & predictor %in%
@@ -172,8 +172,8 @@ if(.outfmt == 'html'){
     formula;
   
   tb1 <- table1(.tb1formula,data=dat04,render.categorical=table1cat00) %>%
-    submulti(dct0[,c('colname','dispname')],'partial') %>% 
-    gsub('BLANK.','</br>',.) %>% gsub('Patient age','<br/>Patient age',.);
+    rname(method='partial') %>% gsub('BLANK.','</br>',.) %>% 
+    gsub('Patient age','<br/>Patient age',.);
   
   print(tb1);
 };
@@ -254,7 +254,7 @@ analyzable outcomes, see supplementary table S1) EFI was a good predictor in
 all three age groups.
 
 ```{r tb3}
-tb3 %>% mutate(Outcome = submulti(Outcome,dct0[,c('colname','dispname')])) %>%
+tb3 %>% mutate(Outcome = rnameshort(Outcome)) %>%
          pander(caption='(\\#tab:tb3) Performance of EFI models');
 ```
 
