@@ -101,6 +101,14 @@ dct0<-sync_dictionary(dat03);
 #'
 #'
 # Local functions ----
+
+# tb1 tweak
+table1cat00 <- function(xx,...) {
+  if(identical(levels(xx),c('Yes','No'))) {
+    return(parse.abbrev.render.code('Freq (Pct%)')(xx,...)['Yes'])};
+  if(identical(levels(xx),'')) return(' ');
+  return(render.categorical.default(xx))};
+
 # summarizing coxph results
 summsurv00 <- function(fit
                        # simultaneously set columns to choose from glance and
@@ -286,6 +294,7 @@ dat04 <- dat03[,lapply(.SD,head,1),by=patient_num,.SDcols=v(c_patdata)[1:5]] %>%
                   ,Frailty=tail(a_efi,1)
                   ,`Median Frailty`=median(a_efi,na.rm=T)
                   ,`Number of Visits`=.N
+                  ,BLANK0='',BLANK1=''
                   ,a_los=as.numeric(median(a_los,na.rm=T))
                   ,`Frailty Stage`=cut(tail(a_efi,1),c(0,0.1,0.2,1)
                                        ,include.lowest = T
@@ -294,15 +303,18 @@ dat04 <- dat03[,lapply(.SD,head,1),by=patient_num,.SDcols=v(c_patdata)[1:5]] %>%
                                                  ,'Frail, > 0.2')))
                ,by=patient_num][,-1]);
 
-.tb1formula <- setdiff(names(dat04),c('language_cd','Frailty Stage'
-                                      ,'Median Frailty','patient_num'
-                                      ,'age_at_death_days'
-                                      ,'age_at_visit_days')) %>%
+# .tb1formula <- setdiff(names(dat04),c('language_cd','Frailty Stage'
+#                                       ,'Median Frailty','patient_num'
+#                                       ,'age_at_death_days'
+#                                       ,'age_at_visit_days')) %>%
+.tb1formula <- c('sex_cd','race_cd','BLANK0'
+                 ,setdiff(names(dat04),c(v(c_patdata),'BLANK0','BLANK1'
+                                         ,'Median Frailty','patient_num'))) %>%
   paste0('`',.,'`',collapse='+') %>% paste('~',.,'|`Frailty Stage`') %>%
   formula;
 
-tb1 <- table1(.tb1formula,data=dat04) %>%
-  submulti(dct0[,c('colname','dispname')],'partial');
+tb1 <- table1(.tb1formula,data=dat04,render.categorical=table1cat00) %>%
+  submulti(dct0[,c('colname','dispname')],'partial') %>% gsub('BLANK.','<br/>',.);
 
 tb1;
 

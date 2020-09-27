@@ -55,10 +55,11 @@ knitr::opts_chunk$set(echo=.debug>0, warning=.debug>0, message=.debug>0);
 .outfmt <- knitr::opts_knit$get('rmarkdown.pandoc.to');
 message('.outfmt = ',.outfmt);
 if(is.null(.outfmt)){
-  if(knitr::is_html_output()) .outfmt <- 'html' else {
-    if(knitr::is_latex_output()) .outfmt <- 'latex' else {
-      .outfmt <- 'unknown';
-    }}};
+  .outfmt <- if(knitr::is_html_output()) 'html' else {
+    if(knitr::is_latex_output()) 'latex' else {
+      if(interactive()) 'html' else {
+        'unknown';
+    }}}};
 message('.outfmt = ',.outfmt);
 
 .currentscript <- current_scriptname('efi_safety.Rmd');
@@ -165,17 +166,14 @@ baseline characteristics of the testing cohort are shown in Table
 
 ```{r table1,results='asis'}
 if(.outfmt == 'html'){
-  .tb1formula <- setdiff(names(dat04),c('language_cd','Frailty Stage'
-                                        ,'Median Frailty','patient_num'
-                                        ,'age_at_death_days'
-                                        ,'age_at_visit_days'
-                                        ,setdiff(v(c_response)
-                                                 ,.outcomenames))) %>%
-    paste0('`',.,'`',collapse='+') %>% paste('~',.,'|`Frailty Stage`') %>%
+  .tb1formula <- c('sex_cd','race_cd','BLANK0',.outcomenames
+                   ,'Patient age (years)','Frailty','Number of Visits') %>% 
+    paste0('`',.,'`',collapse='+') %>% paste('~',.,'|`Frailty Stage`') %>% 
     formula;
   
-  tb1 <- table1(.tb1formula,data=dat04) %>%
-    submulti(dct0[,c('colname','dispname')],'partial');
+  tb1 <- table1(.tb1formula,data=dat04,render.categorical=table1cat00) %>%
+    submulti(dct0[,c('colname','dispname')],'partial') %>% 
+    gsub('BLANK.','</br>',.) %>% gsub('Patient age','<br/>Patient age',.);
   
   print(tb1);
 };
