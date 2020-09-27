@@ -306,14 +306,6 @@ patient's visit-history and the accuracy of EFI and to better distinguish
 genuinely non-frail patients from those who have a lot of missing data because
 they are often seen outside the researchers' health system.
 
-Vital status is often out of date in EHR systems if the patient did not
-die in the hospital or shortly after their visit, so our data may
-under-represent the true mortality rates. Nevertheless, the relationship
-between EFI and mortality risk observed here agrees with previous EFI
-studies. Unlike previous studies we sampled all adults rather than just
-older adults so we could assess the performance of EFI across the
-lifespan and include individuals who might have early-onset frailty.
-
 There is no gold standard method to assess Frailty in clinical practice.
 Currently available frailty assessment tools used in geriatric practice have
 good validity (for example @fried01a) but these are time
