@@ -13,10 +13,10 @@ vi_c_hospinfect	vi_c_hospinfect	derived_index	vi_c_hospinfect	Hospital Acquired 
 vi_c_hosptrauma	vi_c_hosptrauma	derived_index	vi_c_hosptrauma	Hospital Acquired Trauma	Trauma	vi_c_hosptrauma	TRUE	TRUE	TRUE							TRUE	TRUE		c_hosptrauma	
 vi_c_cardiac	vi_c_cardiac	derived_index	vi_c_cardiac	Cardiac Complications	Cardiac	vi_c_cardiac	TRUE	TRUE	TRUE							TRUE	TRUE		c_cardiac	
 vi_c_falls	vi_c_falls	derived_index	vi_c_falls	Falls		vi_c_falls	TRUE	TRUE	TRUE						TRUE				c_falls	
-vi_c_drugadverse	vi_c_drugadverse	derived_index	vi_c_drugadverse	Drug Adverse Event		vi_c_drugadverse	TRUE	TRUE	TRUE							TRUE			c_drugadverse	
+vi_c_drugadverse	vi_c_drugadverse	derived_index	vi_c_drugadverse	Drug Adverse Event		vi_c_drugadverse	TRUE	TRUE	TRUE							TRUE		TRUE	c_drugadverse	
 vi_c_decubulcer	vi_c_decubulcer	derived_index	vi_c_decubulcer	Pressure Ulcer		vi_c_decubulcer		TRUE	TRUE										c_decubulcer	
 vi_c_endometab	vi_c_endometab	derived_index	vi_c_endometab	Endocrine and Metabolic Complications	Endo & Metabolic	vi_c_endometab		TRUE	TRUE										c_endometab	
-vi_c_thromb	vi_c_thromb	derived_index	vi_c_thromb	Venous Thromboembolism	VTE	vi_c_thromb	TRUE	TRUE	TRUE							TRUE			c_thromb	
+vi_c_thromb	vi_c_thromb	derived_index	vi_c_thromb	Venous Thromboembolism	VTE	vi_c_thromb	TRUE	TRUE	TRUE							TRUE		TRUE	c_thromb	
 vi_c_respiratory	vi_c_respiratory	derived_index	vi_c_respiratory	Respiratory Complications	Respiratory	vi_c_respiratory		TRUE	TRUE										c_respiratory	Vital status according to NAACCR, 0 = deceased, 1 = alive
 vi_c_hemorrhage	vi_c_hemorrhage	derived_index	vi_c_hemorrhage	Hemorrhage		vi_c_hemorrhage		TRUE	TRUE										c_hemorrhage	
 vi_c_fluidmgmt	vi_c_fluidmgmt	derived_index	vi_c_fluidmgmt	Fluid Management Events	Fluid Management	vi_c_fluidmgmt	TRUE	TRUE	TRUE							TRUE			c_fluidmgmt	
@@ -39,3 +39,4 @@ a_t_since_disch	a_t_since_disch	0	a_t_since_disch	Days Since Previous Discharge	
 z_ipv	z_ipv	0	z_ipv			z_ipv														 Which inpatient stay is it for this patient? If ‘0’ then it’s a visit in the interval prior to their first inpatient stay. All visits have a number, but not all of them are part of an inpatient stay, it just means they fall in the interval between that inpatient stay and the next one.
 z_inip	z_inip	derived_index	z_inip			z_inip														Does this row of data represent a day that’s part of an inpatient stay?
 z_age_at_disch_days	z_age_at_disch_days	0	z_age_at_disch_days			z_age_at_disch_days														Age at discharge (needed for readmission calc)
+vi_diabetes				Diabetes		vi_diabetes		TRUE												
