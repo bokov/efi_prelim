@@ -302,7 +302,8 @@ panderOptions('knitr.auto.asis', TRUE);
 dat04 <- dat03[,lapply(.SD,head,1),by=patient_num,.SDcols=v(c_patdata)[1:5]] %>%
   # the [,-1] in the following line and at the end are needed to avoid
   # duplicates of patient_num
-  cbind(dat03[,lapply(.SD,any),by=patient_num,.SDcol=v(c_response)][,-1]
+  cbind(dat03[,lapply(.SD,any),by=patient_num
+              ,.SDcol=c(v(c_response),'vi_diabetes')][,-1]
         ,dat03[,.(`Patient age (years)`=max(age_at_visit_days)/365.25
                   ,Frailty=tail(a_efi,1)
                   ,`Median Frailty`=median(a_efi,na.rm=T)
