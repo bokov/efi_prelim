@@ -75,17 +75,27 @@ for(ii in tf_merge) eval(substitute(dat01[,paste0('vi_',ii) :=
                                            do.call(pmax,.SD) %>% as.logical()
                                          ,.SDcols=v(ii,dictionary=dct0)]
                                     ,env=list(ii=ii)));
+#' ## Diabetes
+dat01$vi_diabetes <- apply(data.frame(dat01)[,v(c_diabetes)],1,any);
 #' ## Missingness
 #'
 #' ### Any diagnoses at all during visit?
-dat01$a_anydiagtf <- apply(dat01[,.SD,.SDcols=setdiff(c(v(c_icd10),v(c_icd9))
-                                                      ,v(c_info))],1,any);
+# dat01$a_anydiagtf <- apply(dat01[,.SD,.SDcols=setdiff(c(v(c_icd10),v(c_icd9))
+#                                                       ,v(c_info))],1,any);
+dat01$a_anydiagtf <- c(v(c_icd10),v(c_icd9)) %>% paste0('_tf') %>%
+  intersect(names(dat01)) %>% `[`(dat01,,.SD,.SDcols=.) %>% apply(1,any);
+
 #' ### Any procedures at all during visit?
-dat01$a_anyproctf <- apply(dat01[,.SD,.SDcols=setdiff(c(v(c_icd10pcs),v(c_cpt))
-                                                      ,v(c_info))],1,any);
+# dat01$a_anyproctf <- apply(dat01[,.SD,.SDcols=setdiff(c(v(c_icd10pcs),v(c_cpt))
+#                                                       ,v(c_info))],1,any);
+dat01$a_anyproctf <- c(v(c_icd10pcs),v(c_cpt)) %>% paste0('_tf') %>%
+  intersect(names(dat01)) %>% `[`(dat01,,.SD,.SDcols=.) %>% apply(1,any);
 #' ### Any labs at all during visit?
-dat01$a_anylabstf <- apply(dat01[,.SD,.SDcols=setdiff(v(c_loinc),v(c_info))],1
-                           ,function(xx) any(!is.na(xx)));
+# dat01$a_anylabstf <- apply(dat01[,.SD,.SDcols=setdiff(v(c_loinc),v(c_info))],1
+#                            ,function(xx) any(!is.na(xx)));
+dat01$a_anylabstf <- v(c_loinc) %>% paste0('_mn') %>%
+  intersect(names(dat01)) %>% `[`(dat01,,.SD,.SDcols=.) %>%
+  apply(1,function(xx) any(!is.na(xx)));
 dat01$a_anythingtf <- with(dat01,a_anydiagtf|a_anyproctf|a_anylabstf);
 
 #' ## Comorbidity scores
