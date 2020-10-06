@@ -111,9 +111,10 @@ for(jj in fits[.outcomenames]) {
 
 ```{r tb2}
 panderOptions('knitr.auto.asis', TRUE);
-subset(tb2,orig_outcome %in% .outcomenames)[,c('Outcome','betahat','foldchange'
-                                               ,'SE','Z','P')] %>%
-  rename(`β^ (95% CI)`=betahat,`fold-change (95% CI)`=foldchange ) %>%
+subset(tb2,outcome %in% .outcomenames & 
+         predictor=='Frailty')[,c('Outcome','β^ (95% CI)','fold-change (95% CI)'
+                                  ,'SE','Z','P, adjusted')] %>%
+  #rename(`β^ (95% CI)`=betahat,`fold-change (95% CI)`=foldchange ) %>%
   pander(digits=3,row.names=FALSE);
 
 # Model performance  ----
@@ -128,9 +129,11 @@ bind_rows(sapply(fits[.outcomenames],function(xx){
     glance(yy)[,c('concordance','logLik','AIC')]
     },simplify=F),.id='Predictor'))
   },simplify=F),.id='Outcome') %>%
+  subset(Predictor=='Frailty') %>%
   mutate(Outcome=ifelse(Predictor=='Frailty'
                         ,submulti(Outcome,dct0[,c('colname','dispname')])
                         ,' ')) %>%
+  select(-Predictor) %>% 
   rename(Concordance=concordance,`Log Likelihood`=logLik) %>% pander;
 
 # Response vars ----
