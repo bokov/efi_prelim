@@ -1,6 +1,6 @@
 ---
 title: "The deficit-accumulation electronic frailty index can predict patient 
-        safety events even in younger patients using only structured data in 
+        safety events in adult patients of all ages using only structured data in 
         the electronic health record."
 author: 'Alex Bokov ^1,✉^, Sara Espinoza ^1^, Chandana Tripathy ^1^,
   ..., ..., ..., and Kathleen R. Stevens ^1^'
