@@ -2,8 +2,7 @@
 title: "The deficit-accumulation electronic frailty index can predict patient 
         safety events in adult patients of all ages using only structured data in 
         the electronic health record."
-author: 'Alex Bokov ^1,✉^, Sara Espinoza ^1^, Chandana Tripathy ^1^,
-  ..., ..., ..., and Kathleen R. Stevens ^1^'
+author: 'Alex Bokov ^1,✉^, Sara Espinoza ^1^, Chandana Tripathy ^1^ , and Kathleen R. Stevens ^1^'
 css: "production.css"
 abstract: 'We have found that the electronic frailty index (EFI), a risk
   score developed using the Rockwood deficit-accumulation framework, is
@@ -18,17 +17,17 @@ clean: false
 bibliography: efi_paper.bib
 csl: harvard-cite-them-right.csl
 output:
+  bookdown::word_document2:
+    reference_docx: efi_template.docx
+    fig_caption: true
+    self_contained: true
+    number_sections: false
   bookdown::html_document2:
     fig_caption: true
     self_contained: true
     number_sections: false
     keep_md: true
     clean: false
-  bookdown::word_document2:
-    reference_docx: efi_template.docx
-    fig_caption: true
-    self_contained: true
-    number_sections: false
 ---
 
 ```{r load_deps, echo=FALSE, message=FALSE, warning=FALSE,results='hide'}
@@ -82,7 +81,7 @@ snip_dat <- c(pat=length(unique(dat03$patient_num)),vis=nrow(dat03)) %>%
 ```
 
 
-# Introduction
+# Introduction/Background
 
 Frailty is the lifelong erosion of stress resistance and accumulation of
 impairments across multiple physiological systems. Among older community
@@ -91,41 +90,44 @@ classified as frail [@hoover13]. Frailty predicts disability, injurious falls,
 and mortality [@pajewski19], emergency room visits and hospitalizations
 [@fried01a], and long-term care admissions [@pajewski19; @rockwood06;
 @rockwood05]. The Fried phenotype [@fried01a] and Rockwood deficit accumulation
-index [@rockwood07; @mitnitski01a], are the most commonly used methods for
-operationalizing frailty. There is reasonable convergence between these two
-approaches [@li15; @malmstrom14] but the deficit accumulation approach does not
-require individual questionnaires nor physical assessments yet offers similar
-[@malmstrom14] or possibly better [@kulminski08] predictive accuracy. Recently
+index [@rockwood07; @mitnitski01a], are two commonly used measures of frailty. 
+There is reasonable convergence between these two approaches 
+[@li15; @malmstrom14] and Kulminsky @kulminski08 found evidence for the index outperforming 
+the phenotype. Furthermore, the but the deficit accumulation approach 
+scales better to large populations and secondary use of data because it does not
+require individual questionnaires nor physical assessments. Recently
 Johnston et al. @johnston20 reported that frailty can improve the accuracy
 of predicted annualized Medicare costs over Centers for Medicare & Medicaid
 Services Hierarchical Condition Categories (CMS-HCC) alone. To be pro-active
 health systems need to be able to replicate such analysis on their own
 electronic medical record (EMR) data. Several groups have adapted the Rockwood
-index to EMR-derived data [@clegg16a; @pajewski19; @stow18]. However, so
-far only patients older than 65 have been studied. Yet value-based care is
-broader than Medicare as private payers start moving to the ACO model, so it is
+index to EMR-derived data [@clegg16a; @pajewski19; @stow18]. So
+far mainly patients older than 65 have been studied. Yet value-based care is
+broader than Medicare. As private payers start moving to the ACO model it is
 important to understand whether EFI generalizes to outcomes such as preventable
 safety events in other age groups.
 
 ::: {.note2team custom-style="bnote2team"}
-Transition from data to knowledge and then to clinical practice is slow.
-Learning health systems (LHS) are intended accelerate the movement of routinely
-gathered clinical data into knowledge and care decisions by leveraging and
-extending the relationship between care practice, research, and knowledge
-translation [@friedman14].
+Effective care of frail older persons is a public health priority for individuals and for the healthcare delivery system.  Frailty identifies the vulnerability of a person to endogenous and exogenous stressors, exposing the individual to higher risk of negative health-related outcomes and a loss ofmarks a transition between successful aging and disability.   
 
-The IOM describes the LHS as a vision for an integrated health system "...in
-which progress in science, informatics, and care culture align to generate new
-knowledge as an ongoing, natural by-product of the care experience, and
-seamlessly refine and deliver best practices for continuous improvement in
-health and healthcare." [@grossmann11].
+Accurate assessment of Frailty can inform clinical management decisions and assist with anticipating healthcare resource utilization.  Such assessments are useful when validity of the Frailty Index scores are significantly associated with clinically relevant variables. 
 
-Following principles of implementation science {xxx}, clinical stakeholders (SE,
-CT) were directly engaged in the research design to identify key outcomes that
-are meaningful, relevant, and useful in guiding clinical care planning.
+In order to mitigate the risks posed by frailty through case management, clinicians must be able to validly and efficiently assess the degree of frailty.  While multiple approaches to frailty assessment in the elderly have been developed, these approaches remain inadequate in terms of efficiency (some are time intensive), clinical meaningfulness (predictive of negative outcomes), or both. Assessment approaches at the front line of care must be accurate and efficient to integrate into the clinical workflow. 
+
+The capability to leverage clinical data and harness its potential to generate knowledge rapidly to inform decisions can have transformative effects on complex systems that provide services.  The Learning Health System (LHS) is one widely held vision for realizing this transformation.  The LHS uses routine data from service delivery and patient care to generate knowledge to continuously improve healthcare.  {Friedman C, Rubin J, Brown J, et al. Toward a science of learning systems: a research agenda for the high-functioning learning health system. J Am Med Inform Assoc.2015;22:43–50.doi:10.1136/amiajnl-2014-002977} 
+
+[NOTE FROM KS:  The following paragraph is the more detailed background of the anchoring report on LHS from the IOM.  Provided FYI, not necessarily to include in full narrative. KS] 
+
+In a 2013 report, the Institute of Medicine highlighted the use of routine data from service delivery (e.g., electronic health records) to generate knowledge to continuously improve healthcare.  “The committee believes that achieving a learning health care system—one in which science and informatics, patient-clinician partnerships, incentives, and culture are aligned to prodownloadmote and enable continuous and real-time improvement in both the effectiveness and efficiency of care—is both necessary and possible for the nation.” (IOM, 2013, p. 21) 
+
+{Institute of Medicine (IOM).  2013.  Best Care at Lower Cost:  The Path to Continuously Learning Health Care in America. Washington, DC:  National Academies Press.}   https://doi.org/10.17226/13444.  https://www.nap.edu/catalog/13444/best-care-at-lower-cost-the-path-to-continuously-learning 
+
+To address the need for assessment efficiency, we developed a Frailty Index that is calculated from readily available electronic health record data, reflecting a key improvement strategy from the Learning Healthcare System (LHS) paradigm. 
 :::
 
 # Methods
+
+Following principles of implementation science {Meissner, Paul, Linda B. Cottler, and J. Lloyd Michener. "Engagement science: The core of dissemination, implementation, and translational research science." Journal of Clinical and Translational Science 4, no. 3 (2020): 216-218.}, clinical stakeholders and experts (SE, CT) were directly engaged in the research design to identify key outcomes that were meaningful, relevant, and useful in guiding clinical care planning. We applied patient safety indicators used for routine large-scale surveillance of hospital and health system performance {Southern, Danielle A., Bernard Burnand, Saskia E. Droesler, Ward Flemons, Alan J. Forster, Yana Gurevich, James Harrison et al. "Deriving ICD-10 codes for patient safety indicators for large-scale surveillance using administrative hospital data." Medical care 55, no. 3 (2017): 252-260} and extended the data set to include additional variables.   
 
 ## Population
 
@@ -200,10 +202,10 @@ then joined to the EHR data.
 ## Outcomes
 
 The primary outcomes we predicted with EFI were hospital-acquired infections,
-non-operative hospital-acquired trauma, cardiac complications, and the occurence
+non-operative hospital-acquired trauma, cardiac complications, and the occurrence
 of one or more of these or any other patient safety events defined in
 @southern17. The advantage of using these PSI definitions is that they leverage
-the greater specificity of ICD10 codes (rather than a straight mapping of AHCR
+the greater specificity of ICD10 codes (rather than a straight mapping from AHCR
 ICD9 codes) and the uniform denominator for all but maternal and fetal PSIs
 greatly simplifies calculation. Of the remaining PSIs defined by @southern17, 2
 were excluded because pregnancies were outside the scope of our protocol. Three
@@ -221,7 +223,7 @@ enriched for these events.
 For each outcome of interest, we used a Cox proportional hazard model to
 estimate the risk of the first occurrences of the outcome after the patients'
 respective index visits using EFI as the predictor. Unlike earlier studies, we
-treated EFI as a time-varying numeric predictor with multiple followups per
+treated EFI as a time-varying numeric predictor with multiple follow-ups per
 patient. Since only the first occurrence was being predicted, a recurring event
 model was not necessary. Patients were followed up to the first occurrences of
 the respective outcomes, so the standard form of the Cox model was sufficient.
@@ -235,7 +237,10 @@ dataset into three roughly equal subgroups.
 Table \@ref(tab:tb2) shows the results of Cox proportional hazard models for
 each of the responses, with EFI as the predictor. For each 0.1 increase in
 EFI, we found at least a doubling of risk: `r pander(snip_resultsfold)`.
-The p-values shown have been adjusted for multiple comparisons
+In other words, a patient with a frailty of 0 would have a `r fs('X% ()')` 
+chance of experiencing a patient safety compared to a patient with a frailty of 
+0.2, who would have a `r fs('Y% ()')` chance, while the overall risk is 
+`r fs('Z%()')`.  The p-values shown have been adjusted for multiple comparisons
 (`r as.english(nrow(tb2)) %>% as.character` outcomes reported in
 one study) using the @holm79 method and in all cases are highly
 significant. 
@@ -290,6 +295,38 @@ with(jj,{
 
 # Discussion
 
+We implemented an electronic Frailty Index using the Rockwood
+deficit-accumulation framework and used it to predict patient safety events in
+real-world data from an EHR system. Our results add to the evidence that
+Rockwood indexes are a rapid, low-effort method of risk assessment that scales
+to large patient populations. As yet there is no gold standard method to assess
+Frailty in clinical practice. Currently available frailty assessment tools
+geriatric practice have good validity (for example Fried et al. (2001)) are time
+intensive and often difficult to implement in a busy general practice. Assessing
+frailty helps clinicians identify high risk patients and tailor interventions to
+preserve function and prevent health decline and poor outcomes and impact cost
+of care. Because of the simplicity of the Rockwood Frailty Index, it is more
+likely to be adopted by clinicians in a busy practice.
+
+Unlike previous studies, we did not restrict our sample to older patients. We
+found a highly significant relationship in all age groups between frailty and
+hospital-acquired infections, hospital-acquired trauma, cardiac complications,
+and overall occurrence of patient safety events even after a very conservative
+multiple comparison correction.  [go through the rest, mention which ones were
+not significant]. Moreover, except the 18-45 year old group for infections and
+trauma, all the models had a concordance greater than 0.7.
+
+Our sample population amounts to making predictions about randomly selected
+patients assessed only on EHR data available up to a randomly selected encounter
+for each of these patients. As a consequence some clinically relevant events
+such as pressure ulcers, post-surgical complications, and ICU stays were less
+frequent than they would be in a more narrowly focused sample (e.g. only
+geriatric patients or only inpatients). Nevertheless frailty does predict
+patient safety events that may be less anticipated in younger patients. As the
+next step toward clinical deployment we intend to repeat this analysis with
+patients seen at the internal medicine department of our health system, who tend
+toward older ages and more comorbidities but are not solely geriatric patients.
+
 Our data shares the fundamental limitation of the EHR system from which it was
 obtained: like all EHR systems, it only has information that providers and
 coders put into it. Events taking place outside the health system or at
@@ -315,23 +352,39 @@ interventions to prevent health decline and poor outcomes. Because of the
 simplicity of the Rockwood Frailty Index, it is more likely to be adopted by
 clinicians in a busy practice.
 
-::: {.note2team custom-style="bnote2team"}
-Other possible points to cover:
-
--   What we learned by not restricting the sample to older adults?
--   What agrees and what disagrees with previous work?
--   What is new?
-    -   Publicly available code
-    -   Strictly limiting data elements to those we can count on being
-        available in any EHR system, at any site
--   future work
--   theoretical and practical implications
-:::
-
-
 # Conclusions
 
-`r fs('TBD')`
+Results from our Cox proportional hazard models in Table 2 demonstrate a
+statistically significant association of EFI with clinically meaningful outcomes
+from EHR data. The c-statistics in Table 3 demonstrate that the Cox models are
+well fitted to this data. This contributes to a growing body of evidence that
+risk scores built using the Rockwood framework [@mitnitski01a] will be a
+valuable tool for clinical decision support not restricted to any one illness or
+specialty. The variables used to calculate EFI are ones that are in some form
+available in every EMR system. If there are EMR systems where a few of these
+variables are not available, Rockwood deficit accumulation indexes have been
+shown to continue giving consistent results despite variations in what
+individual codes are available as long as there is a sufficiently large and
+representative collection of deficits into which these variables can be binned
+`r fs('[ref]')`.
+
+To facilitate adoption and refinement of EFI, we are publishing not only the
+code mappings but also scripts that implement the mapping algorithm with
+detailed notes on adapting them to local environments. We intend to evolve these
+scripts into a self-contained app that interfaces with EMR systems (via FHIR) to
+provide real-time frailty assessment at the clinical point of care and assist
+clinicians in developing care plans to mitigate the risks of frailty.
+
+::: {.note2team custom-style="bnote2team"}
+NOTE FROM KS:  Can we make a parallel statement in our CONCLUSIONS? KS: AN
+INTERESTING QUOTE FROM Southern:  “The methodological work presented here
+utilizes the unique potential of diagnosis timing information to produce a
+clinically relevant listing of diagnosis codes that have potential as PSIs that
+may overcome some of the notable shortcomings of existing PSI systems. The
+resulting work has great potential to inform future approaches to monitoring
+health system performance and quality/safety improvement internationally.”
+:::
+ 
 
 # Acknowledgments
 
