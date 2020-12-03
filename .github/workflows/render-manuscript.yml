@@ -23,8 +23,8 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v1
 
       - name: Install libcurl on linux
+        run: sudo apt-get install libcurl4-openssl-dev
         if: runner.os == 'Linux'
-        run:sudo apt-get install libcurl4-openssl-dev
 
       - name: Install rmarkdown, remotes, and the local package
         run: |
@@ -41,6 +41,8 @@ jobs:
           cat('\n\nDone tidbits\n\n')
           cat('\n\nDone Package Installs\n\n')
         shell: Rscript {0}
-
+      - name: Debug via tmate
+        if: runner.os == 'Linux'
+        uses: mxschmitt/action-tmate@v3
       - name: Render Files
         run: Rscript -e 'rmarkdown::render(file.path(".","efi_patientsafety.Rmd"))'
