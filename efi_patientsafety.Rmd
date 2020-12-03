@@ -18,17 +18,17 @@ clean: false
 bibliography: efi_paper.bib
 csl: harvard-cite-them-right.csl
 output:
+  bookdown::word_document2:
+    reference_docx: efi_template.docx
+    fig_caption: true
+    self_contained: true
+    number_sections: false
   bookdown::html_document2:
     fig_caption: true
     self_contained: true
     number_sections: false
     keep_md: true
     clean: false
-  bookdown::word_document2:
-    reference_docx: efi_template.docx
-    fig_caption: true
-    self_contained: true
-    number_sections: false
 ---
 
 ```{r load_deps, echo=FALSE, message=FALSE, warning=FALSE,results='hide'}
@@ -83,6 +83,10 @@ snip_dat <- c(pat=length(unique(dat03$patient_num)),vis=nrow(dat03)) %>%
 
 
 # Introduction/Background
+
+I want [I left a comment.]{.comment-start id="0"
+author="AFB" date="2020-12-03T10:13:00Z"}some text to have a
+comment []{.comment-end id="0"}on it.
 
 Frailty is the lifelong erosion of stress resistance and accumulation of
 impairments across multiple physiological systems. Among older community
