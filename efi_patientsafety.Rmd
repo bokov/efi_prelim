@@ -35,8 +35,10 @@ output:
 .projpackages <- c('GGally','pander','dplyr','ggplot2','data.table'
                    ,'survival','broom','forcats','table1','english','bookdown');
 .deps <- c( 'analysis.R' );
-.debug <- 0;
-.junk<-capture.output(source('./scripts/global.R',chdir=TRUE,echo=FALSE
+.debug <- 1;
+message(paste0('\n\n working dir: ',getwd(),'\n\n'))
+cat('\n\nAvailable Files:',list.files(),sep='\n','\n')
+.junk<-capture.output(source(file.path('./scripts/global.R'),chdir=TRUE,echo=FALSE
                              ,local=TRUE));
 # Set some formatting options for this document
 panderOptions('table.alignment.default','right');
