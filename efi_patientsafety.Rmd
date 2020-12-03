@@ -38,7 +38,7 @@ output:
 .debug <- 1;
 message(paste0('\n\n working dir: ',getwd(),'\n\n'))
 cat('\n\nAvailable Files:',list.files(),sep='\n','\n')
-.junk<-capture.output(source(file.path('./scripts/global.R'),chdir=TRUE,echo=FALSE
+.junk<-capture.output(source(file.path('./scripts/global.R'),chdir=TRUE,echo=!1
                              ,local=TRUE));
 # Set some formatting options for this document
 panderOptions('table.alignment.default','right');
