@@ -1,8 +1,4 @@
-on:
-  push:
-    paths:
-      - efi_patientsafety.Rmd
-
+on: push
 name: Render Manuscript
 
 jobs:
