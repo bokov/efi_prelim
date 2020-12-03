@@ -21,6 +21,11 @@ jobs:
       - uses: actions/checkout@v2
       - uses: r-lib/actions/setup-r@v1
       - uses: r-lib/actions/setup-pandoc@v1
+      - name: Install libcurl on linux
+        run: |
+          if [ "$RUNNER_OS" == "Linux" ]; then
+            sudo apt-get install libcurl4-openssl-dev
+          fi
       - name: Install rmarkdown, remotes, and the local package
         run: |
           install.packages("remotes",repos='https://cloud.r-project.org')
