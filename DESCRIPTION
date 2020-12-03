@@ -2,7 +2,8 @@ Imports:
   pander,
   dplyr,
   markdown,
-  rmarkdown
+  rmarkdown,
+  bookdown
 Remotes:
   bokov/rio,
   bokov/tidbits
