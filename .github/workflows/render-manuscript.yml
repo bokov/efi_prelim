@@ -49,9 +49,7 @@ jobs:
           restore-keys: r-
 
       - name: Install packages
-        run: |
-          R -e 'install.packages("renv")'
-          R -e 'renv::restore()'
+        run:  R -e 'options(repos='https://cloud.r-project.org'); install.packages("renv"); renv::restore()'
 
       - name: Install submodules
         run: ./initgitmods.sh
