@@ -13,21 +13,22 @@ abstract: 'We have found that the electronic frailty index (EFI), a risk
   for most of the patient safety outcomes we examined EFI is also predictive 
   for patients in the 45-65 age range and even in the 18-45 age range.'
 documentclass: article
+description: 'Manuscript'
 clean: false
 bibliography: efi_paper.bib
 csl: harvard-cite-them-right.csl
 output:
-  bookdown::word_document2:
-    reference_docx: efi_template.docx
-    fig_caption: true
-    self_contained: true
-    number_sections: false
   bookdown::html_document2:
     fig_caption: true
     self_contained: true
     number_sections: false
     keep_md: true
     clean: false
+  bookdown::word_document2:
+    reference_docx: efi_template.docx
+    fig_caption: true
+    self_contained: true
+    number_sections: false
 ---
 
 ```{r load_deps, echo=FALSE, message=FALSE, warning=FALSE,results='hide'}
