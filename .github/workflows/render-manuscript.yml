@@ -24,8 +24,15 @@ jobs:
       - name: Install rmarkdown, remotes, and the local package
         run: |
           install.packages("remotes",repos='https://cloud.r-project.org')
-          remotes::install_local(".")
+          cat('\n\nDone install.packages\n\n')
+          #remotes::install_local(".")
+          cat('\n\nDone install_local\n\n')
           remotes::install_cran("rmarkdown")
+          cat('\n\nDone install_cran\n\n')
+          remotes::install_github('bokov/rio')
+          cat('\n\nDone rio\n\n')
+          remotes::install_github('bokov/tidbits')
+          cat('\n\nDone tidbits\n\n')
           cat('\n\nDone Package Installs\n\n')
         shell: Rscript {0}
       - name: Render Files
