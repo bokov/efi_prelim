@@ -33,7 +33,7 @@ output:
 
 ```{r load_deps, echo=FALSE, message=FALSE, warning=FALSE,results='hide'}
 .projpackages <- c('GGally','pander','dplyr','ggplot2','data.table'
-                   ,'survival','broom','forcats','table1','english');
+                   ,'survival','broom','forcats','table1','english','bookdown');
 .deps <- c( 'analysis.R' );
 .debug <- 0;
 .junk<-capture.output(source('./scripts/global.R',chdir=TRUE,echo=FALSE
