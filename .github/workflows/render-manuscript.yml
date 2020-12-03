@@ -10,10 +10,10 @@ jobs:
       matrix:
         config:
           - {os: ubuntu-20.04, r: 'release', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          - {os: ubuntu-20.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          - {os: ubuntu-20.04, r: 'oldrel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
-          - {os: windows-latest, r: 'release'}
-          - {os: macOS-latest, r: 'release'}
+          #- {os: ubuntu-20.04, r: 'devel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          #- {os: ubuntu-20.04, r: 'oldrel', rspm: "https://packagemanager.rstudio.com/cran/__linux__/focal/latest"}
+          #- {os: windows-latest, r: 'release'}
+          #- {os: macOS-latest, r: 'release'}
 
     env:
       GITHUB_PAT: ${{ secrets.CI_SECRET }}
@@ -31,8 +31,6 @@ jobs:
           install.packages("remotes",repos='https://cloud.r-project.org')
           install.packages("bookdown",repos='https://cloud.r-project.org')
           cat('\n\nDone install.packages\n\n')
-          #remotes::install_local(".")
-          cat('\n\nDone install_local\n\n')
           remotes::install_cran("rmarkdown")
           cat('\n\nDone install_cran\n\n')
           remotes::install_github('bokov/rio')
@@ -41,8 +39,14 @@ jobs:
           cat('\n\nDone tidbits\n\n')
           cat('\n\nDone Package Installs\n\n')
         shell: Rscript {0}
-      - name: Debug via tmate
-        if: runner.os == 'Linux'
-        uses: mxschmitt/action-tmate@v3
+
+      - name: Install submodules
+        run: ./initgitmods.sh
+        shell: bash
+
+      #- name: Debug via tmate
+      #  if: runner.os == 'Linux'
+      #  uses: mxschmitt/action-tmate@v3
+
       - name: Render Files
         run: Rscript -e 'rmarkdown::render(file.path(".","efi_patientsafety.Rmd"))'
