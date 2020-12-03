@@ -29,6 +29,7 @@ jobs:
       - name: Install rmarkdown, remotes, and the local package
         run: |
           install.packages("remotes",repos='https://cloud.r-project.org')
+          install.packages("bookdown",repos='https://cloud.r-project.org')
           cat('\n\nDone install.packages\n\n')
           #remotes::install_local(".")
           cat('\n\nDone install_local\n\n')
