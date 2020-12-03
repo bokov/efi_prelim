@@ -26,7 +26,7 @@ jobs:
           install.packages("remotes",repos='https://cloud.r-project.org')
           remotes::install_local(".")
           remotes::install_cran("rmarkdown")
-        run: cat('\n\nDone Package Installs\n\n')
+          cat('\n\nDone Package Installs\n\n')
         shell: Rscript {0}
       - name: Render Files
         run: Rscript -e 'rmarkdown::render("efi_patientsafety.Rmd")'
