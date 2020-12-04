@@ -156,6 +156,21 @@ p.abstract:after {
     text-justify: inter-character;
 }
 
+.comment-start {
+  background-color: #FFB;
+  display:  none;
+  float: right;
+  position: relative;
+  width: 18vw;
+  margin-right: -19vw;
+  /* The following were attempts to fix comments running into each other
+  margin-top: -5vw;
+  margin-bottom: -5vw;
+  overflow-y: scroll;
+  font-size: x-small;
+  */
+}
+
 .note2self {
   background-color: #FF0;
 }
@@ -163,6 +178,7 @@ p.abstract:after {
 .note2team {
   background-color: #FCC;
 }
+
 
 .table caption {
     color: #777;
