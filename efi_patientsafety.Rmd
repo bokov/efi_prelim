@@ -22,6 +22,7 @@ output:
     reference_docx: efi_template.docx
     fig_caption: true
     self_contained: true
+    keep_md: true
     number_sections: false
   bookdown::html_document2:
     fig_caption: true
@@ -35,7 +36,7 @@ output:
 .projpackages <- c('GGally','pander','dplyr','ggplot2','data.table'
                    ,'survival','broom','forcats','table1','english','bookdown');
 .deps <- c( 'analysis.R' );
-.debug <- 1;
+.debug <- 0;
 message(paste0('\n\n working dir: ',getwd(),'\n\n'))
 cat('\n\nAvailable Files:',list.files(),sep='\n','\n')
 .junk<-capture.output(source(file.path('./scripts/global.R'),chdir=TRUE,echo=!1
@@ -86,10 +87,6 @@ snip_dat <- c(pat=length(unique(dat03$patient_num)),vis=nrow(dat03)) %>%
 
 # Introduction/Background
 
-I want [I left a comment.]{.comment-start id="0"
-author="AFB" date="2020-12-03T10:13:00Z"}some text to have a
-comment []{.comment-end id="0"}on it.
-
 Frailty is the lifelong erosion of stress resistance and accumulation of
 impairments across multiple physiological systems. Among older community
 dwelling adults 32% have been classified as pre-frail and 24% have been
@@ -99,42 +96,88 @@ and mortality [@pajewski19], emergency room visits and hospitalizations
 @rockwood05]. The Fried phenotype [@fried01a] and Rockwood deficit accumulation
 index [@rockwood07; @mitnitski01a], are two commonly used measures of frailty. 
 There is reasonable convergence between these two approaches 
-[@li15; @malmstrom14] and Kulminsky @kulminski08 found evidence for the index outperforming 
-the phenotype. Furthermore, the but the deficit accumulation approach 
-scales better to large populations and secondary use of data because it does not
-require individual questionnaires nor physical assessments. Recently
-Johnston et al. @johnston20 reported that frailty can improve the accuracy
-of predicted annualized Medicare costs over Centers for Medicare & Medicaid
-Services Hierarchical Condition Categories (CMS-HCC) alone. To be pro-active
-health systems need to be able to replicate such analysis on their own
-electronic medical record (EMR) data. Several groups have adapted the Rockwood
-index to EMR-derived data [@clegg16a; @pajewski19; @stow18]. So
-far mainly patients older than 65 have been studied. Yet value-based care is
+[@li15; @malmstrom14] and Kulminsky @kulminski08 found evidence for the index 
+outperforming the phenotype but without requiring patient questionnaires nor 
+physical assessments. Recently Johnston et al. @johnston20 reported that frailty 
+can improve the accuracy of predicted annualized Medicare costs over Centers for 
+Medicare & Medicaid Services Hierarchical Condition Categories (CMS-HCC) alone. 
+To be pro-active, health systems need to be able to replicate such analysis on
+their own electronic medical record (EMR) data. Several groups have adapted the
+Rockwood index to EMR-derived data [@clegg16a; @pajewski19; @stow18]. So far
+[[\@Bokov, Alex F](styles.xml) TODO: see if the literature supports a stronger statement than \'mainly\']{.comment-start id="0" author="Bokov, Alex F"
+date="2020-10-16T08:30:43Z"}mainly []{.comment-end id="0"}
+patients older than 65 have been studied yet value-based care is
 broader than Medicare. As private payers start moving to the ACO model it is
 important to understand whether EFI generalizes to outcomes such as preventable
 safety events in other age groups.
 
+Effective care of frail older persons is a public health priority for
+individuals and for the healthcare delivery system.  Frailty identifies the
+vulnerability of a person to endogenous and exogenous stressors, exposing the
+individual to higher risk of negative health-related outcomes and marks a
+transition between successful aging and disability.
+
+Accurate assessment of Frailty can inform clinical management decisions and
+assist with anticipating healthcare resource utilization.  Such assessments are
+useful when validity of the Frailty Index scores are significantly associated
+with clinically relevant variables.
+
+In order to mitigate the risks posed by frailty through case management,
+clinicians must be able to validly and efficiently assess the degree of frailty.
+While multiple approaches to frailty assessment in the elderly have been
+developed, these approaches remain inadequate in terms of efficiency (some are
+time intensive), clinical meaningfulness (predictive of negative outcomes), or
+both. Assessment approaches at the front line of care must be accurate and
+efficient to integrate into the clinical workflow.
+
+The capability to leverage clinical data and harness its potential to generate
+knowledge rapidly to inform decisions can have transformative effects on complex
+systems that provide services.  The Learning Health System (LHS) is one widely
+held vision for realizing this transformation.  The LHS uses routine data from
+service delivery and patient care to generate knowledge to continuously improve
+healthcare.  {Friedman C, Rubin J, Brown J, et al. Toward a science of learning
+systems: a research agenda for the high-functioning learning health system. J Am
+Med Inform Assoc.2015;22:43–50.doi:10.1136/amiajnl-2014-002977}
+
 ::: {.note2team custom-style="bnote2team"}
-Effective care of frail older persons is a public health priority for individuals and for the healthcare delivery system.  Frailty identifies the vulnerability of a person to endogenous and exogenous stressors, exposing the individual to higher risk of negative health-related outcomes and a loss ofmarks a transition between successful aging and disability.   
-
-Accurate assessment of Frailty can inform clinical management decisions and assist with anticipating healthcare resource utilization.  Such assessments are useful when validity of the Frailty Index scores are significantly associated with clinically relevant variables. 
-
-In order to mitigate the risks posed by frailty through case management, clinicians must be able to validly and efficiently assess the degree of frailty.  While multiple approaches to frailty assessment in the elderly have been developed, these approaches remain inadequate in terms of efficiency (some are time intensive), clinical meaningfulness (predictive of negative outcomes), or both. Assessment approaches at the front line of care must be accurate and efficient to integrate into the clinical workflow. 
-
-The capability to leverage clinical data and harness its potential to generate knowledge rapidly to inform decisions can have transformative effects on complex systems that provide services.  The Learning Health System (LHS) is one widely held vision for realizing this transformation.  The LHS uses routine data from service delivery and patient care to generate knowledge to continuously improve healthcare.  {Friedman C, Rubin J, Brown J, et al. Toward a science of learning systems: a research agenda for the high-functioning learning health system. J Am Med Inform Assoc.2015;22:43–50.doi:10.1136/amiajnl-2014-002977} 
-
-[NOTE FROM KS:  The following paragraph is the more detailed background of the anchoring report on LHS from the IOM.  Provided FYI, not necessarily to include in full narrative. KS] 
-
-In a 2013 report, the Institute of Medicine highlighted the use of routine data from service delivery (e.g., electronic health records) to generate knowledge to continuously improve healthcare.  “The committee believes that achieving a learning health care system—one in which science and informatics, patient-clinician partnerships, incentives, and culture are aligned to prodownloadmote and enable continuous and real-time improvement in both the effectiveness and efficiency of care—is both necessary and possible for the nation.” (IOM, 2013, p. 21) 
-
-{Institute of Medicine (IOM).  2013.  Best Care at Lower Cost:  The Path to Continuously Learning Health Care in America. Washington, DC:  National Academies Press.}   https://doi.org/10.17226/13444.  https://www.nap.edu/catalog/13444/best-care-at-lower-cost-the-path-to-continuously-learning 
-
-To address the need for assessment efficiency, we developed a Frailty Index that is calculated from readily available electronic health record data, reflecting a key improvement strategy from the Learning Healthcare System (LHS) paradigm. 
+[NOTE FROM KS:  The following paragraph is the more detailed background of the
+anchoring report on LHS from the IOM.  Provided FYI, not necessarily to include
+in full narrative. KS]
 :::
+
+In a 2013 report, the Institute of Medicine highlighted the use of routine data
+from service delivery (e.g., electronic health records) to generate knowledge to
+continuously improve healthcare.  “The committee believes that achieving a
+learning health care system—one in which science and informatics,
+patient-clinician partnerships, incentives, and culture are aligned to
+prodownloadmote and enable continuous and real-time improvement in both the
+effectiveness and efficiency of care—is both necessary and possible for the
+nation.” (IOM, 2013, p. 21)
+
+{Institute of Medicine (IOM).  2013.  Best Care at Lower Cost:  The Path to
+Continuously Learning Health Care in America. Washington, DC:  National
+Academies Press.}   https://doi.org/10.17226/13444.
+https://www.nap.edu/catalog/13444/best-care-at-lower-cost-the-path-to-continuously-learning
+
+To address the need for assessment efficiency, we developed a Frailty Index that
+is calculated from readily available electronic health record data, reflecting a
+key improvement strategy from the Learning Healthcare System (LHS) paradigm.
 
 # Methods
 
-Following principles of implementation science {Meissner, Paul, Linda B. Cottler, and J. Lloyd Michener. "Engagement science: The core of dissemination, implementation, and translational research science." Journal of Clinical and Translational Science 4, no. 3 (2020): 216-218.}, clinical stakeholders and experts (SE, CT) were directly engaged in the research design to identify key outcomes that were meaningful, relevant, and useful in guiding clinical care planning. We applied patient safety indicators used for routine large-scale surveillance of hospital and health system performance {Southern, Danielle A., Bernard Burnand, Saskia E. Droesler, Ward Flemons, Alan J. Forster, Yana Gurevich, James Harrison et al. "Deriving ICD-10 codes for patient safety indicators for large-scale surveillance using administrative hospital data." Medical care 55, no. 3 (2017): 252-260} and extended the data set to include additional variables.   
+Following principles of implementation science {Meissner, Paul, Linda B.
+Cottler, and J. Lloyd Michener. "Engagement science: The core of dissemination,
+implementation, and translational research science." Journal of Clinical and
+Translational Science 4, no. 3 (2020): 216-218.}, clinical stakeholders and
+experts (SE, CT) were directly engaged in the research design to identify key
+outcomes that were meaningful, relevant, and useful in guiding clinical care
+planning. We applied patient safety indicators used for routine large-scale
+surveillance of hospital and health system performance {Southern, Danielle A.,
+Bernard Burnand, Saskia E. Droesler, Ward Flemons, Alan J. Forster, Yana
+Gurevich, James Harrison et al. "Deriving ICD-10 codes for patient safety
+indicators for large-scale surveillance using administrative hospital data."
+Medical care 55, no. 3 (2017): 252-260} and extended the data set to include
+additional variables.
 
 ## Population
 
@@ -162,8 +205,13 @@ using only the development cohort and blinded to the testing cohort. For
 publication, the same analysis scripts were run on the testing cohort
 and used to create all results reported here (the development version of
 each table and figure is available in the supplemental materials). The
-baseline characteristics of the testing cohort are shown in Table
-\@ref(tab:table1).
+baseline characteristics of the testing cohort are shown in 
+[I wonder if there are any specific comparisons between frail and
+non-frail in table 1 that should be discussed in the text. Race, sex,
+age, number of visits?]{.comment-start id="1" author="Bokov, Alex F"
+date="2020-10-16T08:36:49Z"}Table []{.comment-end
+id="1"} \@ref(tab:table1).
+
 
 ***
 
@@ -224,8 +272,17 @@ patient population, but it is likely that more targeted samples will be more
 enriched for these events.
 
 
-
 ## Statistical Analysis
+
+[[\@Bokov, Alex F](https://doi.org/10.17226/13444)
+COMMENT
+]{.comment-start id="999" author="Bokov, Alex F"
+date="December, 2020"} CONTENT []{.comment-end id="999"}
+
+`r print(foo<-note('Text one.','Regular comment'))` 
+More spacer text. Lorem ipsum. 
+`r note('Field three used.','Field3 has value',field3='[#FIELD3]')`. Lorem ipsum 
+`r note('No date','No date comment',date='')`. blarg balasdf `r foo`. Done.
 
 For each outcome of interest, we used a Cox proportional hazard model to
 estimate the risk of the first occurrences of the outcome after the patients'
@@ -242,15 +299,27 @@ dataset into three roughly equal subgroups.
 # Results
 
 Table \@ref(tab:tb2) shows the results of Cox proportional hazard models for
-each of the responses, with EFI as the predictor. For each 0.1 increase in
+each of the responses, with EFI as the predictor. 
+[[\@Bokov, Alex F](https://www.nap.edu/catalog/13444/best-care-at-lower-cost-the-path-to-continuously-learning)
+TODO: Also say how many (number and %) of the frail and non-frail groups
+experienced each event. Or, maybe put it into the table.]{.comment-start
+id="3" author="Bokov, Alex F" date="2020-10-16T08:39:11Z"}
+For each 0.1 increase in
 EFI, we found at least a doubling of risk: `r pander(snip_resultsfold)`.
+[[\@Bokov, Alex
+F](https://doi.org/10.17226/13444) TODO: Fill in the appropriate values for
+these placeholders.]{.comment-start id="4" author="Bokov, Alex F"
+date="2020-10-16T08:46:37Z"}
 In other words, a patient with a frailty of 0 would have a `r fs('X% ()')` 
 chance of experiencing a patient safety compared to a patient with a frailty of 
 0.2, who would have a `r fs('Y% ()')` chance, while the overall risk is 
-`r fs('Z%()')`.  The p-values shown have been adjusted for multiple comparisons
+`r fs('Z%()')`.
+[]{.comment-end id="4"} []{.comment-end
+id="3"}
+The p-values shown have been adjusted for multiple comparisons
 (`r as.english(nrow(tb2)) %>% as.character` outcomes reported in
-one study) using the @holm79 method and in all cases are highly
-significant. 
+one study) using the @holm79 method and in all cases are 
+[[\@Bokov, Alex F](http://dx.doi.org/10.1136/amiajnl-2014-002977) Report a comparison between the developmental and test data.]{.comment-start id="2" author="Bokov, Alex F" date="2020-10-16T08:42:00Z"}highly significant[]{.comment-end id="2"}. 
 
 
 ```{r tb2}
@@ -280,6 +349,7 @@ plots for each of the outcomes stratified by whether EFI is greater than 0.19
 (Frail=TRUE) or less (Frail=FALSE), the cut-point established by [@stow18].
 
 
+::: {.MultiFigure custom-style="MultiFigure"}
 ```{r kmplots, fig.show="hold", fig.height=4, fig.width=12, fig.cap=" - "}
 # . kmplots ----
 .subfig <- 0;
@@ -297,7 +367,7 @@ with(jj,{
   })};
 
 ```
-
+:::
 
 
 # Discussion
@@ -382,16 +452,17 @@ scripts into a self-contained app that interfaces with EMR systems (via FHIR) to
 provide real-time frailty assessment at the clinical point of care and assist
 clinicians in developing care plans to mitigate the risks of frailty.
 
-::: {.note2team custom-style="bnote2team"}
-NOTE FROM KS:  Can we make a parallel statement in our CONCLUSIONS? KS: AN
-INTERESTING QUOTE FROM Southern:  “The methodological work presented here
+
+[[\@Stevens, Kathleen]() Can we make a parallel statement in our CONCLUSIONS? 
+AN INTERESTING QUOTE FROM Southern:  “The methodological work presented here
 utilizes the unique potential of diagnosis timing information to produce a
 clinically relevant listing of diagnosis codes that have potential as PSIs that
 may overcome some of the notable shortcomings of existing PSI systems. The
 resulting work has great potential to inform future approaches to monitoring
 health system performance and quality/safety improvement internationally.”
-:::
- 
+]{.comment-start id="6" author="Stevens, Kathleen"
+date="2020-10-16T08:30:43Z"}... []{.comment-end id="6"}
+
 
 # Acknowledgments
 
