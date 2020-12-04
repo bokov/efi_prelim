@@ -113,3 +113,66 @@ fs <- function(str,text=str,url=paste0('#',gsub('[^_a-z0-9]','-',tolower(str)))
   }
   retfun(out);
 }
+
+
+#' Usew the fs() function to create .docx-compatible notes!
+#'
+#' This function is intended mainly for use dynamically in `r ...` calls
+#' within markdown.
+#'
+#' @param target  The document text to which this note is attached
+#' @param comment The content of the note
+#' @param author  Author
+#' @param id      Unique ID automatically generated for each note
+#' @param date    Date
+#' @param fmt     Can be one of:
+#'                         'i' (short note and short comment, both inline),
+#'                         'c' (long comment, treated as block)
+#'                         't' (long target, treated as a block)
+#'                         'b' (both treated as blocks)
+#'
+#' @param ...
+#'
+#' @return A character vector length 1-3 that together contains the markup for
+#'         margin notes.
+#' @export
+#'
+#' @examples
+#'
+#' # Ordinary comment:
+#' note('Document text','Comment about the document text', author='Alex')
+#'
+#' # Long comment:
+#' .nt <- note('Document text','PLACEHOLDER, UNUSED BUT SHOULD BE UNIQUE', author='Alex',fmt='c')
+#' .nt[1]
+#' #' Write your comment text here
+#' .nt[2]
+#'
+#' # Long text:
+#' .nt <- note('','A normal sized comment', author='Alex',fmt='t')
+#' .nt[1]
+#' #' This time, write the DOCUMENT text here
+#' .nt[2]
+#'
+#' # Long comment and text
+#' .nt <- note('','PLACEHOLDER2, UNUSED BUT SHOULD BE UNIQUE', author='Alex', fmt='b')
+#' .nt[1]
+#' #' Write your long comment here
+#' .nt[2]
+#' #' Write your long document text here
+#' .nt[3]
+#'
+note <- function(target='TARGET',comment='COMMENT',author='Bokov, Alex F'
+                 ,id=abs(digest::digest2int(comment)),date=Sys.Date()
+                 ,fmt=c('inline','comment','target','both'),...){
+  id <- as.character(id);
+  class <- sprintf('.comment-start id="%s" author="%s" date="%s"'
+                  ,id,author,date);
+  tpl <- c('[','%4$s',']{%3$s}','%1$s',paste0('[]{.comment-end id="',id,'"}'));
+  tpl <- switch(match.arg(fmt)
+                     ,inline = paste0(tpl,collapse='')
+                     ,comment = c(tpl[1],paste0(tpl[c(3:5)],collapse=''))
+                     ,target = c(paste0(tpl[1:3],collapse=''),tpl[5])
+                     ,both = tpl[c(1,3,5)]);
+  fs(target,class=class,tooltip=comment,template=tpl,...);
+}
