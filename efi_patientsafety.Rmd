@@ -443,11 +443,11 @@ health system performance and quality/safety improvement internationally.”'
 
 # Acknowledgments
 
-`r note('This work was supported by NIH/NCATS UL1TR001120 and UL1TR002645 (AFB,
+`r note("This work was supported by NIH/NCATS UL1TR001120 and UL1TR002645 (AFB,
 KRS), the Long School of Medicine KL2 Award (AFB), the Claude D. Pepper Older
 Americans Independence Center P30 AG044271 (SER),  Berneice Castella
-Distinguished Professorship in Aging Research in Nursing  (KRS)'
-,'Did I get everybody's correctly?',date='2020-12-04T14:20')
+Distinguished Professorship in Aging Research in Nursing  (KRS)"
+,"Did I get everybody's correctly?",date='2020-12-04T14:20')`
 
 
 # References
