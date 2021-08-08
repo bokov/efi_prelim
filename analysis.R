@@ -188,14 +188,14 @@ plotsurv00 <- function(data,dispname
 
 # text snippets
 #
-# The 'table' argument must have the following columns: 'estimate','outcome',
-# and 'Outcome'
-resultsfold00 <- function(table){
-  data.table(table)[,.(paste(paste0(round(exp(unique(range(estimate))),1)
-                                    ,collapse=' to '),'fold for',Outcome[1]))
-                    ,by=outcome][[2]] %>%
-    submulti(cbind(c('icf','snf')
-                   ,c('ICF','SNF after having been admitted from home')))};
+# # The 'table' argument must have the following columns: 'estimate','outcome',
+# # and 'Outcome'
+# resultsfold00 <- function(table){
+#   data.table(table)[,.(paste(paste0(round(exp(unique(range(estimate))),1)
+#                                     ,collapse=' to '),'fold for',Outcome[1]))
+#                     ,by=outcome][[2]] %>%
+#     submulti(cbind(c('icf','snf')
+#                    ,c('ICF','SNF after having been admitted from home')))};
 
 # resultsfold00 <- . %>% with(.,{
 #   paste0(round(exp(estimate),1),'-fold for ',Outcome) %>% tolower %>%
