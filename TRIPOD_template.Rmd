@@ -1,0 +1,194 @@
+---
+title: "[TRIPOD 1] Identify the study as developing and/or validating a multivariable prediction model, the target population, and the outcome to be predicted."
+author: 'Author One ^1,✉^, Author Two ^1^'
+css: "production.css"
+abstract: |
+  | [TRIPOD 2] Provide a summary of objectives, study design, setting, participants, sample size, predictors, outcome, statistical analysis, results, and conclusions.
+
+documentclass: article
+description: 'Manuscript'
+clean: false
+bibliography: efi_paper.bib
+csl: harvard-cite-them-right.csl
+output:
+  bookdown::html_document2:
+    fig_caption: true
+    self_contained: true
+    number_sections: false
+    keep_md: true
+    clean: false
+  bookdown::word_document2:
+    reference_docx: efi_template.docx
+    fig_caption: true
+    self_contained: true
+    keep_md: true
+    number_sections: false
+---
+
+```{r load_deps, echo=FALSE, message=FALSE, warning=FALSE,results='hide'}
+.projpackages <- c('GGally','pander','dplyr','ggplot2','data.table'
+                   ,'survival','broom','forcats','table1','english','bookdown');
+.deps <- c( 'analysis.R' );
+.debug <- 0;
+message(paste0('\n\n working dir: ',getwd(),'\n\n'));
+cat('\n\nAvailable Files:',list.files(),sep='\n','\n');
+.junk<-capture.output(source(file.path('./scripts/global.R'),chdir=TRUE,echo=!1
+                             ,local=TRUE));
+# Set some formatting options for this document
+panderOptions('table.alignment.default','right');
+panderOptions('table.alignment.rownames','right');
+panderOptions('table.split.table',Inf);
+panderOptions('p.wrap','');
+panderOptions('p.copula',', and ');
+panderOptions('graph.fontfamily','serif');
+# theme_get() gives default theme
+theme_set(theme_bw(base_family = 'serif',base_size=14) +
+            theme(strip.background = element_rect(fill=NA,color=NA)
+                  ,strip.text = element_text(size=15)));
+knitr::opts_chunk$set(echo=.debug>0, warning=.debug>0, message=.debug>0);
+
+# detect current output format
+.outfmt <- knitr::opts_knit$get('rmarkdown.pandoc.to');
+if(is.null(.outfmt)){
+  .outfmt <- if(knitr::is_html_output()) 'html' else {
+    if(knitr::is_latex_output()) 'latex' else {
+      if(interactive()) 'html' else {
+        'unknown';
+    }}}};
+message('.outfmt = ',.outfmt);
+
+.currentscript <- current_scriptname('efi_patientsafety.Rmd');
+.outcomenames <- c('vi_c_psi','vi_c_hospinfect','vi_c_hosptrauma'
+                   ,'vi_c_cardiac');
+snip_outcomes <- rname(.outcomenames);
+
+# limit the data to items of interest
+
+
+# snippets ----
+
+```
+# Introduction/Background
+
+[TRIPOD 3.a] Explain the medical context (including whether diagnostic or prognostic) and rationale for developing or validating the multivariable prediction model, including references to existing models.
+
+[TRIPOD 3.b] Specify the objectives, including whether the study describes the development or validation of the model or both.
+
+# Methods
+
+## Source of data
+
+[TRIPOD 4.a] Describe the study design or source of data (e.g., randomized trial, cohort, or registry data), separately for the development and validation data sets, if applicable.
+
+[TRIPOD 4.b] Specify the key study dates, including start of accrual; end of accrual; and, if applicable, end of follow-up. 
+
+## Participants
+
+[TRIPOD 5.a] Specify key elements of the study setting (e.g., primary care, secondary care, general population) including number and location of centres.
+
+[TRIPOD 5.b] Describe eligibility criteria for participants. 
+
+[TRIPOD 5.c] Give details of treatments received, if relevant. 
+
+## Outcome
+[TRIPOD 6.a] Clearly define the outcome that is predicted by the prediction model, including how and when assessed. 
+
+[TRIPOD 6.b] Report any actions to blind assessment of the outcome to be predicted. 
+
+## Predictors
+[TRIPOD 7.a] Clearly define all predictors used in developing or validating the multivariable prediction model, including how and when they were measured.
+
+[TRIPOD 7.b] Report any actions to blind assessment of predictors for the outcome and other predictors. 
+
+## Sample size
+
+[TRIPOD 8] Explain how the study size was arrived at.
+
+## Missing data
+
+[TRIPOD 9] Describe how missing data were handled (e.g., complete-case analysis, single imputation, multiple imputation) with details of any imputation method. 
+
+## Statistical analysis methods
+
+[TRIPOD 10.a, development only] Describe how predictors were handled in the analyses. 
+[TRIPOD 10.b, development only] Specify type of model, all model-building procedures (including any predictor selection), and method for internal validation.
+
+[TRIPOD 10.c, validation only] For validation, describe how the predictions were calculated. 
+
+[TRIPOD 10.d] Specify all measures used to assess model performance and, if relevant, to compare multiple models. 
+
+[TRIPOD 10.e, validation only] Describe any model updating (e.g., recalibration) arising from the validation, if done.
+
+## Risk groups
+
+[TRIPOD 11] Provide details on how risk groups were created, if done. 
+
+## Development vs. validation
+
+[TRIPOD 12, validation only] For validation, identify any differences from the development data in setting, eligibility criteria, outcome, and predictors. 
+
+# Results
+
+## Participants
+
+[TRIPOD 13.a] Describe the flow of participants through the study, including the number of participants with and without the outcome and, if applicable, a summary of the follow-up time. A diagram may be helpful. 
+
+[TRIPOD 13.b] Describe the characteristics of the participants (basic demographics, clinical features, available predictors), including the number of participants with missing data for predictors and outcome. 
+
+[TRIPOD 13.c, validation only] For validation, show a comparison with the development data of the distribution of important variables (demographics, predictors and outcome). 
+
+## Model development 
+
+[TRIPOD 14.a, development only] Specify the number of participants and outcome events in each analysis. 
+
+[TRIPOD 14.b, development only] If done, report the unadjusted association between each candidate predictor and outcome.
+
+## Model specification
+
+[TRIPOD 15.a, development only] Present the full prediction model to allow predictions for individuals (i.e., all regression coefficients, and model intercept or baseline survival at a given time point).
+
+[TRIPOD 15.b, development only] Explain how to the use the prediction model.
+
+## Model performance
+
+[TRIPOD 16] Report performance measures (with CIs) for the prediction model.
+
+## Model-updating
+
+[TRIPOD 17, validation only] If done, report the results from any model updating (i.e., model specification, model performance).
+
+# Discussion
+
+## Limitations
+
+[TRIPOD 18] Discuss any limitations of the study (such as nonrepresentative sample, few events per predictor, missing data). 
+
+## Interpretation
+
+[TRIPOD 19.a, validation only] For validation, discuss the results with reference to performance in the development data, and any other validation data. 
+
+[TRIPOD 19.b] Give an overall interpretation of the results, considering objectives, limitations, results from similar studies, and other relevant evidence. 
+
+## Implications
+
+[TRIPOD 20] Discuss the potential clinical use of the model and implications for future research. 
+
+# Conclusions
+
+## Supplementary information
+
+[TRIPOD 21] Provide information about the availability of supplementary resources, such as study protocol, Web calculator, and data sets. 
+
+# Acknowledgments
+
+[TRIPOD 22] Give the source of funding and the role of the funders for the present study. 
+
+
+# References
+
+
+
+---
+date: '2021-08-08'
+
+---
