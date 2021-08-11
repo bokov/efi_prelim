@@ -126,3 +126,17 @@ resultsfold00 <- function(table){
                     ,by=outcome][[2]] %>%
     submulti(cbind(c('icf','snf')
                    ,c('ICF','SNF after having been admitted from home')))};
+
+#' This function creates an entry for a CONSORT diagram summarizing the current
+#' state of the data
+consortstep <- function(dat,node='',patient_num='patient_num'
+                        ,start_date='start_date',...){
+  patients <- length(unique(dat[[patient_num]]))
+  patdays <- nrow(unique(
+    if(is(dat,'data.table')){
+      dat[,.SD,.SDcols=c(patient_num,start_date)]
+    } else {dat[,c(patient_num,start_date)]}));
+  earliest <- min(dat[[start_date]],na.rm = TRUE);
+  latest <- max(dat[[start_date]],na.rm = TRUE);
+  data.frame(node=node,patients=patients,patdays=patdays
+             ,earliest=earliest,latest=latest,...)};
