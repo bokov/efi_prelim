@@ -148,7 +148,7 @@ from service delivery (e.g., electronic health records) to generate knowledge to
 continuously improve healthcare.  “The committee believes that achieving a
 learning health care system—one in which science and informatics,
 patient-clinician partnerships, incentives, and culture are aligned to
-prodownloadmote and enable continuous and real-time improvement in both the
+promote and enable continuous and real-time improvement in both the
 effectiveness and efficiency of care—is both necessary and possible for the
 nation.” [@smith13a]
 `r .nt[2]`
