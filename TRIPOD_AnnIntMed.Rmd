@@ -245,15 +245,14 @@ codes are used in the EHR.
 
 *[TRIPOD 10.d] Specify all measures used to assess model performance and, if relevant, to compare multiple models. *
 
-For each outcome of interest, we used a Cox proportional hazard model to
-estimate the risk of the first occurrences of the outcome after the patients'
-respective index visits using EFI as the predictor. Unlike earlier studies, we
-treated EFI as a time-varying numeric predictor with multiple follow-ups per
-patient. Since only the first occurrence was being predicted, a recurring event
-model was not necessary. Patients were followed up to the first occurrences of
-the respective outcomes, so the standard form of the Cox model was sufficient.
-Harrell's c-statistic [@harrell84; @harrell96] was used to assess model 
-performance (Table \@ref(tab:tb3)).
+For each outcome of interest, we used Cox proportional hazard models [@cox72]
+with using eFI as the predictor to estimate the risk of the first occurrences of
+the respective outcomes after the patients' index visits. Unlike earlier 
+studies, we treated eFI as a time-varying numeric predictor with multiple 
+follow-ups per patient. Since patients were followed up to the first occurrences 
+the standard form of the Cox model was sufficient. Harrell's c-statistic 
+[@harrell84; @harrell96] was used to assess model performance 
+(Table \@ref(tab:tb3)).
 
 *[TRIPOD 10.c, validation only] For validation, describe how the predictions were calculated. *
 
