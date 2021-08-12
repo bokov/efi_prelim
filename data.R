@@ -50,8 +50,15 @@ dct0 <- import('varmap.csv');
 if(debug) message('About to read');
 # filtering out patients with two or fewer visits with `if(.N>2)0` and
 set.seed(project_seed);
-dat01 <- fread(unzip(inputdata['dat01']))[-1,][age_at_visit_days >= 18*362.25,][
-  ,if(.N>2) .SD, by=patient_num][
+dat01 <- fread(unzip(inputdata['dat01']))[-1,];
+consort <- consortstep(dat01,'start',label='1% Sample of All Patients'
+                       ,previous=NA);
+dat01 <- dat01[age_at_visit_days >= 18*362.25,][,if(.N>2) .SD, by=patient_num];
+consort <- rbind(consort
+                 ,consortstep(dat01,'adultvis'
+                              ,label='At least three visits after the age of 18'
+                              ,previous=tail(consort$node,1)));
+dat01 <- dat01[
     # creating a randomly selected index visit for each patient
     ,z_ixvis:=sample(age_at_visit_days[-c(1,.N)],1),by=patient_num][
       ,a_t1:=age_at_visit_days-z_ixvis,by=patient_num][
@@ -258,6 +265,9 @@ dat02 <- fread(inputdata['dat02'])[,START_DATE := as.Date(START_DATE)] %>%
 dat01[dat02,on = c('patient_num','start_date'),a_efi := i.nval_num];
 #' Delete the rows prior to each patient's `z_ixvis` randomly chosen index visit
 dat01 <- dat01[a_t0>=0 & !is.na(a_efi),][,if(.N>1) .SD,by=patient_num];
+consort <- rbind(consort,consortstep(dat01,'postidxefivisgt1'
+                                     ,label='At least two visits with non-missing eFI after randomly selected index visit'
+                                     ,previous=tail(consort$node,1)));
 #' Mark all the trailing 0's ... these might be patients who have not even been
 #' seen for their last few visits
 # dat01[,z_trailing_old:=seq_len(.N) > Position(function(xx) xx>0
@@ -269,6 +279,11 @@ dat01[,z_trailing:=seq_len(.N) > max(Position(function(xx) xx>0
                                      ,Position(function(xx) xx,a_anythingtf
                                                ,right=T,nomatch=0))
       ,by=patient_num];
+efi_pats <- unique(subset(dat01,a_efi>0)$patient_num);
+dat01 <- subset(dat01,patient_num %in% efi_pats & !z_trailing);
+consort <- rbind(consort,consortstep(dat01,'haveefi'
+                                     ,label='At least one visit where eFI was greater than 0'
+                                     ,previous=tail(consort$node,1)));
 
 # make binned variables ----
 #' Maked binned versions of certain variables
@@ -279,8 +294,18 @@ dat01$a_agegrp <- cut(dat01$age_at_visit_days,365.25*c(-Inf,45,65,Inf)
 dat01$a_frailtf <- dat01$a_efi>0.19;
 
 # subsamples ----
+
+# document the branch-point
+consort <- rbind(consort
+                 ,data.frame(node='branchpoint0'
+                             ,patients=NA,patdays=NA,earliest=NA,latest=NA
+                             ,label='',previous=tail(consort$node,1)));
 dat01devel <- dat01[z_subsample=='devel',];
+consort <- rbind(consort,consortstep(dat01devel,'dev',label='Development subset'
+                                     ,previous='branchpoint0'));
 dat01test <- dat01[z_subsample=='test',];
+consort <- rbind(consort,consortstep(dat01test,'test',label='Validation subset'
+                                     ,previous='branchpoint0'));
 
 #' # Diagnostic Summary
 #'
@@ -313,8 +338,12 @@ file.rename(.outfile,paste0(format(Sys.time(),'%y%m%d%H%M'),'_'
                             ,submulti(basename(inputdata['dat01'])
                                       ,rbind(c('\\.[^.]*$','_test.tsv')
                                              ,c('^[0-9]{11,13}_','')))));
+.outfile <- export(consort,tempfile(),format='tsv');
+file.rename(.outfile,paste0(format(Sys.time(),'%y%m%d%H%M'),'_'
+                            ,substr(tools::md5sum(.outfile),1,5)
+                            ,'_consort.tsv'));
 
-.savelist <- if(debug>0) setdiff(ls(),.origfiles) else c();
+.savelist <- if(debug>0) setdiff(ls(),.origfiles) else c('consort');
 suppressWarnings(save(file=file.path(.workdir
                                      ,paste0(basename(.currentscript)
                                              ,'.rdata'))
