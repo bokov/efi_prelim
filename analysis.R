@@ -177,6 +177,7 @@ summsurv00 <- function(fit
                        ,columns=c(statistic.wald='Wald Statistic'
                                   ,p.value.wald='P'
                                   ,concordance='Concordance'
+                                  ,std.error.concordance='SE Concordance'
                                   ,logLik='Log Likelihood'
                                   ,'AIC'
                                   ,nevent='Events'
@@ -411,6 +412,7 @@ tb2[,c('predictor','Outcome','β^ (95% CI)','fold-change (95% CI)','SE','Z'
 #+ tb3
 tb3 <- lapply(fits,function(xx) cbind(Predictor=rownames(xx$modelsummary)
                                       ,xx$modelsummary[,c('Concordance'
+                                                          ,'SE Concordance'
                                                           ,'Log Likelihood'
                                                           ,'AIC')])) %>%
   bind_rows(.id='Outcome');
