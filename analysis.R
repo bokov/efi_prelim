@@ -45,30 +45,77 @@ knitr::opts_chunk$set(echo=.debug>0, warning=.debug>0, message=.debug>0);
 # Load files ----
 
 # data
+# This is a large file and takes a while to process so we cache it when
+# possible, and specify a cached version in local.config.R (this does NOT
+# mean these cached files should ever be committed to the repo, they are
+# strictly local, that's why they are in local.config.R!!!). If that cached
+# version actually exists, we load that and move on.
 if(file.exists(inputdata['dat03'])){
-  dat03 <- fread(.dat03new<-inputdata['dat03']) } else {
-    .infilepatt <- paste0('^[0-9]{10}_[a-z0-9]{4,12}_'
-                          ,gsub('^[0-9]*_|\\.[^.]*$',''
-                                ,basename(inputdata['dat01'])),'_dev.tsv$');
-    if(length(.dat03candidates <- list.files(patt=.infilepatt))>0){
-      .dat03new <- file.info(.dat03candidates,extra_cols = F)[
-        ,'mtime',drop=F] %>% arrange(desc(mtime)) %>% rownames %>% head(1);
-      dat03 <- fread(.dat03new);
-      message(inputdata['dat03'],' not found, loading most recent available: '
-              ,.dat03new);
-    } else {
-      #.srcenv1 <- new.env();
-      unlink('data.R.rdata',force = T);
-      .loadedobjects <- load_deps2('data.R',cachedir = .workdir,debug=.debug);
-      #source('data.R',local=.srcenv1);
-      .dat03candidates <- list.files(patt=.infilepatt);
-      .dat03new <- file.info(.dat03candidates,extra_cols = F)[
-        ,'mtime',drop=F] %>% arrange(desc(mtime)) %>% rownames %>% head(1);
-      dat03 <- fread(.dat03new);
-      message(inputdata['dat03'],' not found, nor any other valid input files.'
-              ,'Ran data.R and loaded the resulting ',.dat03new,' file.')
-    }
+  dat03 <- fread(.dat03new<-inputdata['dat03'])
+} else {
+  # otherwise, we check to see if any other cached versions exist and load the
+  # most recent one (WARNING: this means if you have a messed up cache file
+  # it's on you to delete it to avoid it being used by the script). Or, if there
+  # is a specific cached file you want read, update local.config.R.
+  # Here is a regexp for identifying cached files. Note hard-coded '_dev.tsv'
+  .infilepatt <- paste0('^[0-9]{10}_[a-z0-9]{4,12}_'
+                        ,gsub('^[0-9]*_|\\.[^.]*$',''
+                              ,basename(inputdata['dat01'])),'_dev.tsv$');
+  # if any cached files are found, find and read the most recently changed one
+  if(length(.dat03candidates <- list.files(patt=.infilepatt))>0){
+    .dat03new <- file.info(.dat03candidates,extra_cols = F)[
+      ,'mtime',drop=F] %>% arrange(desc(mtime)) %>% rownames %>% head(1);
+    dat03 <- fread(.dat03new);
+    message(inputdata['dat03'],' not found, loading most recent available: '
+            ,.dat03new);
+  } else {
+    # If no cached files are found at all, only then run the 'data.R' dependency
+    # as you would in a standard scriport. But, again because of file sizes and
+    # the fact that data.R generates at least two copies of the data, data.R
+    # creates a blank data.R.rdata unless its debug > 0. Instead, we just
+    # repeat the .infilepatt filename search and load the most recent.
+    unlink('data.R.rdata',force = T);
+    .loadedobjects <- load_deps2('data.R',cachedir = .workdir,debug=.debug);
+    .dat03candidates <- list.files(patt=.infilepatt);
+    .dat03new <- file.info(.dat03candidates,extra_cols = F)[
+      ,'mtime',drop=F] %>% arrange(desc(mtime)) %>% rownames %>% head(1);
+    dat03 <- fread(.dat03new);
+    message(inputdata['dat03'],' not found, nor any other valid input files.'
+            ,'Ran data.R and loaded the resulting ',.dat03new,' file.')
   }
+}
+
+# consort diagram ----
+.dat03consort <- list.files(patt=paste0('^',gsub('_.*tsv','',.dat03new)
+                                        ,'.*consort.tsv'))[1];
+consort <- import(.dat03consort);
+.consortnodes <- mutate(consort
+                        ,label=paste0(label,'\\n(Patients='
+                                      ,format(patients,big.m=',')
+                                      ,', Patient-Days='
+                                      ,format(patdays,big.m=',')
+                                      ,')')) %>%
+  with(paste0(node,' [label = "',label,'"'
+              ,ifelse(grepl('branchpoint',node),', shape="point", width=0 ','')
+              ,'];'));
+.consortsubg <- subset(consort,grepl('branchpoint'
+                                     ,paste(node,previous)))$node %>%
+  paste0('; ',collapse='');
+
+consortgv <- c(
+  'digraph { splines = "ortho"; node [shape = "box"];'
+  ,.consortnodes
+  ,'subgraph { rank = "same";'
+  ,.consortsubg
+  ,'}'
+  # edges are hardcoded for now
+  ,'dev -> branchpoint0 [dir="back"];
+branchpoint0 -> test;
+start -> adultvis -> postidxefivisgt1 -> haveefi;
+haveefi -> branchpoint0 [arrowhead=none];'
+  ,'}');
+
+
 
 # data dictionary
 .srcenv0 <- new.env();
@@ -77,8 +124,8 @@ if(!file.exists('varmap.csv')) source('dictionary.R',local=.srcenv0);
 dct0 <- import('varmap.csv');
 
 
-efi_pats <- unique(subset(dat03,a_efi>0)$patient_num);
-dat03 <- subset(dat03,patient_num %in% efi_pats & !z_trailing);
+#efi_pats <- unique(subset(dat03,a_efi>0)$patient_num);
+#dat03 <- subset(dat03,patient_num %in% efi_pats & !z_trailing);
 
 # syncronize dictionary with newly-loaded data
 dct0<-sync_dictionary(dat03);
