@@ -1,0 +1,332 @@
+---
+title: "Development and validation of an EHR-based frailty index for prediction patient safety events in a health system."
+#' author: 'Alex Bokov ^1,✉^, Sara Espinoza ^1^, Chandana Tripathy ^1^, and Kathleen R. Stevens ^1^'
+css: "production.css"
+abstract: | 
+  We conducted a retrospective cohort study on structured data of XXXX patients
+  randomly sampled from all adult patients in the Epic EHR system of a large 
+  South Texas academic health center and its teaching hospital partner to 
+  determine whether our implementation of the Rockwood frailty index (eFI) can 
+  predict iatrogenic patient safety events using only codes and numeric values 
+  routinely collected in EHR systems. According to both the c-statistic and the 
+  AIC of the Cox proportional hazard models we used to analyze the data, eFI 
+  performs well as a predictor of infections, non-operative trauma, cardiac 
+  complications, and of coded events categorized as patient safety indicators 
+  (PSI).
+
+documentclass: article
+description: 'Manuscript'
+clean: false
+bibliography: efi_paper.bib
+csl: harvard-cite-them-right.csl
+output:
+  bookdown::html_document2:
+    fig_caption: true
+    self_contained: true
+    number_sections: false
+    keep_md: true
+    clean: false
+  bookdown::word_document2:
+    reference_docx: efi_template.docx
+    fig_caption: true
+    self_contained: true
+    keep_md: true
+    number_sections: false
+---
+
+```{r load_deps, echo=FALSE, message=FALSE, warning=FALSE,results='hide'}
+.projpackages <- c('GGally','pander','dplyr','ggplot2','data.table'
+                   ,'survival','broom','forcats','table1','english','bookdown'
+                   ,'DiagrammeR','DiagrammeRsvg','rsvg');
+.deps <- c( 'analysis.R' );
+.debug <- 0;
+message(paste0('\n\n working dir: ',getwd(),'\n\n'));
+cat('\n\nAvailable Files:',list.files(),sep='\n','\n');
+.junk<-capture.output(source(file.path('./scripts/global.R'),chdir=TRUE,echo=!1
+                             ,local=TRUE));
+# Set some formatting options for this document
+panderOptions('table.alignment.default','right');
+panderOptions('table.alignment.rownames','right');
+panderOptions('table.split.table',Inf);
+panderOptions('p.wrap','');
+panderOptions('p.copula',', and ');
+panderOptions('graph.fontfamily','serif');
+# theme_get() gives default theme
+theme_set(theme_bw(base_family = 'serif',base_size=14) +
+            theme(strip.background = element_rect(fill=NA,color=NA)
+                  ,strip.text = element_text(size=15)));
+knitr::opts_chunk$set(echo=.debug>0, warning=.debug>0, message=.debug>0);
+knitr::knit_hooks$set(inline = function(xx) {prettyNum(xx, big.mark=",")});
+
+
+# detect current output format
+.outfmt <- knitr::opts_knit$get('rmarkdown.pandoc.to');
+if(is.null(.outfmt)){
+  .outfmt <- if(knitr::is_html_output()) 'html' else {
+    if(knitr::is_latex_output()) 'latex' else {
+      if(interactive()) 'html' else {
+        'unknown';
+    }}}};
+message('.outfmt = ',.outfmt);
+
+.currentscript <- current_scriptname('efi_patientsafety.Rmd');
+.outcomenames <- c('vi_c_psi','vi_c_hospinfect','vi_c_hosptrauma'
+                   ,'vi_c_cardiac');
+snip_outcomes <- rname(.outcomenames);
+snip_todates <- dat03[,.(xx=max(start_date)),by=patient_num] %>%
+  with(range(xx)) %>% paste0(collapse=' and ');
+snip_fromdates <- dat03[,.(xx=min(start_date)),by=patient_num] %>%
+  with(range(xx)) %>% paste0(collapse=' and ');
+
+# limit the data to items of interest
+
+
+# snippets ----
+
+```
+# Introduction/Background
+
+*[TRIPOD 3.a] Explain the medical context (including whether diagnostic or prognostic) and rationale for developing or validating the multivariable prediction model, including references to existing models.*
+*[TRIPOD 3.b] Specify the objectives, including whether the study describes the development or validation of the model or both.*
+
+Frailty is the lifelong erosion of stress resistance and accumulation of
+impairments across multiple physiological systems. Among older community
+dwelling adults 32% have been classified as pre-frail and 24% have been
+classified as frail [@hoover13]. Frailty predicts disability, injurious falls,
+and mortality [@pajewski19], emergency room visits and hospitalizations
+[@fried01a], and long-term care admissions [@pajewski19; @rockwood06;
+@rockwood05]. The Fried phenotype [@fried01a] and Rockwood deficit accumulation
+index [@rockwood07; @mitnitski01a], are two commonly used measures of frailty. 
+There is reasonable convergence between these two approaches 
+[@li15; @malmstrom14] but the former is better suited to large-scale deployment
+in EHR systems because it does not require patient questionnaires nor 
+dedicated physical assessments. Furthermore, Kulminsky @kulminski08 found 
+evidence for the index outperforming the phenotype. 
+
+Our version of the electronic frailty index (eFI) improves on previous EHR 
+adaptations of the Rockwood index [@clegg16a; @pajewski19] by eliminating the 
+need for manually-curated lab reference ranges and by calculating the eFI over
+a rolling two-year window for every available patient encounter rather than at 
+one fixed time point. The scripts and usage notes are freely available online.
+
+Improving and maintaining patient safety is a key goal for every health system. 
+A simple and rapid frailty assessment would help clinicians can tailor 
+interventions to avoid poor outcomes in their patients. Here our objective was 
+to develop and validate (against hold-out data) eFI as a predictor of 
+preventable infections, trauma, cardiac complications, and patient safety events
+in general.
+
+
+# Methods
+
+## Source of data
+
+*[TRIPOD 4.a] Describe the study design or source of data (e.g., randomized trial, cohort, or registry data), separately for the development and validation data sets, if applicable.*
+
+*[TRIPOD 4.b] Specify the key study dates, including start of accrual; end of accrual; and, if applicable, end of follow-up. *
+
+A random 1% sample (`r subset(consort,node=='start')$patients` patients, 
+`r subset(consort,node=='start')$patdays` visit-days) was drawn from 
+deidentified i2b2 data warehouse records representing the entire patient 
+population in the EHR system of a large academic health center and its teaching 
+hospital partner. 
+
+The nominal date of index encounters ranged between `r snip_fromdates` while 
+that of final encounters ranged between `r snip_todates`. The actual
+dates were within one year of these dates due to deidentification.
+
+## Participants
+
+*[TRIPOD 5.a] Specify key elements of the study setting (e.g., primary care, secondary care, general population) including number and location of centres.*
+*[TRIPOD 5.b] Describe eligibility criteria for participants. *
+*[TRIPOD 5.c] Give details of treatments received, if relevant. *
+
+The patient-visits in the data are a representative sample of the mix of all 
+primary care, specialist, and inpatient encounters of UT Health San Antonio and 
+the University Health System. As summarized in Figure \@ref(fig:consort), 
+encounters during which the patient was below the age of 18 were excluded and
+patients who had fewer than three such encounters were excluded. To avoid the
+bias that would accompany always using the first valid visit as a starting 
+point, an index date was randomly selected for each patient from among all 
+their visit dates and only data recorded on or after that visit was used in 
+analysis (not counting the eFI values which were pre-calculated over for every 
+patient-visit in the EHR system, obtained as a separate file, and linked to 
+the main dataset). After this step, patients who had fewer than two visits 
+remaining were also excluded.
+
+Some patients whose eFI never goes above 0 are non-frail, but there is no 
+reliable way to distinguish them from those who have a 0 eFI for artifactual 
+causes-- e.g. incomplete records, sparse encounter histories. Furthermore, at 
+the tail ends of their histories most patients had date-only records during 
+which eFI was 0 and no diagnoses, procedures, nor lab results were recorded. 
+These may have been missed appointments or accesses to patient files without 
+actual encounters. We therefore excluded patients who never had 
+an eFI greater than 0 and for those that remained we excluded all visits 
+after the last procedure, diagnosis, lab, or eFI (whichever happened last) was recorded.
+
+Finally, the patients were split into development (
+`r subset(consort,node=='dev')$patients` patients, 
+`r subset(consort,node=='dev')$patdays` visit-days) and validation (
+`r subset(consort,node=='test')$patients` patients, 
+`r subset(consort,node=='test')$patdays` visit-days) subsets.
+
+```{r consort,fig.cap='CONSORT Diagram'}
+grViz(consortgv);
+```
+This study was performed using only retrospective EHR data with no 
+treatment, intervention or any other interaction with patients. The exposure 
+groups were determined by patient eFI as will be discussed below.
+
+## Sample size
+
+*[TRIPOD 8] Explain how the study size was arrived at.*
+
+We limited ourselves to a 1% initial sample for two reasons. First, given 
+anticipated utility of the eFI for predicting other clinically important
+outcomes in future studies, and given that our approach uses information from a 
+large time-span for each sampled patient, we needed to avoid depleting the un-analyzed patient population in these early stages. Secondly, we needed to 
+stay within processing-time and file-size constraints of our research
+data warehouse team. Extrapolating from the effect sizes in @pajewski19, events 
+with an overall prevalence of 5% and a hazard ratio of 1.33 between frail and 
+non-frail groups should be detectable with a power well over 0.80. 
+
+## Outcomes and Predictors
+*[TRIPOD 6.a] Clearly define the outcome that is predicted by the prediction model, including how and when assessed. *
+
+*[TRIPOD 6.b] Report any actions to blind assessment of the outcome to be predicted. *
+*[TRIPOD 7.b] Report any actions to blind assessment of predictors for the outcome and other predictors. *
+
+We drew on the expertise of the clinicians on our team (CT and SE) to select 
+outcomes that are meaningful, relevant, and useful in guiding clinical care 
+planning. These outcomes were: `r pander(wrap(snip_outcomes,'*'))`. To assess 
+these outcomes in EHR data we used ICD-10 code mappings developed by 
+@southern17. 
+
+Insofar that any other decisions about processing and statistical analysis 
+required data, we used only the development data and were blinded to the 
+validation data. After the analysis scripts were finalized for publication, 
+they were re-run on the validation data and used to generate all the results 
+reported here. The development version of each table and figure is available in the 
+supplemental materials. 
+
+*[TRIPOD 7.a] Clearly define all predictors used in developing or validating the multivariable prediction model, including how and when they were measured.*
+
+Predictors (i.e. deficits on which eFI is calculated) were chosen prior to 
+extraction of the research data, based on the frailty index implemented by 
+@clegg16a for UK health systems and then adapted to ICD10 by @pajewski19. The
+underlying methodology was developed by Mitnitsky, Rockwood, et al. [@mitnitski01a;@song10; @searle08a]. We built upon their work by mapping 
+laboratory tests to specific LOINC codes and omitting data elements which are 
+not universally available in EHR systems. We made the mapping tables and sample 
+SQL code available for public use and discussion [@bokov20]. For each patient 
+visit, all distinct diagnoses and abnormal lab results over the preceding 
+two-year window were aggregated into a single eFI-- a numeric value that
+can range from 0 to 1 (but in practice seldom exceeds 0.6). Though we omitted 
+all visits prior to a randomly select index visit for each patient (see 
+[Participants] section, above) this did not interfere with EFI calculation 
+because eFI values were calculated en-masse for every distinct patient-date in 
+our health system and then matching records were joined to the study sample.
+
+
+## Missing data
+
+*[TRIPOD 9] Describe how missing data were handled (e.g., complete-case analysis, single imputation, multiple imputation) with details of any imputation method. *
+
+Our missing data strategy approximates a complete-case analysis in 
+that we excluded patients with too few visits or missing eFI. No imputation was
+done on the remaining records; absence of ICD10 codes for the respective 
+outcomes was interpreted as non-occurrence. This is in line with how discrete
+codes are used in the EHR.
+
+## Statistical analysis methods
+
+*[TRIPOD 10.a, development only] Describe how predictors were handled in the analyses. *
+*[TRIPOD 10.b, development only] Specify type of model, all model-building procedures (including any predictor selection), and method for internal validation.*
+
+For each outcome of interest, we used a Cox proportional hazard model to
+estimate the risk of the first occurrences of the outcome after the patients'
+respective index visits using EFI as the predictor. Unlike earlier studies, we
+treated EFI as a time-varying numeric predictor with multiple follow-ups per
+patient. Since only the first occurrence was being predicted, a recurring event
+model was not necessary. Patients were followed up to the first occurrences of
+the respective outcomes, so the standard form of the Cox model was sufficient.
+
+*[TRIPOD 10.c, validation only] For validation, describe how the predictions were calculated. *
+
+*[TRIPOD 10.d] Specify all measures used to assess model performance and, if relevant, to compare multiple models. *
+
+*[TRIPOD 10.e, validation only] Describe any model updating (e.g., recalibration) arising from the validation, if done.*
+
+## Risk groups
+
+*[TRIPOD 11] Provide details on how risk groups were created, if done. *
+
+
+## Development vs. validation
+
+*[TRIPOD 12, validation only] For validation, identify any differences from the development data in setting, eligibility criteria, outcome, and predictors. *
+
+# Results
+
+## Participants
+
+*[TRIPOD 13.a] Describe the flow of participants through the study, including the number of participants with and without the outcome and, if applicable, a summary of the follow-up time. A diagram may be helpful. *
+
+*[TRIPOD 13.b] Describe the characteristics of the participants (basic demographics, clinical features, available predictors), including the number of participants with missing data for predictors and outcome. *
+
+*[TRIPOD 13.c, validation only] For validation, show a comparison with the development data of the distribution of important variables (demographics, predictors and outcome). *
+
+## Model development 
+
+*[TRIPOD 14.a, development only] Specify the number of participants and outcome events in each analysis. *
+
+*[TRIPOD 14.b, development only] If done, report the unadjusted association between each candidate predictor and outcome.*
+
+## Model specification
+
+*[TRIPOD 15.a, development only] Present the full prediction model to allow predictions for individuals (i.e., all regression coefficients, and model intercept or baseline survival at a given time point).*
+
+*[TRIPOD 15.b, development only] Explain how to the use the prediction model.*
+
+## Model performance
+
+*[TRIPOD 16] Report performance measures (with CIs) for the prediction model.*
+
+## Model-updating
+
+*[TRIPOD 17, validation only] If done, report the results from any model updating (i.e., model specification, model performance).*
+
+# Discussion
+
+## Limitations
+
+*[TRIPOD 18] Discuss any limitations of the study (such as nonrepresentative sample, few events per predictor, missing data). *
+
+## Interpretation
+
+*[TRIPOD 19.a, validation only] For validation, discuss the results with reference to performance in the development data, and any other validation data. *
+
+*[TRIPOD 19.b] Give an overall interpretation of the results, considering objectives, limitations, results from similar studies, and other relevant evidence. *
+
+## Implications
+
+*[TRIPOD 20] Discuss the potential clinical use of the model and implications for future research. *
+
+# Conclusions
+
+## Supplementary information
+
+*[TRIPOD 21] Provide information about the availability of supplementary resources, such as study protocol, Web calculator, and data sets. *
+
+# Acknowledgments
+
+*[TRIPOD 22] Give the source of funding and the role of the funders for the present study. *
+
+
+# References
+
+
+
+---
+date: '2021-08-08'
+
+---
