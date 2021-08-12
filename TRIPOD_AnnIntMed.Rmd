@@ -240,7 +240,10 @@ codes are used in the EHR.
 ## Statistical analysis methods
 
 *[TRIPOD 10.a, development only] Describe how predictors were handled in the analyses. *
+
 *[TRIPOD 10.b, development only] Specify type of model, all model-building procedures (including any predictor selection), and method for internal validation.*
+
+*[TRIPOD 10.d] Specify all measures used to assess model performance and, if relevant, to compare multiple models. *
 
 For each outcome of interest, we used a Cox proportional hazard model to
 estimate the risk of the first occurrences of the outcome after the patients'
@@ -249,12 +252,16 @@ treated EFI as a time-varying numeric predictor with multiple follow-ups per
 patient. Since only the first occurrence was being predicted, a recurring event
 model was not necessary. Patients were followed up to the first occurrences of
 the respective outcomes, so the standard form of the Cox model was sufficient.
+Harrell's c-statistic [@harrell84; @harrell96] was used to assess model 
+performance (Table \@ref(tab:tb3)).
 
 *[TRIPOD 10.c, validation only] For validation, describe how the predictions were calculated. *
 
-*[TRIPOD 10.d] Specify all measures used to assess model performance and, if relevant, to compare multiple models. *
 
 *[TRIPOD 10.e, validation only] Describe any model updating (e.g., recalibration) arising from the validation, if done.*
+
+No updates or model recalibration were done after running the analysis on the 
+validation data.
 
 ## Risk groups
 
@@ -264,6 +271,11 @@ the respective outcomes, so the standard form of the Cox model was sufficient.
 ## Development vs. validation
 
 *[TRIPOD 12, validation only] For validation, identify any differences from the development data in setting, eligibility criteria, outcome, and predictors. *
+
+There were no differences in the choice of predictors, outcome, inclusion 
+criteria, or clinical setting between the development and validation data 
+because both were mutually exclusive, randomly-assigned subgroups of patients 
+from the same sample.
 
 # Results
 
@@ -290,6 +302,20 @@ the respective outcomes, so the standard form of the Cox model was sufficient.
 ## Model performance
 
 *[TRIPOD 16] Report performance measures (with CIs) for the prediction model.*
+```{r tb3}
+subset(tb3,Outcome %in% .outcomenames & Predictor == 'Frailty') %>% 
+  mutate(Outcome = rnameshort(Outcome)
+         ,`Concordance (CI)`=paste0(round(Concordance,3)
+                                    ,' ('
+                                    ,round(Concordance-1.96*`SE Concordance`,3)
+                                    ,', '
+                                    ,round(Concordance+1.96*`SE Concordance`,3)
+                                    ,')')) %>% 
+  select('Outcome','Concordance (CI)','Log Likelihood') %>% 
+  pander(caption='(\\#tab:tb3) Performance of EFI models',row.names=F);
+
+```
+
 
 ## Model-updating
 
