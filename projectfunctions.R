@@ -140,3 +140,14 @@ consortstep <- function(dat,node='',patient_num='patient_num'
   latest <- max(dat[[start_date]],na.rm = TRUE);
   data.frame(node=node,patients=patients,patdays=patdays
              ,earliest=earliest,latest=latest,...)};
+
+#' Clean up numbers.
+nb <- function(xx,digits=4
+                      ,rxp=gsub('#',digits,'^([0-9]+\\.[0-9]{0,#})[0-9]+(.*)$')){
+  #message('nb input: ',xx);
+  #message('nb rxp: ',rxp);
+  if(!is.numeric(xx)) return(xx);
+  ifelse(between(log10(abs(xx)),-4,7),prettyNum(round(xx,digits),big.mark=",")
+         ,gsub(rxp,'\\1\\2'
+               ,knitr:::format_sci(xx,'md')))};
+
