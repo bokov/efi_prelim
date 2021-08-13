@@ -266,6 +266,9 @@ validation data.
 
 *[TRIPOD 11] Provide details on how risk groups were created, if done. *
 
+The eFI is a continuous variable. However, for purposes of presentation we use
+the a cutpoint 0.19 established by [@stow18]. Patients above this cut-point are
+considered frail while those below are considered non-frail or pre-frail.
 
 ## Development vs. validation
 
