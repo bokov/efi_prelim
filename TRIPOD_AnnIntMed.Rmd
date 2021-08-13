@@ -34,7 +34,7 @@ output:
     number_sections: false
 ---
 
-```{r load_deps, echo=FALSE, message=FALSE, warning=FALSE,results='hide'}
+```{r load_deps, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
 .projpackages <- c('GGally','pander','dplyr','ggplot2','data.table'
                    ,'survival','broom','forcats','table1','english','bookdown'
                    ,'DiagrammeR','DiagrammeRsvg','rsvg');
@@ -56,8 +56,11 @@ theme_set(theme_bw(base_family = 'serif',base_size=14) +
             theme(strip.background = element_rect(fill=NA,color=NA)
                   ,strip.text = element_text(size=15)));
 knitr::opts_chunk$set(echo=.debug>0, warning=.debug>0, message=.debug>0);
-knitr::knit_hooks$set(inline = function(xx) {prettyNum(xx, big.mark=",")});
-
+options(digits=5); # default is 7
+knitr::knit_hooks$set(inline = nb);
+# knitr::knit_hooks$set(inline = function(x) {
+#   knitr:::format_sci(x, 'md')
+# })
 
 # detect current output format
 .outfmt <- knitr::opts_knit$get('rmarkdown.pandoc.to');
@@ -86,7 +89,7 @@ snip_fromdates <- dat03[,.(xx=min(start_date)),by=patient_num] %>%
 ```
 # Introduction/Background
 
-*[TRIPOD 3.a] Explain the medical context (including whether diagnostic or prognostic) and rationale for developing or validating the multivariable prediction model, including references to existing models.*
+*[TRIPOD 3.a] Explain the medical context (including whether diagnostic or prognostic) and rationale for developing or validating the multivariable prediction model, including references to existing models.*  
 *[TRIPOD 3.b] Specify the objectives, including whether the study describes the development or validation of the model or both.*
 
 Frailty is the lifelong erosion of stress resistance and accumulation of
@@ -121,12 +124,11 @@ in general.
 
 ## Source of data
 
-*[TRIPOD 4.a] Describe the study design or source of data (e.g., randomized trial, cohort, or registry data), separately for the development and validation data sets, if applicable.*
-
+*[TRIPOD 4.a] Describe the study design or source of data (e.g., randomized trial, cohort, or registry data), separately for the development and validation data sets, if applicable.*  
 *[TRIPOD 4.b] Specify the key study dates, including start of accrual; end of accrual; and, if applicable, end of follow-up. *
 
-A random 1% sample (`r subset(consort,node=='start')$patients` patients, 
-`r subset(consort,node=='start')$patdays` visit-days) was drawn from 
+A random 1% sample (`r nb(subset(consort,node=='start')$patients)` patients, 
+`r nb(subset(consort,node=='start')$patdays)` visit-days) was drawn from 
 deidentified i2b2 data warehouse records representing the entire patient 
 population in the EHR system of a large academic health center and its teaching 
 hospital partner. 
@@ -137,8 +139,8 @@ dates were within one year of these dates due to deidentification.
 
 ## Participants
 
-*[TRIPOD 5.a] Specify key elements of the study setting (e.g., primary care, secondary care, general population) including number and location of centres.*
-*[TRIPOD 5.b] Describe eligibility criteria for participants. *
+*[TRIPOD 5.a] Specify key elements of the study setting (e.g., primary care, secondary care, general population) including number and location of centres.*  
+*[TRIPOD 5.b] Describe eligibility criteria for participants. *  
 *[TRIPOD 5.c] Give details of treatments received, if relevant. *
 
 The patient-visits in the data are a representative sample of the mix of all 
@@ -191,8 +193,7 @@ with an overall prevalence of 5% and a hazard ratio of 1.33 between frail and
 non-frail groups should be detectable with a power well over 0.80. 
 
 ## Outcomes and Predictors
-*[TRIPOD 6.a] Clearly define the outcome that is predicted by the prediction model, including how and when assessed. *
-
+*[TRIPOD 6.a] Clearly define the outcome that is predicted by the prediction model, including how and when assessed. *  
 *[TRIPOD 6.b] Report any actions to blind assessment of the outcome to be predicted. *
 *[TRIPOD 7.b] Report any actions to blind assessment of predictors for the outcome and other predictors. *
 
@@ -239,45 +240,46 @@ codes are used in the EHR.
 
 ## Statistical analysis methods
 
-*[TRIPOD 10.a, development only] Describe how predictors were handled in the analyses. *
-
-*[TRIPOD 10.b, development only] Specify type of model, all model-building procedures (including any predictor selection), and method for internal validation.*
-
-*[TRIPOD 10.d] Specify all measures used to assess model performance and, if relevant, to compare multiple models. *
+*[TRIPOD 10.a, development only] Describe how predictors were handled in the analyses.*  
+*[TRIPOD 10.b, development only] Specify type of model, all model-building procedures (including any predictor selection), and method for internal validation.*  
+*[TRIPOD 10.d] Specify all measures used to assess model performance and, if relevant, to compare multiple models.*
 
 For each outcome of interest, we used Cox proportional hazard models [@cox72]
 with using eFI as the predictor to estimate the risk of the first occurrences of
 the respective outcomes after the patients' index visits. Unlike earlier 
 studies, we treated eFI as a time-varying numeric predictor with multiple 
-follow-ups per patient. Since patients were followed up to the first occurrences 
-the standard form of the Cox model was sufficient. Harrell's c-statistic 
+follow-ups per patient. Patients were followed up to the first occurrences of
+the outcome for each of the models. Harrell's c-statistic 
 [@harrell84; @harrell96] was used to assess model performance 
-(Table \@ref(tab:tb3)).
+(Table \@ref(tab:tb3)). The proportionality assumption was tested for each model
+as per @grambsch94. All four models satisfied the proportionality assumption
+(supplement).
 
-*[TRIPOD 10.c, validation only] For validation, describe how the predictions were calculated. *
+## Development vs. validation
 
+*[TRIPOD 10.c, validation only] For validation, describe how the predictions were calculated.*  
+*[TRIPOD 10.e, validation only] Describe any model updating (e.g., recalibration) arising from the validation, if done.*  
+*[TRIPOD 12, validation only] For validation, identify any differences from the development data in setting, eligibility criteria, outcome, and predictors. *
 
-*[TRIPOD 10.e, validation only] Describe any model updating (e.g., recalibration) arising from the validation, if done.*
-
-No updates or model recalibration were done after running the analysis on the 
-validation data.
+We used the following validation methods recommended by @royston13: 
+regressing out-of-sample linear predictors against the in-sample linear 
+predictors (Table \@ref(tab:coxgof)), re-fitting the validations model using the 
+developmental predictors as the sole explanatory variables
+(Table \@ref(tab:lmdiscrim)), and comparing the cumulative
+distributions of the out-of-sample and in-sample linear predictors (supplement).
+There were no differences in the choice of predictors, outcome, inclusion 
+criteria, or clinical setting between the development and validation data. 
+Both were mutually exclusive, randomly-assigned subgroups of patients 
+from the same sample. No updates or model recalibration were needed after 
+analyzing the validation data.
 
 ## Risk groups
 
 *[TRIPOD 11] Provide details on how risk groups were created, if done. *
 
 The eFI is a continuous variable. However, for purposes of presentation we use
-the a cutpoint 0.19 established by [@stow18]. Patients above this cut-point are
+a cutpoint of 0.19, established by @stow18. Patients above this cut-point are
 considered frail while those below are considered non-frail or pre-frail.
-
-## Development vs. validation
-
-*[TRIPOD 12, validation only] For validation, identify any differences from the development data in setting, eligibility criteria, outcome, and predictors. *
-
-There were no differences in the choice of predictors, outcome, inclusion 
-criteria, or clinical setting between the development and validation data 
-because both were mutually exclusive, randomly-assigned subgroups of patients 
-from the same sample.
 
 # Results
 
@@ -287,13 +289,44 @@ from the same sample.
 
 *[TRIPOD 13.b] Describe the characteristics of the participants (basic demographics, clinical features, available predictors), including the number of participants with missing data for predictors and outcome. *
 
+```{r table1header}
+    pander(rbind(c('.','','','','','','',''))
+           ,caption='(\\#tab:table1) Cohort demographics\n\n');
+```
+
+```{r tb1,results='asis'}
+.dat04keep <- c('sex_cd','race_cd','BLANK0',.outcomenames
+                ,'Frailty'
+                ,'Patient age (years)','Number of Visits');
+if(.outfmt == 'html'){
+  .tb1formula <- wrap(.dat04keep,'`') %>% paste0(collapse=' + ') %>%
+    paste('~',.,'|Dataset+grp') %>% formula;
+  tb1 <- bind_rows(dat04[,.SD,.SDcols=.dat04keep]
+                   ,dat04v[,.SD,.SDcols=.dat04keep]
+                   ,.id='Dataset') %>% 
+    mutate(frl=ifelse(Frailty>0.19,'Frail (eFI > 0.19)'
+                            ,'Non-Frail (eFI <= 0.19)')
+           ,Dataset=ifelse(Dataset==1,'Development','Validation')
+           ,grp=interaction(frl,Dataset)) %>%
+    table1(.tb1formula,data=.) %>%
+    rname(method='partial') %>% gsub('BLANK.','</br>',.) %>% 
+    gsub('Patient age','<br/>Patient age',.);
+  
+  print(tb1);
+  
+};
+```
+
+  
 *[TRIPOD 13.c, validation only] For validation, show a comparison with the development data of the distribution of important variables (demographics, predictors and outcome). *
 
 ## Model development 
 
-*[TRIPOD 14.a, development only] Specify the number of participants and outcome events in each analysis. *
+*[TRIPOD 14.a, development only] Specify the number of participants and outcome events in each analysis. *  
+*~~[TRIPOD 14.b, development only] If done, report the unadjusted association between each candidate predictor and outcome.~~*
 
-*[TRIPOD 14.b, development only] If done, report the unadjusted association between each candidate predictor and outcome.*
+NOTE: This is where the main data goes, include 
+
 
 ## Model specification
 
@@ -303,7 +336,9 @@ from the same sample.
 
 ## Model performance
 
-*[TRIPOD 16] Report performance measures (with CIs) for the prediction model.*
+*[TRIPOD 16] Report performance measures (with CIs) for the prediction model.*\  
+*~~[TRIPOD 17, validation only] If done, report the results from any model updating (i.e., model specification, model performance).~~*
+
 ```{r tb3}
 subset(tb3,Outcome %in% .outcomenames & Predictor == 'Frailty') %>% 
   mutate(Outcome = rnameshort(Outcome)
@@ -318,10 +353,31 @@ subset(tb3,Outcome %in% .outcomenames & Predictor == 'Frailty') %>%
 
 ```
 
+```{r coxgof}
+lapply(valresults[.outcomenames]
+       ,function(xx) tidy(xx$Frailty$coxgof,conf.int=T)[-1]) %>%
+  bind_rows(.id='outcome') %>% 
+  mutate(outcome=rnameshort(outcome)
+         , `Mismatch (CI)`=paste0(nb(estimate),' (',nb(conf.low),', '
+                                        ,nb(conf.high),')')
+         ,SE=nb(std.error),t=nb(statistic),P=nb(p.value)) %>% 
+  tibble::column_to_rownames(var='outcome') %>% 
+  select(c('Mismatch (CI)','SE','t','P')) %>% 
+  pander(caption='(\\#tab:coxgof) Goodness of fit and calibration.');
+```
 
-## Model-updating
+```{r lmdiscrim}
+lapply(valresults[.outcomenames]
+       ,function(xx) tidy(xx$Frailty$lmdiscrim,conf.int=T)[-1]) %>% 
+  bind_rows(.id='outcome') %>%
+  mutate(Outcome=rnameshort(ifelse(lag(outcome,1,'(Intercept)')==outcome
+                                   ,outcome,'(Intercept)'))
+         ,`Coefficient`=nb(estimate),SE=nb(std.error)
+         ,t=nb(statistic),P=nb(p.value)) %>% 
+  select('Outcome','Coefficient','SE','t') %>%
+  pander(row.names=F,caption='(\\#tab:lmdiscrim) Validation against developmental data.')
+```
 
-*[TRIPOD 17, validation only] If done, report the results from any model updating (i.e., model specification, model performance).*
 
 # Discussion
 
