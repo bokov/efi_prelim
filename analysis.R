@@ -194,7 +194,10 @@ summsurv00 <- function(fit
                                   ,'AIC'
                                   ,nevent='Events'
                                   ,n='Visits'
-                                  ,subjects='Patients')
+                                  ,subjects='Patients'
+                                  ,zph.chisq='χ² (ZPH)'
+                                  ,zph.df='DF (ZPH)'
+                                  ,zph.p ='P (ZPH)')
                        ,env=parent.frame()
                        # number at risk
                       ,subjects=nrow(unique(select(eval(fit$call$data,env=env)
@@ -206,7 +209,9 @@ summsurv00 <- function(fit
   searchrep <- cbind(names(columns),columns);
   searchrep[,1] <- ifelse(searchrep[,1] %in% c(NA,'')
                           ,searchrep[,2],searchrep[,1]);
-  out <- c(glance(fit),subjects=subjects);
+  out <- c(glance(fit),subjects=subjects
+           ,zph=tryCatch(cox.zph(fit)$table[1,]
+                         ,error=function(ee) c(chisq=NA,df=NA,p=NA)));
   out <- out[intersect(searchrep[,1],names(out))] %>%
     setNames(.,submulti(names(.),searchrep,'startsends')) %>%
     data.frame(check.names=FALSE);
@@ -515,6 +520,15 @@ dat04v <- dat03v[,lapply(.SD,head,1),by=patient_num,.SDcols=v(c_patdata)[1:5]] %
                                                  ,'Frail, > 0.2')))
                ,by=patient_num][,-1]);
 
+frailPlusAge <- lapply(fits,function(xx){
+  anova(xx$models$Frailty,update(xx$models$Frailty,.~.+age_at_visit_days)) %>%
+    tidy %>% `[`(2,)}) %>% bind_rows(.id='Outcome');
+# %>% mutate(Outcome=rnameshort(Outcome),p.value=nb(p.value,3)) %>% rename(Wald=statistic,DF=df,P=p.value) %>% pander(caption='Age comparisons')
+frailPlusAgeval <- lapply(fitsval,function(xx){
+  anova(xx$models$Frailty,update(xx$models$Frailty,.~.+age_at_visit_days)) %>%
+    tidy %>% `[`(2,)}) %>% bind_rows(.id='Outcome');
+
+
 #' ## Cohort table (development)
 panderOptions('knitr.auto.asis', TRUE);
 dat04 <- dat03[,lapply(.SD,head,1),by=patient_num,.SDcols=v(c_patdata)[1:5]] %>%
@@ -602,13 +616,19 @@ tb3 <- lapply(fits,function(xx) cbind(Predictor=rownames(xx$modelsummary)
                                       ,xx$modelsummary[,c('Concordance'
                                                           ,'SE Concordance'
                                                           ,'Log Likelihood'
-                                                          ,'AIC')])) %>%
+                                                          ,'AIC'
+                                                          ,'χ² (ZPH)'
+                                                          ,'DF (ZPH)'
+                                                          ,'P (ZPH)')])) %>%
   bind_rows(.id='Outcome');
 tb3v <- lapply(fitsval,function(xx) cbind(Predictor=rownames(xx$modelsummary)
-                                      ,xx$modelsummary[,c('Concordance'
-                                                          ,'SE Concordance'
-                                                          ,'Log Likelihood'
-                                                          ,'AIC')])) %>%
+                                          ,xx$modelsummary[,c('Concordance'
+                                                              ,'SE Concordance'
+                                                              ,'Log Likelihood'
+                                                              ,'AIC'
+                                                              ,'χ² (ZPH)'
+                                                              ,'DF (ZPH)'
+                                                              ,'P (ZPH)')])) %>%
   bind_rows(.id='Outcome');
 #' ### Development
 
