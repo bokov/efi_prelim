@@ -13,12 +13,12 @@ abstract: |
   performs well as a predictor of infections, non-operative trauma, cardiac 
   complications, and of coded events categorized as patient safety indicators 
   (PSI).
-
 documentclass: article
 description: 'Manuscript'
 clean: false
 bibliography: efi_paper.bib
 csl: harvard-cite-them-right.csl
+always_allow_html: true
 output:
   bookdown::html_document2:
     fig_caption: true
@@ -73,8 +73,8 @@ if(is.null(.outfmt)){
 message('.outfmt = ',.outfmt);
 
 .currentscript <- current_scriptname('efi_patientsafety.Rmd');
-.outcomenames <- c('vi_c_psi','vi_c_hospinfect','vi_c_hosptrauma'
-                   ,'vi_c_cardiac');
+.outcomenames <- c('vi_c_hospinfect','vi_c_hosptrauma'
+                   ,'vi_c_cardiac','vi_c_psi');
 snip_outcomes <- rname(.outcomenames);
 snip_todates <- dat03[,.(xx=max(start_date)),by=patient_num] %>%
   with(range(xx)) %>% paste0(collapse=' and ');
@@ -139,9 +139,10 @@ dates were within one year of these dates due to deidentification.
 
 ## Participants
 
-*[TRIPOD 5.a] Specify key elements of the study setting (e.g., primary care, secondary care, general population) including number and location of centres.*  
-*[TRIPOD 5.b] Describe eligibility criteria for participants. *  
-*[TRIPOD 5.c] Give details of treatments received, if relevant. *
+*[TRIPOD 5.a] OK Specify key elements of the study setting (e.g., primary care, secondary care, general population) including number and location of centres.*  
+*[TRIPOD 5.b] OK Describe eligibility criteria for participants. *  
+*[TRIPOD 5.c] OK Give details of treatments received, if relevant. *  
+*[TRIPOD 13.a] OK Describe the flow of participants through the study, including the number of participants with and without the outcome and, if applicable, a summary of the follow-up time. A diagram may be helpful. *  
 
 The patient-visits in the data are a representative sample of the mix of all 
 primary care, specialist, and inpatient encounters of UT Health San Antonio and 
@@ -170,11 +171,21 @@ Finally, the patients were split into development (
 `r subset(consort,node=='dev')$patients` patients, 
 `r subset(consort,node=='dev')$patdays` visit-days) and validation (
 `r subset(consort,node=='test')$patients` patients, 
-`r subset(consort,node=='test')$patdays` visit-days) subsets.
+`r subset(consort,node=='test')$patdays` visit-days) subsets. The incidence of 
+the outcomes is reported in the [Results] section, below.
 
-```{r consort,fig.cap='CONSORT Diagram'}
-grViz(consortgv);
+```{r consort,fig.cap=NULL}
+#grViz(consortgv);
+grViz(consortgv) %>% DiagrammeRsvg::export_svg() %>% charToRaw %>% rsvg::rsvg_png(file='foo.png');
+knitr::include_graphics('foo.png');
 ```
+```{r consortcap, fig.cap='CONSORT diagram.',fig.height=0.1}
+.oldmar <- par('mar'); par(mar=c(0,0,0,0));
+plot(0,type='n',axes=F,xlab=NA,ylab=NA,cex=0.01);
+par(mar=.oldmar);
+```
+
+
 This study was performed using only retrospective EHR data with no 
 treatment, intervention or any other interaction with patients. The exposure 
 groups were determined by patient eFI as will be discussed below.
@@ -230,7 +241,7 @@ our health system and then matching records were joined to the study sample.
 
 ## Missing data
 
-*[TRIPOD 9] Describe how missing data were handled (e.g., complete-case analysis, single imputation, multiple imputation) with details of any imputation method. *
+*[TRIPOD 9] Describe how missing data were handled (e.g., complete-case analysis, single imputation, multiple imputation) with details of any imputation method. *  
 
 Our missing data strategy approximates a complete-case analysis in 
 that we excluded patients with too few visits or missing eFI. No imputation was
@@ -285,9 +296,48 @@ considered frail while those below are considered non-frail or pre-frail.
 
 ## Participants
 
-*[TRIPOD 13.a] Describe the flow of participants through the study, including the number of participants with and without the outcome and, if applicable, a summary of the follow-up time. A diagram may be helpful. *
+*[TRIPOD 13.b] Describe the characteristics of the participants (basic demographics, clinical features, available predictors), including the number of participants with missing data for predictors and outcome. *  
+*[TRIPOD 13.c, validation only] For validation, show a comparison with the development data of the distribution of important variables (demographics, predictors and outcome). *  
+*[TRIPOD 14.a, development only] Specify the number of participants and outcome events in each analysis. *  
+*~~[TRIPOD 14.b, development only] If done, report the unadjusted association between each candidate predictor and outcome.~~*
 
-*[TRIPOD 13.b] Describe the characteristics of the participants (basic demographics, clinical features, available predictors), including the number of participants with missing data for predictors and outcome. *
+
+```{r tb1prep,results='hide'}
+.dat04keep <- c('sex_cd','race_cd','BLANK0',.outcomenames ,'BLANK1'
+                ,'Frailty'
+                ,'Patient age (years)');
+.tb1formula <- wrap(.dat04keep,'`') %>% paste0(collapse=' + ') %>%
+  paste('~',.,'|frl+Dataset') %>% formula;
+tb1 <- bind_rows(dat04[,.SD,.SDcols=.dat04keep]
+                   ,dat04v[,.SD,.SDcols=.dat04keep]
+                   ,.id='Dataset') %>%
+  mutate(frl=ifelse(Frailty>0.19,'Frail (eFI > 0.19)'
+                    ,'Non-Frail (eFI <= 0.19)')
+         ,Dataset=ifelse(Dataset==1,'Development','Validation')) %>%
+  mutate(across(everything(),~({
+    label(.)<-paste0('<b>',rname(cur_column()),'</b>'
+                     ,if(is.numeric(.)) ': Mean(SD)&nbsp;' else ': N(%)&nbsp;');
+    if(grepl('^BLANK',cur_column())) label(.) <- ' ';
+    .}))) %>%
+  table1(.tb1formula,data=.,render=proj_render,render.strat=proj_render_strat
+         ,overall='Total',digits=2);
+tb1df <- as.data.frame(tb1);
+
+```
+
+
+There were `r tb1df[3,6]` females and `r tb1df[4,6]` males in the development 
+data and `r tb1df[3,7]` females and `r tb1df[4,7]` in the validation data.
+In the development data `r tb1df[11,6]` of the patients were white and in the 
+validation data, `r tb1df[11,7]` were. As expected, the majority of patients had 
+an eFI below 0.19 those with a higher eFI were moderately older 
+(`r gsub(' .*$','',tb1df[21,2])` vs `r gsub(' .*$','',tb1df[21,4])` in the 
+development data and `r gsub(' .*$','',tb1df[21,3])` vs 
+`r gsub(' .*$','',tb1df[21,5])` in the validation data). Patients in the high
+eFI groups had a mean (SD) eFI of `r tb1df[20,2]` and `r tb1df[20,3]` in the 
+development and validation data respectively. Overall, the development and 
+validation cohorts were very similar to each other in both demographics and 
+outcome incidence.
 
 ```{r table1header}
     pander(rbind(c('.','','','','','','',''))
@@ -295,60 +345,156 @@ considered frail while those below are considered non-frail or pre-frail.
 ```
 
 ```{r tb1,results='asis'}
-.dat04keep <- c('sex_cd','race_cd','BLANK0',.outcomenames
-                ,'Frailty'
-                ,'Patient age (years)','Number of Visits');
 if(.outfmt == 'html'){
-  .tb1formula <- wrap(.dat04keep,'`') %>% paste0(collapse=' + ') %>%
-    paste('~',.,'|Dataset+grp') %>% formula;
-  tb1 <- bind_rows(dat04[,.SD,.SDcols=.dat04keep]
-                   ,dat04v[,.SD,.SDcols=.dat04keep]
-                   ,.id='Dataset') %>% 
-    mutate(frl=ifelse(Frailty>0.19,'Frail (eFI > 0.19)'
-                            ,'Non-Frail (eFI <= 0.19)')
-           ,Dataset=ifelse(Dataset==1,'Development','Validation')
-           ,grp=interaction(frl,Dataset)) %>%
-    table1(.tb1formula,data=.) %>%
-    rname(method='partial') %>% gsub('BLANK.','</br>',.) %>% 
-    gsub('Patient age','<br/>Patient age',.);
+  #rname(method='partial') %>% gsub('BLANK.','</br>',.) %>% 
+  #  gsub('Patient age','<br/>Patient age',.);
   
   print(tb1);
-  
 };
 ```
 
-  
-*[TRIPOD 13.c, validation only] For validation, show a comparison with the development data of the distribution of important variables (demographics, predictors and outcome). *
+***
 
 ## Model development 
 
-*[TRIPOD 14.a, development only] Specify the number of participants and outcome events in each analysis. *  
-*~~[TRIPOD 14.b, development only] If done, report the unadjusted association between each candidate predictor and outcome.~~*
+```{r kmpsi, fig.cap=NULL, fig.height=4, fig.width=12, message=FALSE,collapse='true',results='asis'}
+panderOptions('knitr.auto.asis', FALSE);
+.subfig <- 0;
+with(fitsval$vi_c_psi,{
+  message(dispname);
+  print(plot);
+  pander(cphunivar(models$Frailty,3,3),row.names=F);
+  risktable00(survfit(Surv(a_t0, a_t1, xx) ~ Frail,data,id = patient_num)) %>%
+    pander(row.names=F);
+  });
 
-NOTE: This is where the main data goes, include 
+```
+```{r kmpsicap, fig.cap='Any patient safety event.',fig.height=0.1}
+.oldmar <- par('mar'); par(mar=c(0,0,0,0));
+plot(0,type='n',axes=F,xlab=NA,ylab=NA,cex=0.01);
+par(mar=.oldmar);
+```
 
+Lorem ipsum regular text ...
+
+```{r kminf, fig.cap=NULL, fig.height=4, fig.width=12, message=FALSE,collapse='true',results='asis'}
+panderOptions('knitr.auto.asis', FALSE);
+.subfig <- 0;
+with(fitsval$vi_c_hospinfect,{
+  message(dispname);
+  print(plot);
+  pander(cphunivar(models$Frailty,3,3),row.names=F);
+  risktable00(survfit(Surv(a_t0, a_t1, xx) ~ Frail,data,id = patient_num)) %>%
+    pander(row.names=F);
+  });
+
+```
+```{r kminfcap, fig.cap='Hospital acquired infections.',fig.height=0.1}
+.oldmar <- par('mar'); par(mar=c(0,0,0,0));
+plot(0,type='n',axes=F,xlab=NA,ylab=NA,cex=0.01);
+par(mar=.oldmar);
+```
+
+Lorem ipsum regular text ...
+
+
+```{r kmtra, fig.cap=NULL, fig.height=4, fig.width=12, message=FALSE,collapse='true',results='asis'}
+panderOptions('knitr.auto.asis', FALSE);
+.subfig <- 0;
+with(fitsval$vi_c_hosptrauma,{
+  message(dispname);
+  print(plot);
+  pander(cphunivar(models$Frailty,3,3),row.names=F);
+  risktable00(survfit(Surv(a_t0, a_t1, xx) ~ Frail,data,id = patient_num)) %>%
+    pander(row.names=F);
+  });
+
+```
+```{r kmtracap, fig.cap='Non-operative trauma.',fig.height=0.1}
+.oldmar <- par('mar'); par(mar=c(0,0,0,0));
+plot(0,type='n',axes=F,xlab=NA,ylab=NA,cex=0.01);
+par(mar=.oldmar);
+```
+
+Lorem ipsum regular text ...
+
+
+```{r kmcard, fig.cap=NULL, message=FALSE,collapse='true',results='asis'}
+panderOptions('knitr.auto.asis', FALSE);
+.subfig <- 0;
+with(fitsval$vi_c_cardiac,{
+  message(dispname);
+  print(plot);
+  pander(cphunivar(models$Frailty,3,3),row.names=F);
+  risktable00(survfit(Surv(a_t0, a_t1, xx) ~ Frail,data,id = patient_num)) %>%
+    pander(row.names=F);
+  });
+
+```
+```{r kmcardcap, fig.cap='Cardiac complications.',fig.height=0.1}
+.oldmar <- par('mar'); par(mar=c(0,0,0,0));
+plot(0,type='n',axes=F,xlab=NA,ylab=NA,cex=0.01);
+par(mar=.oldmar);
+```
+
+Lorem ipsum regular text ...
 
 ## Model specification
 
-*[TRIPOD 15.a, development only] Present the full prediction model to allow predictions for individuals (i.e., all regression coefficients, and model intercept or baseline survival at a given time point).*
+*[TRIPOD 15.a, development only] Present the full prediction model to allow predictions for individuals (i.e., all regression coefficients, and model intercept or baseline survival at a given time point).*  
+
+We used R [@rteam21] and the Survival R package [@therneau00] for all analysis. 
+We fit very simple univariate Cox models that in R syntax have the following 
+specification:
+
+::: {.example #modelspec}
+`coxph( Surv(t0,t1,xx) ~ I(10*efi), data=DATA)`
+:::
+
+Here `t0` and `t1` are the start and stop of an observation period (i.e. the 
+time elapsed from one encounter and the next). These are integers, representing
+the number of days relative to each patient's index visit. The `xx` is an 
+indicator variable for the outcome with a value of `TRUE` if that outcome 
+occurred during the observation period and `FALSE` if it did not. The predictor
+eFI is represented by `efi`, a continuous variable with a range of 0 to 1. The 
+full expression, `I(10*efi)` means we scaled `efi` by 10 so that the 
+coefficient could be interpreted as the change in hazard ratio per 0.1 change in 
+eFI. All model coefficients are shown in Figures 
+\@ref(fig:kmpsicap)-\@ref(fig:kmcardcap).
 
 *[TRIPOD 15.b, development only] Explain how to the use the prediction model.*
 
+The statistical analysis we used to validate eFI as a predictor of 
+infections, trauma, and cardiac complications R [@rteam21] is not 
+a preqrequisite for _deploying_ eFI in the clinic. Cox models can be useful 
+initially to find optimal thresholds tuned to specific outcomes instead of 
+relying on the 0.19 cutoff but here we showed that this cutoff does an 
+good job of partitioning patients into risk groups for very different types of 
+patient safety events. Nor is eFI limited to any specific EHR system. As long as 
+it is possible to extract a table of dates, patient IDs, ICD-10 codes, and LOINC 
+codes for labs with accompanying value-flags, such a result-set can be converted 
+into eFI values at patient-visit granularity and used as a predictor. We 
+publicly shared code [@bokov20] to use as a starting point for researchers or 
+enterprise analytics teams to deploy their own local eFI.
+
 ## Model performance
 
-*[TRIPOD 16] Report performance measures (with CIs) for the prediction model.*\  
+*[TRIPOD 16] Report performance measures (with CIs) for the prediction model.*  
 *~~[TRIPOD 17, validation only] If done, report the results from any model updating (i.e., model specification, model performance).~~*
 
 ```{r tb3}
-subset(tb3,Outcome %in% .outcomenames & Predictor == 'Frailty') %>% 
+panderOptions('knitr.auto.asis', TRUE);
+subset(tb3v,Outcome %in% .outcomenames & Predictor == 'Frailty') %>% 
   mutate(Outcome = rnameshort(Outcome)
-         ,`Concordance (CI)`=paste0(round(Concordance,3)
+         ,`Concordance (95% CI)`=paste0(nb(Concordance,2)
                                     ,' ('
-                                    ,round(Concordance-1.96*`SE Concordance`,3)
+                                    ,nb(Concordance-1.96*`SE Concordance`,2)
                                     ,', '
-                                    ,round(Concordance+1.96*`SE Concordance`,3)
-                                    ,')')) %>% 
-  select('Outcome','Concordance (CI)','Log Likelihood') %>% 
+                                    ,nb(Concordance+1.96*`SE Concordance`,2)
+                                    ,')')
+         ,`PH: χ^2^~df=1~`=nb(`χ² (ZPH)`,2),`PH: P`=nb(`P (ZPH)`,3)
+         ) %>% 
+  select('Outcome','Concordance (95% CI)','PH: χ^2^~df=1~','PH: P') %>% 
   pander(caption='(\\#tab:tb3) Performance of EFI models',row.names=F);
 
 ```
@@ -358,9 +504,9 @@ lapply(valresults[.outcomenames]
        ,function(xx) tidy(xx$Frailty$coxgof,conf.int=T)[-1]) %>%
   bind_rows(.id='outcome') %>% 
   mutate(outcome=rnameshort(outcome)
-         , `Mismatch (CI)`=paste0(nb(estimate),' (',nb(conf.low),', '
-                                        ,nb(conf.high),')')
-         ,SE=nb(std.error),t=nb(statistic),P=nb(p.value)) %>% 
+         , `Mismatch (CI)`=paste0(nb(estimate,3),' (',nb(conf.low,3),', '
+                                        ,nb(conf.high,3),')')
+         ,SE=nb(std.error,3),t=nb(statistic,3),P=nb(p.value)) %>% 
   tibble::column_to_rownames(var='outcome') %>% 
   select(c('Mismatch (CI)','SE','t','P')) %>% 
   pander(caption='(\\#tab:coxgof) Goodness of fit and calibration.');
@@ -372,8 +518,8 @@ lapply(valresults[.outcomenames]
   bind_rows(.id='outcome') %>%
   mutate(Outcome=rnameshort(ifelse(lag(outcome,1,'(Intercept)')==outcome
                                    ,outcome,'(Intercept)'))
-         ,`Coefficient`=nb(estimate),SE=nb(std.error)
-         ,t=nb(statistic),P=nb(p.value)) %>% 
+         ,`Coefficient`=nb(estimate,3),SE=nb(std.error,2)
+         ,t=nb(statistic,2),P=nb(p.value,2)) %>% 
   select('Outcome','Coefficient','SE','t') %>%
   pander(row.names=F,caption='(\\#tab:lmdiscrim) Validation against developmental data.')
 ```
@@ -383,13 +529,13 @@ lapply(valresults[.outcomenames]
 
 ## Limitations
 
-*[TRIPOD 18] Discuss any limitations of the study (such as nonrepresentative sample, few events per predictor, missing data). *
+*[TRIPOD 18] Discuss any limitations of the study (such as nonrepresentative sample, few events per predictor, missing data). *  
 
 ## Interpretation
 
-*[TRIPOD 19.a, validation only] For validation, discuss the results with reference to performance in the development data, and any other validation data. *
+*[TRIPOD 19.a, validation only] For validation, discuss the results with reference to performance in the development data, and any other validation data. *  
 
-*[TRIPOD 19.b] Give an overall interpretation of the results, considering objectives, limitations, results from similar studies, and other relevant evidence. *
+*[TRIPOD 19.b] Give an overall interpretation of the results, considering objectives, limitations, results from similar studies, and other relevant evidence. *  
 
 ## Implications
 
@@ -403,7 +549,15 @@ lapply(valresults[.outcomenames]
 
 # Acknowledgments
 
-*[TRIPOD 22] Give the source of funding and the role of the funders for the present study. *
+*[TRIPOD 22] Give the source of funding and the role of the funders for the present study. *  
+
+`r note("This work was supported by NIH/NCATS UL1TR001120 and UL1TR002645 (AFB,
+KRS), the Long School of Medicine KL2 Award (AFB), the Claude D. Pepper Older
+Americans Independence Center P30 AG044271 (SER),  and the Berneice Castella
+Distinguished Professorship in Aging Research in Nursing  (KRS)."
+,"Did I get everybody's correctly?",date='2020-12-04T14:20')` The funders of 
+this study had no influence on the design, data collection, analysis, 
+interpretation, or manuscript preparation and submission.
 
 
 # References
