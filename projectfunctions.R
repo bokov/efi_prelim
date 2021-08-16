@@ -151,3 +151,94 @@ nb <- function(xx,digits=4
          ,gsub(rxp,'\\1\\2'
                ,knitr:::format_sci(xx,'md')))};
 
+#' The standard Cox PH table format that will be used for this publication
+cphunivar <- function(fit,nhyp=3,digitst=3)  tidy(fit,conf.int=T) %>%
+  select(-term) %>% mutate(`Hazard Ratio`=exp(estimate),P=nhyp*p.value) %>%
+  sapply(nb,digits=3) %>% rbind() %>% data.frame(check.names = F) %>%
+  mutate(`β (95% CI)`=paste0(estimate,' (',conf.low,', ',conf.high,')')
+         ,SE=std.error,Wald=statistic,) %>%
+  select('Hazard Ratio','β (95% CI)','SE','Wald','P');
+
+risktable00 <- function(surv,times=c(0,30,60,90,365,365*3),digits=2,...)
+  summary(surv,times=times,censored=T,...) %>%
+  with(data.frame(strata,`t (Days)`=time,`At Risk`=n.risk,Events=n.event
+                  ,Censored=n.censor,`S~0~(t)`=surv,SE=std.err
+                  ,`Lower CI`=lower,`Upper CI`=upper,check.names = F) %>%
+         mutate(Frail=gsub('^.*=',''
+                           ,ifelse(`t (Days)`==min(`t (Days)`)
+                                   ,as.character(strata),''))) %>%
+         mutate_all(nb,digits=digits) ) %>%
+  select('Frail','t (Days)','At Risk','Events','Censored','S~0~(t)','SE'
+         ,'Lower CI','Upper CI');
+
+proj_render_cont <- function(xx,...){
+  with(stats.apply.rounding(stats.default(xx,...),...)
+       # ,c('',`Median [IQR]`=sprintf('%s [%s - %s]',nb(as.numeric(MEDIAN))
+       #                              ,nb(as.numeric(Q2))
+       #                              ,nb(as.numeric(Q3))))
+       ,c(`Mean (SD)`=sprintf('%s (%s)',nb(as.numeric(MEAN)),nb(as.numeric(SD))))
+
+       # ,c(`Median [IQR]`=sprintf('%s <br/>[%s - %s]',nb(as.numeric(MEDIAN))
+       #                              ,nb(as.numeric(Q2))
+       #                              ,nb(as.numeric(Q3))))
+  )};
+
+proj_render_tf <- function(xx,...,digits=3,na.is.category=F){
+  sapply(stats.apply.rounding(stats.default(xx, ...), ...)
+         , function(yy) {with(yy,sprintf("%s (%s%%)"
+                                         , nb(as.numeric(FREQ)
+                                              ,digits=digits)
+                                         ,if (na.is.category) PCT else {
+                                           PCTnoNA
+                                         }))})['Yes']
+};
+
+
+proj_render_catblank <- function(xx,...){
+  c("", sapply(stats.default(xx, ...),function(yy,...) ''))
+};
+
+proj_render_cat <- function(xx,...,digits=3,na.is.category=F){
+  c("", sapply(stats.apply.rounding(stats.default(xx, ...), ...)
+               , function(yy) {with(yy,sprintf("%s (%s%%)"
+                                              , nb(as.numeric(FREQ)
+                                                   ,digits=digits)
+                                              ,if (na.is.category) PCT else {
+                                                PCTnoNA
+                                                }))})) %>%
+    setNames(.,paste0('&nbsp;&nbsp;',names(.)))
+  };
+
+proj_render <- function(xx,name,...){
+  if(grepl('^BLANK',name)) return(c(' ',sapply(stats.default(xx,...)
+                                              ,function(yy) '&nbsp;')));
+  #if(name=='vi_c_psi') browser();
+  if(is.logical(xx)) return(proj_render_tf(xx,...));
+  if(!is.numeric(xx)) return(proj_render_cat(xx,...));
+  proj_render_cont(xx,...);
+}
+
+proj_render_strat <- function (label, n, transpose = F){
+  sprintf(ifelse(is.na(n), "<span class='stratlabel'>%s</span>",
+                 "<span class='stratlabel'>%s<br><span class='stratn'>(N=%s)</span></span>"),
+          label, nb(as.numeric(n)))
+}
+
+# expr.from.lm <- function (fit) {
+#   # the terms we're interested in
+#   con <- names(coef(fit))
+#   # current expression (built from the inside out)
+#   expr <- quote(epsilon)
+#   # prepend expressions, working from the last symbol backwards
+#   for (i in length(con):1) {
+#     if (con[[i]] == '(Intercept)')
+#       expr <- bquote(beta[.(i-1)] + .(expr))
+#     else
+#       expr <- bquote(beta[.(i-1)] * .(as.symbol(con[[i]])) + .(expr))
+#   }
+#   # add in response
+#   expr <- bquote(.(terms(fit)[[2]]) == .(expr))
+#   # convert to expression (for easy plotting)
+#   as.expression(expr)
+# }
+#
