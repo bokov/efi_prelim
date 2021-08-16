@@ -184,6 +184,8 @@ dat01$race_cd <- forcats::fct_collapse(dat01$race_cd,White='white',Black='black'
                                                 ,'unknown/othe','more than on')
                                        ,Unknown=c('@','unknown','i choose not')
                                        ,Asian='asian') %>% forcats::fct_infreq();
+#' Relabel `sex_cd`
+dat01$sex_cd <- factor(dat01$sex_cd,levels = c('f','m','u'),labels='Female','Male','Unknown');
 
 #' Discharge to intermediate care or skilled nursin (for patients originally
 #' admitted from home)
