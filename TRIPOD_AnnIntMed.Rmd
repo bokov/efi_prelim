@@ -37,7 +37,7 @@ output:
 ```{r load_deps, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
 .projpackages <- c('GGally','pander','dplyr','ggplot2','data.table'
                    ,'survival','broom','forcats','table1','english','bookdown'
-                   ,'DiagrammeR','DiagrammeRsvg','rsvg');
+                   ,'DiagrammeR','DiagrammeRsvg','rsvg','survminer');
 .deps <- c( 'analysis.R' );
 .debug <- 0;
 message(paste0('\n\n working dir: ',getwd(),'\n\n'));
@@ -146,7 +146,7 @@ dates were within one year of these dates due to deidentification.
 
 The patient-visits in the data are a representative sample of the mix of all 
 primary care, specialist, and inpatient encounters of UT Health San Antonio and 
-the University Health System. As summarized in Figure \@ref(fig:consort), 
+the University Health System. As summarized in Figure \@ref(fig:consortcap), 
 encounters during which the patient was below the age of 18 were excluded and
 patients who had fewer than three such encounters were excluded. To avoid the
 bias that would accompany always using the first valid visit as a starting 
@@ -205,8 +205,6 @@ non-frail groups should be detectable with a power well over 0.80.
 
 ## Outcomes and Predictors
 *[TRIPOD 6.a] Clearly define the outcome that is predicted by the prediction model, including how and when assessed. *  
-*[TRIPOD 6.b] Report any actions to blind assessment of the outcome to be predicted. *
-*[TRIPOD 7.b] Report any actions to blind assessment of predictors for the outcome and other predictors. *
 
 We drew on the expertise of the clinicians on our team (CT and SE) to select 
 outcomes that are meaningful, relevant, and useful in guiding clinical care 
@@ -214,12 +212,15 @@ planning. These outcomes were: `r pander(wrap(snip_outcomes,'*'))`. To assess
 these outcomes in EHR data we used ICD-10 code mappings developed by 
 @southern17. 
 
-Insofar that any other decisions about processing and statistical analysis 
+`r note('Insofar that any other decisions about processing and statistical analysis 
 required data, we used only the development data and were blinded to the 
 validation data. After the analysis scripts were finalized for publication, 
 they were re-run on the validation data and used to generate all the results 
 reported here. The development version of each table and figure is available in the 
 supplemental materials. 
+','*[TRIPOD 6.b] Report any actions to blind assessment of the outcome to be predicted. *  
+*[TRIPOD 7.b] Report any actions to blind assessment of predictors for the outcome and other predictors. *  
+',author="TRIPOD")`
 
 *[TRIPOD 7.a] Clearly define all predictors used in developing or validating the multivariable prediction model, including how and when they were measured.*
 
@@ -246,8 +247,7 @@ our health system and then matching records were joined to the study sample.
 Our missing data strategy approximates a complete-case analysis in 
 that we excluded patients with too few visits or missing eFI. No imputation was
 done on the remaining records; absence of ICD10 codes for the respective 
-outcomes was interpreted as non-occurrence. This is in line with how discrete
-codes are used in the EHR.
+outcomes was interpreted as non-occurrence.
 
 ## Statistical analysis methods
 
@@ -357,12 +357,16 @@ if(.outfmt == 'html'){
 
 ## Model development 
 
-```{r kmpsi, fig.cap=NULL, fig.height=4, fig.width=12, message=FALSE,collapse='true',results='asis'}
+```{r kmpsi, fig.cap=NULL, message=FALSE,collapse='true',results='asis'}
 panderOptions('knitr.auto.asis', FALSE);
-.subfig <- 0;
 with(fitsval$vi_c_psi,{
   message(dispname);
-  print(plot);
+  plotsurv01(survfit(Surv(a_t0,a_t1,xx)~Frail,id=patient_num,data=data)
+             ,survfit(Surv(a_t0,a_t1,xx)~Frail,id=patient_num
+                      ,data=fits$vi_c_psi$data)
+             ,labs=c('Non-Frail','Frail',
+                     '\nNon-Frail\n(development)','\nFrail\n(development)')
+             ,title=dispname) %>% print; 
   pander(cphunivar(models$Frailty,3,3),row.names=F);
   risktable00(survfit(Surv(a_t0, a_t1, xx) ~ Frail,data,id = patient_num)) %>%
     pander(row.names=F);
@@ -377,17 +381,21 @@ par(mar=.oldmar);
 
 Lorem ipsum regular text ...
 
-```{r kminf, fig.cap=NULL, fig.height=4, fig.width=12, message=FALSE,collapse='true',results='asis'}
+```{r kminf, fig.cap=NULL, message=FALSE,collapse='true',results='asis'}
 panderOptions('knitr.auto.asis', FALSE);
 .subfig <- 0;
 with(fitsval$vi_c_hospinfect,{
   message(dispname);
-  print(plot);
+  plotsurv01(survfit(Surv(a_t0,a_t1,xx)~Frail,id=patient_num,data=data)
+             ,survfit(Surv(a_t0,a_t1,xx)~Frail,id=patient_num
+                      ,data=fits$vi_c_hospinfect$data)
+             ,labs=c('Non-Frail','Frail',
+                     '\nNon-Frail\n(development)','\nFrail\n(development)')
+             ,title=dispname) %>% print; 
   pander(cphunivar(models$Frailty,3,3),row.names=F);
   risktable00(survfit(Surv(a_t0, a_t1, xx) ~ Frail,data,id = patient_num)) %>%
     pander(row.names=F);
   });
-
 ```
 ```{r kminfcap, fig.cap='Hospital acquired infections.',fig.height=0.1}
 .oldmar <- par('mar'); par(mar=c(0,0,0,0));
@@ -398,17 +406,20 @@ par(mar=.oldmar);
 Lorem ipsum regular text ...
 
 
-```{r kmtra, fig.cap=NULL, fig.height=4, fig.width=12, message=FALSE,collapse='true',results='asis'}
+```{r kmtra, fig.cap=NULL, message=FALSE,collapse='true',results='asis'}
 panderOptions('knitr.auto.asis', FALSE);
-.subfig <- 0;
 with(fitsval$vi_c_hosptrauma,{
   message(dispname);
-  print(plot);
+  plotsurv01(survfit(Surv(a_t0,a_t1,xx)~Frail,id=patient_num,data=data)
+             ,survfit(Surv(a_t0,a_t1,xx)~Frail,id=patient_num
+                      ,data=fits$vi_c_hosptrauma$data)
+             ,labs=c('Non-Frail','Frail',
+                     '\nNon-Frail\n(development)','\nFrail\n(development)')
+             ,title=dispname) %>% print; 
   pander(cphunivar(models$Frailty,3,3),row.names=F);
   risktable00(survfit(Surv(a_t0, a_t1, xx) ~ Frail,data,id = patient_num)) %>%
     pander(row.names=F);
   });
-
 ```
 ```{r kmtracap, fig.cap='Non-operative trauma.',fig.height=0.1}
 .oldmar <- par('mar'); par(mar=c(0,0,0,0));
@@ -424,12 +435,16 @@ panderOptions('knitr.auto.asis', FALSE);
 .subfig <- 0;
 with(fitsval$vi_c_cardiac,{
   message(dispname);
-  print(plot);
+  plotsurv01(survfit(Surv(a_t0,a_t1,xx)~Frail,id=patient_num,data=data)
+             ,survfit(Surv(a_t0,a_t1,xx)~Frail,id=patient_num
+                      ,data=fits$vi_c_cardiac$data)
+             ,labs=c('Non-Frail','Frail',
+                     '\nNon-Frail\n(development)','\nFrail\n(development)')
+             ,title=dispname) %>% print; 
   pander(cphunivar(models$Frailty,3,3),row.names=F);
   risktable00(survfit(Surv(a_t0, a_t1, xx) ~ Frail,data,id = patient_num)) %>%
     pander(row.names=F);
   });
-
 ```
 ```{r kmcardcap, fig.cap='Cardiac complications.',fig.height=0.1}
 .oldmar <- par('mar'); par(mar=c(0,0,0,0));
@@ -516,12 +531,13 @@ lapply(valresults[.outcomenames]
 lapply(valresults[.outcomenames]
        ,function(xx) tidy(xx$Frailty$lmdiscrim,conf.int=T)[-1]) %>% 
   bind_rows(.id='outcome') %>%
-  mutate(Outcome=rnameshort(ifelse(lag(outcome,1,'(Intercept)')==outcome
+  mutate(Outcome=paste0(rnameshort(ifelse(lag(outcome,1,'(Intercept)')==outcome
                                    ,outcome,'(Intercept)'))
-         ,`Coefficient`=nb(estimate,3),SE=nb(std.error,2)
+                        ,ifelse(lag(outcome,1,'(Intercept)')==outcome,'\\\n  \\\n  ',''))
+         ,Coefficient=nb(estimate,3),SE=nb(std.error,2)
          ,t=nb(statistic,2),P=nb(p.value,2)) %>% 
   select('Outcome','Coefficient','SE','t') %>%
-  pander(row.names=F,caption='(\\#tab:lmdiscrim) Validation against developmental data.')
+  pander(row.names=F,caption='(\\#tab:lmdiscrim) Validation against developmental data.',keep.line.breaks=T)
 ```
 
 
@@ -549,15 +565,15 @@ lapply(valresults[.outcomenames]
 
 # Acknowledgments
 
-*[TRIPOD 22] Give the source of funding and the role of the funders for the present study. *  
-
 `r note("This work was supported by NIH/NCATS UL1TR001120 and UL1TR002645 (AFB,
 KRS), the Long School of Medicine KL2 Award (AFB), the Claude D. Pepper Older
 Americans Independence Center P30 AG044271 (SER),  and the Berneice Castella
 Distinguished Professorship in Aging Research in Nursing  (KRS)."
-,"Did I get everybody's correctly?",date='2020-12-04T14:20')` The funders of 
-this study had no influence on the design, data collection, analysis, 
-interpretation, or manuscript preparation and submission.
+,"Did I get everybody's correctly?",date='2020-12-04T14:20')` `r note("The 
+funders of this study had no influence on the design, data collection, analysis, 
+interpretation, or manuscript preparation and submission.",
+"*[TRIPOD 22] Give the source of funding and the role of the funders for the present study. *  ",
+'TRIPOD')`
 
 
 # References
