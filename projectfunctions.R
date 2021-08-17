@@ -143,7 +143,7 @@ consortstep <- function(dat,node='',patient_num='patient_num'
 
 #' Clean up numbers.
 nb <- function(xx,digits=4
-                      ,rxp=gsub('#',digits,'^([0-9]+\\.[0-9]{0,#})[0-9]+(.*)$')){
+                      ,rxp=gsub('#',digits,'^(-*[0-9]+\\.[0-9]{0,#})[0-9]+(.*)$')){
   #message('nb input: ',xx);
   #message('nb rxp: ',rxp);
   if(!is.numeric(xx)) return(xx);
@@ -242,3 +242,73 @@ proj_render_strat <- function (label, n, transpose = F){
 #   as.expression(expr)
 # }
 #
+plotsurv01 <- function(srv1,srv2
+                       ,labs=c('Devel1')
+                       ,conf.int=T
+                       ,xlim=c(0,365.25*3)
+                       # hard to distinguish training and validation when censor marks present, so turning off
+                       ,censor.size=0
+                       ,break.time.by=365.25/2 # 6 months
+                       #,cumevents=F, risk.table = F
+                       ,xscale='d_m' # days to months
+                       ,surv.scale='percent'
+                       ,ylab='% Patients event-free'
+                       ,xlab='Months since randomly-selected index visit'
+                       ,palette=c('#00BFC4','#F8766D','#00BFC5','#F8766E')
+                       ,linetype=c(1,1,2,2)
+                       ,linesize=c(1,1,0.5,0.5)
+                       ,alpha=c(0.2,0.2,0,0)
+                       ,fontsize=theme_get()$text$size
+                       ,font.family=theme_get()$text$family
+                       ,dat1=eval(srv1$call$data),dat2=eval(srv2$call$data)
+                       ,legend='right'
+                       ,ptheme = theme(legend.key.width = unit(1,'cm'))
+                       ,...){
+  nstrata <- length(stratanames<-names(c(srv1=srv1$strata,srv2=srv2$strata)));
+  if(missing(labs)){
+    labs <- stratanames;
+    warning('No `labs` argument specified defaulting to the following labels:'
+            ,paste0(stratanames,collapse=', '))
+  } else if(length(labs) != nstrata){
+    length(labs) <- nstrata; labs <- coalesce(labs,stratanames);
+    warning('`labs` had wrong length. Changed to:'
+            ,paste0(labs,collapse=', '))};
+  if(length(palette) != nstrata){
+    length(palette) <- nstrata; palette <- coalesce(palette,'#888888');
+    warning('`palette` had wrong length. Changed to:'
+            ,paste0(palette,collapse=', '))};
+  # linetype, linesize, alpha
+  if(length(linetype)!=nstrata){
+    length(linetype) <- nstrata; linetype <- coalesce(linetype,1)
+    warning('`linetype` had wrong length. Changed to:'
+            ,paste0(linetype,collapse=', '))};
+  if(length(linesize)!=nstrata){
+    length(linesize) <- nstrata; linesize <- coalesce(linesize,1)
+    warning('`linesize` had wrong length. Changed to:'
+            ,paste0(linesize,collapse=', '))};
+  if(length(alpha)!=nstrata){
+    length(alpha) <- nstrata; alpha <- coalesce(alpha,1)
+    warning('`alpha` had wrong length. Changed to:'
+            ,paste0(alpha,collapse=', '))};
+  out<-ggsurvplot_combine(list(srv1,srv2),data=list(dat1,dat2)
+    # plot conf-ints separately, in order to suppress training ones to make the plots less busy
+    ,conf.int=F,xlim=xlim,censor.size=censor.size,break.time.by=break.time.by
+    ,xscale=xscale,ylab=ylab,xlab=xlab,palette=palette,linetype=linetype
+    ,size='strata',fontsize=fontsize,font.family=font.family
+    ,legend=legend,legend.labs=c(labs),surv.scale=surv.scale,...
+    );
+  # cannot add layers directly to ggsurvplot but luckily it has a valid ggplot
+  # object inside it. So we extract that object, add customized confidence
+  # intervals, and put it back where we found it.
+  outplot <- out$plot + scale_size_manual(values=linesize);
+  if(conf.int){
+    outplot <- outplot + geom_ribbon(aes(ymin=lower,ymax=upper
+                                         ,fill=strata,alpha=strata)) +
+      scale_alpha_manual(values=alpha);
+    };
+  outplot <- outplot + labs(color="",linetype="",alpha="",fill="", size="") +
+    ptheme;
+  out$plot <- outplot;
+  out;
+};
+
