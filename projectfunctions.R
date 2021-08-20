@@ -118,6 +118,19 @@ note <- function(target='TARGET',comment='COMMENT',author='Bokov, Alex F'
   fs(target,class=class,tooltip=comment,template=tpl,...);
 }
 
+#' Wrapper for note, specifically for highlighting text that needs to be
+#' reviewed after the real validation data is run.
+valnote <- function(text) note(text
+                             ,comment='Review after running validation data'
+                             ,id=runif(1)
+                             ,author='VALIDATION');
+
+trinote <- function(target,comment) note(target,comment=comment
+                                         ,id=runif(1)
+                                         ,author='TRIPOD');
+
+
+
 # # The 'table' argument must have the following columns: 'estimate','outcome',
 # # and 'Outcome'
 resultsfold00 <- function(table){
@@ -162,13 +175,13 @@ cphunivar <- function(fit,nhyp=3,digitst=3)  tidy(fit,conf.int=T) %>%
 risktable00 <- function(surv,times=c(0,30,60,90,365,365*3),digits=2,...)
   summary(surv,times=times,censored=T,...) %>%
   with(data.frame(strata,`t (Days)`=time,`At Risk`=n.risk,Events=n.event
-                  ,Censored=n.censor,`S~0~(t)`=surv,SE=std.err
+                  ,Censored=n.censor,`S(t)`=surv,SE=std.err
                   ,`Lower CI`=lower,`Upper CI`=upper,check.names = F) %>%
          mutate(Frail=gsub('^.*=',''
                            ,ifelse(`t (Days)`==min(`t (Days)`)
                                    ,as.character(strata),''))) %>%
          mutate_all(nb,digits=digits) ) %>%
-  select('Frail','t (Days)','At Risk','Events','Censored','S~0~(t)','SE'
+  select('Frail','t (Days)','At Risk','Events','Censored','S(t)','SE'
          ,'Lower CI','Upper CI');
 
 proj_render_cont <- function(xx,...){
@@ -243,7 +256,7 @@ proj_render_strat <- function (label, n, transpose = F){
 # }
 #
 plotsurv01 <- function(srv1,srv2
-                       ,labs=c('Devel1')
+                       ,labs=NA
                        ,conf.int=T
                        ,xlim=c(0,365.25*3)
                        # hard to distinguish training and validation when censor marks present, so turning off
@@ -264,7 +277,10 @@ plotsurv01 <- function(srv1,srv2
                        ,legend='right'
                        ,ptheme = theme(legend.key.width = unit(1,'cm'))
                        ,...){
-  nstrata <- length(stratanames<-names(c(srv1=srv1$strata,srv2=srv2$strata)));
+  compare <- !missing(srv2);
+  nstrata <- length(stratanames<- if(compare) {
+    names(c(srv1=srv1$strata,srv2=srv2$strata))
+    } else names(srv1$strata));
   if(missing(labs)){
     labs <- stratanames;
     warning('No `labs` argument specified defaulting to the following labels:'
@@ -290,6 +306,15 @@ plotsurv01 <- function(srv1,srv2
     length(alpha) <- nstrata; alpha <- coalesce(alpha,1)
     warning('`alpha` had wrong length. Changed to:'
             ,paste0(alpha,collapse=', '))};
+  if(!compare) return(ggsurvplot(srv1,data=dat1,conf.int=T,xlim=xlim
+                                 ,censor.size=censor.size
+                                 ,break.time.by=break.time.by
+                                 ,xscale=xscale,ylab=ylab,xlab=xlab
+                                 ,palette=palette,linetype=linetype
+                                 ,fontsize=fontsize,font.family=font.family
+                                 ,legend=legend,legend.labs=c(labs)
+                                 ,surv.scale=surv.scale,...));
+
   out<-ggsurvplot_combine(list(srv1,srv2),data=list(dat1,dat2)
     # plot conf-ints separately, in order to suppress training ones to make the plots less busy
     ,conf.int=F,xlim=xlim,censor.size=censor.size,break.time.by=break.time.by
