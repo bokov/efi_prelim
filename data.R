@@ -58,6 +58,7 @@ consort <- rbind(consort
                  ,consortstep(dat01,'adultvis'
                               ,label='At least three visits after the age of 18'
                               ,previous=tail(consort$node,1)));
+# . z_ixvis ----
 dat01 <- dat01[
     # creating a randomly selected index visit for each patient
     ,z_ixvis:=sample(age_at_visit_days[-c(1,.N)],1),by=patient_num][
@@ -267,6 +268,7 @@ dat02 <- fread(inputdata['dat02'])[,START_DATE := as.Date(START_DATE)] %>%
 #' `a_efi`)
 dat01[dat02,on = c('patient_num','start_date'),a_efi := i.nval_num];
 #' Delete the rows prior to each patient's `z_ixvis` randomly chosen index visit
+# . pre-z_ixvis data dropped here ----
 dat01 <- dat01[a_t0>=0 & !is.na(a_efi),][,if(.N>1) .SD,by=patient_num];
 consort <- rbind(consort,consortstep(dat01,'postidxefivisgt1'
                                      ,label='At least two visits with non-missing eFI after randomly selected index visit'
@@ -277,6 +279,7 @@ consort <- rbind(consort,consortstep(dat01,'postidxefivisgt1'
 #                                               ,a_efi,right=T,nomatch=0)
 #       ,by=patient_num];
 #
+# . trailing visits ----
 dat01[,z_trailing:=seq_len(.N) > max(Position(function(xx) xx>0
                                               ,a_efi,right=T,nomatch=0)
                                      ,Position(function(xx) xx,a_anythingtf
@@ -287,6 +290,7 @@ dat01 <- subset(dat01,patient_num %in% efi_pats & !z_trailing);
 consort <- rbind(consort,consortstep(dat01,'haveefi'
                                      ,label='At least one visit where eFI was greater than 0'
                                      ,previous=tail(consort$node,1)));
+# WHERE z_ixvis SHOULD BE SET AND THEN FILTERED UPON ----
 
 # make binned variables ----
 #' Maked binned versions of certain variables
