@@ -19,18 +19,18 @@ bibliography: efi_paper.bib
 csl: harvard-cite-them-right.csl
 always_allow_html: true
 output:
-  bookdown::html_document2:
-    fig_caption: true
-    self_contained: true
-    number_sections: false
-    keep_md: true
-    clean: false
   bookdown::word_document2:
     reference_docx: template_AnnIntMed_native.docx
     fig_caption: true
     self_contained: true
     keep_md: true
     number_sections: false
+  bookdown::html_document2:
+    fig_caption: true
+    self_contained: true
+    number_sections: false
+    keep_md: true
+    clean: false
 ---
 
 ```{r load_deps, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
@@ -178,7 +178,7 @@ Finally, the patients were split into development (
 `r subset(consort,node=='test')$patdays` visit-days) subsets. The incidence of 
 the outcomes is reported in the [Results] section, below.
 
-```{r consort,fig.cap=NULL}
+```{r consort,fig.cap=NULL,fig.width=5}
 #grViz(consortgv);
 grViz(consortgv) %>% DiagrammeRsvg::export_svg() %>% charToRaw %>% rsvg::rsvg_png(file='foo.png');
 knitr::include_graphics('foo.png');
@@ -193,20 +193,15 @@ This study was performed using only retrospective EHR data with no
 treatment, intervention or any other interaction with patients. The exposure 
 groups were determined by patient eFI as will be discussed below.
 
-## Outcomes and Predictors
+## Outcomes 
 *[TRIPOD 6.a] Clearly define the outcome that is predicted by the prediction model, including how and when assessed. *  
 
-The four outcomes we predicted with eFI were hospital-acquired infections,
-non-operative hospital-acquired trauma, cardiac complications, and the 
-occurrence of one or more of these or one or more PSIs in 
-general as defined by @southern17. Following principles of implementation 
-science [@meissner20a], we drew on the expertise of the clinical stakeholders on 
-our team (CT and SE) to select outcomes that are meaningful, relevant, and 
-useful in guiding clinical care planning. To detect these outcomes in EHR data we 
-used ICD-10 code mappings developed by @southern17. The advantage of these PSI 
-definitions is that they leverage the specificity of ICD10 codes and the 
-uniform denominator greatly simplifies calculation. 
-
+The four outcomes we predicted with eFI were infections, non-operative trauma,
+cardiac complications, and the occurrence of one or more of these or one or more
+PSIs in general as defined by @southern17. Following principles of
+implementation science [@meissner20a], we drew on the expertise of the clinical
+stakeholders on our team (CT and SE) to select outcomes that are meaningful,
+relevant, and useful in guiding clinical care planning.
 
 `r trinote('All decisions about processing and statistical analysis were made
 using only the development data, blinded to the validation data. After the 
@@ -218,6 +213,8 @@ supplemental materials.
 ','*[TRIPOD 6.b] Report any actions to blind assessment of the outcome to be predicted. *  
 *[TRIPOD 7.b] Report any actions to blind assessment of predictors for the outcome and other predictors. *  
 ')`
+
+## eFI, a deficit accumulation index
 
 `r trinote('The standard procedure for creating a deficit accumulation frailty 
 index','*[TRIPOD 7.a] Clearly define all predictors used in developing or validating the multivariable prediction model, including how and when they were measured.*')` [@mitnitski01a;@song10; @searle08a] is to select at least 30-40 functional 
@@ -583,16 +580,19 @@ over-esimated the sensitivity of eFI as a predictor. However, except for
 all-PSI, the slopes were above 0.9.')`
 
 ```{r lmdiscrim}
-lapply(valresults[.outcomenames]
-       ,function(xx) tidy(xx$Frailty$lmdiscrim,conf.int=T)[-1]) %>% 
+valresultsout <- lapply(valresults[.outcomenames]
+                        ,function(xx){
+                          tidy(xx$Frailty$lmdiscrim,conf.int=T)[-1]}) %>%
   bind_rows(.id='outcome') %>%
   mutate(Outcome=paste0(rnameshort(ifelse(lag(outcome,1,'(Intercept)')==outcome
                                    ,outcome,'(Intercept)'))
                         ,ifelse(lag(outcome,1,'(Intercept)')==outcome,'\\\n  \\\n  ',''))
          ,Coefficient=nb(estimate,3),SE=nb(std.error,2)
-         ,t=nb(statistic,2),P=nb(p.value,2)) %>% 
-  select('Outcome','Coefficient','SE','t') %>%
-  pander(row.names=F,caption='(\\#tab:lmdiscrim) Validation against out-of sample predictions from the development model.',keep.line.breaks=T)
+         ,t=nb(statistic,2),P=nb(p.value,2));
+select(valresultsout,'Outcome','Coefficient','SE','t') %>%
+  pander(row.names=F
+         ,caption='(\\#tab:lmdiscrim) Validation against out-of sample predictions from the development model.'
+         ,keep.line.breaks=T);
 ```
 
 `r valnote('For all outcomes, distributions of their linear predictors were 
@@ -602,10 +602,10 @@ in-sample by the validation models (Figure S2).')`
 # Discussion
 
 We implemented an electronic Frailty Index using the Rockwood
-deficit-accumulation framework and used it to predict PSIs in
-real-world data from an EHR system. Our results add to the evidence that
-Rockwood indexes are a rapid, low-effort method of risk assessment that scales
-to large patient populations. 
+deficit-accumulation framework and used it to predict PSIs in real-world data
+from an EHR system. Our results add to the evidence that Rockwood indexes are a
+rapid, low-effort method of risk assessment that scales to large patient
+populations.
 
 ## Limitations
 
@@ -630,16 +630,34 @@ visit-history and the accuracy of eFI.
 
 ## Interpretation
 
-*[TRIPOD 19.a, validation only] For validation, discuss the results with reference to performance in the development data, and any other validation data. *  
 *[TRIPOD 19.b] Give an overall interpretation of the results, considering objectives, limitations, results from similar studies, and other relevant evidence. *  
-Our sample population amounts to making predictions about randomly selected
-patients assessed only on EHR data available up to a randomly selected encounter
-for each of these patients. 
 
-In other words, the design of this study mimics a scenario where an existing 
-patient is seen for the first time after clinical deployment of eFI and the goal
-of the validation is to determine how well eFI by itself will predict the 
-outcomes
+This study only used outcome data for each patient after a randomly selected
+index date between that patient's first and last available visit. This design
+mimics a scenario where an existing patient is seen for the first time after
+clinical deployment of eFI and the goal is to determine how well eFI by itself
+will predict the outcomes without any additional information about prior
+occurrences. eFI predicted infections, trauma, cardiac complications, and
+overall PSI with high statistical significance. In all cases the effect size was
+large enough to be clinically significant and the models had high concordances
+(Table \@ref(tab:tb3)). 
+`r trinote('PSI was the one outcome for which the Cox model\'s 
+proportionality assumption was not met. This may be due to PSI encompassing a
+more heterogeneous set of diagnoses than the other outcomes and some of these
+diagnoses may be more prevalent with age thus introducing a time interaction
+which the univariate model does not include. This may also be why PSI was the 
+only outcome for which there was a significant amount of variation in the 
+validation data which was not explained by out-of-sample predictions 
+(Table \\@ref(tab:coxgof)). For infections, trauma, and cardiac complications the 
+out-of-sample prediction was not significantly worse than the in-sample 
+prediction.'
+,'*[TRIPOD 19.a, validation only] For validation, discuss the results with reference to performance in the development data, and any other validation data. *  ')`
+There was generally a high correlation between the out-of-sample and 
+in-sample predictions (
+`r subset(valresultsout,Outcome!='(Intercept)' & outcome != 'vi_c_psi' )$estimate %>% range %>% nb(digits=2) %>% paste(collapse=' - ')`
+, Table \@ref(tab:lmdiscrim)) except PSI which had a moderate correlation (
+`r subset(valresultsout,Outcome!='(Intercept)' & outcome == 'vi_c_psi')$estimate %>% nb(digits=2)`
+).
 
 
 ## Implications
@@ -654,22 +672,16 @@ example @fried01a) but these are time intensive and often difficult to implement
 in a busy general practice. Because of the simplicity of the Rockwood Frailty
 Index, it is more likely to be adopted by clinicians in a busy practice.
 
-*[TRIPOD 15.b, development only] Explain how to the use the prediction model.*
-
-The statistical analysis we used to validate eFI as a predictor of 
-infections, trauma, and cardiac complications R [@rteam21] is not 
-a prerequisite for _deploying_ eFI in the clinic. Cox models can be useful 
-initially to find optimal thresholds tuned to specific outcomes instead of 
-relying on the 0.19 cutoff but here we showed that this cutoff is effective at 
-partitioning patients into risk groups for very different types of 
-PSIs. Nor is eFI limited to any specific EHR system. As long as 
+The statistical analysis we used to _validate_ eFI as a predictor of 
+infections, trauma, and cardiac complications and PSI is not 
+a prerequisite for _deploying_ eFI in the clinic. Though Cox models can be 
+useful initially to find optimal thresholds tuned to specific populations and 
+outcomes instead of relying on the 0.19 cutoff we used here though it was 
+effective at partitioning patients into risk groups for very different types of 
+events. Nor is eFI limited to any specific EHR system. As long as 
 it is possible to extract a table of dates, patient IDs, ICD-10 codes, and LOINC 
-codes for labs with accompanying value-flags, such a result-set can be converted 
-into eFI values at patient-visit granularity and used as a predictor. We 
-publicly shared mapping tables and scripts [@bokov20] to use as a starting point 
-for researchers or enterprise analytics teams that wish to deploy eFI at their 
-own health systems.
-
+codes for labs with accompanying value-flags, such a result-set can be 
+cross-walked to eFI values at patient-visit granularity. 
 
 
 # Conclusions
@@ -681,20 +693,22 @@ specialty. The variables used to calculate EFI are ones that are in some form
 available in every EMR system. If there are EMR systems where a few of these
 variables are not available, Rockwood deficit accumulation indexes have been
 shown to continue giving consistent results despite variations in what
-individual codes are available as long as there is a sufficiently large and
+individual codes are available [@rockwood06] as long as there is a sufficiently large and
 representative collection of deficits into which these variables can be binned
-`r fs('[ref]')`.
+[@searle08a; @mitnitski05].
 
-## Supplementary information
-
-*[TRIPOD 21] Provide information about the availability of supplementary resources, such as study protocol, Web calculator, and data sets. *  
-
-To facilitate adoption and refinement of EFI, we are publishing not only the
-code mappings but also scripts [@bokov20] that implement the mapping algorithm 
-with notes on adapting them to local environments. We intend to evolve these
-scripts into a self-contained app that interfaces with EMR systems (via FHIR) to
-provide real-time frailty assessment at the clinical point of care and assist
-clinicians in developing care plans to mitigate the risks of frailty.
+`r trinote('
+To facilitate adoption and refinement of EFI, in addition to the crosswalk 
+tables (S5 and S6) we released mapping tables and example SQL scripts [@bokov20]
+as a starting point for researchers or enterprise analytics teams that wish to 
+deploy eFI at their own health systems. With input from colleagues at other
+learning health systems we intend to evolve these scripts into a self-contained
+app that interfaces with EMR systems (via FHIR) to provide real-time frailty
+assessment at the clinical point of care and assist clinicians in developing
+care plans to mitigate the risks of frailty.'
+,'*[TRIPOD 21] Provide information about the availability of supplementary resources, such as study protocol, Web calculator, and data sets. *  
+*[TRIPOD 15.b, development only] Explain how to the use the prediction model.*
+')`
 
 # Acknowledgments
 
