@@ -477,7 +477,7 @@ for(jj in fits) {with(jj,{
   pander(modelsummary);
   cat("\n******\n");
   })};
-#+ survcurvesval,message=FALSE,results='asis',fig.height=4,fig.width=12,fig.cap='validation'
+#+ survcurvesval,message=FALSE,results='hide',fig.height=4,fig.width=12,fig.cap='validation'
 panderOptions('knitr.auto.asis', FALSE);
 for(jj in fitsval) {with(jj,{
   message(dispname);
