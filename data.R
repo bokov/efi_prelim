@@ -33,7 +33,9 @@ tf_psi <- c('c_hospinfect','c_decubulcer','c_endometab','c_thromb','c_cardiac'
               ,'c_surgcomp','c_hosptrauma','c_anaesthesia','c_delirium','c_cns'
               ,'c_gastro','c_severe','c_psi');
 tf_other <- c('c_falls','c_vent','c_respillness'
-              ,'c_corona');
+              ,'c_corona'
+              ,'c_proctrauma','c_drugevent','c_sepsis'
+              );
 tf_merge <- c(tf_psi,tf_other);
 
 # read data dictionaries ----
@@ -79,6 +81,8 @@ for(ii in tf_merge) eval(substitute(dat01[,paste0('vi_',ii) :=
                                            do.call(pmax,.SD) %>% as.logical()
                                          ,.SDcols=v(ii,dictionary=dct0)]
                                     ,env=list(ii=ii)));
+#' ## Pneumonia
+dat01$vi_pneumonia <- grepl('J15|J13|J18|J16',dat01$v163_rsprtr_ptnts);
 #' ## Diabetes
 dat01$vi_diabetes <- apply(data.frame(dat01)[,v(c_diabetes)],1,any);
 #' ## Missingness
@@ -266,13 +270,14 @@ dat01[dat02,on = c('patient_num','start_date'),a_efi := i.nval_num];
 #' Delete the rows prior to each patient's `z_ixvis` randomly chosen index visit
 #' Mark all the trailing 0's ... these might be patients who have not even been
 #' seen for their last few visits
+#+ trailing_visits----
 # dat01[,z_trailing_old:=seq_len(.N) > Position(function(xx) xx>0
 #                                               ,a_efi,right=T,nomatch=0)
 #       ,by=patient_num];
 #
 # . trailing visits ----
 dat01[,z_trailing:=seq_len(.N) > max(Position(function(xx) xx>0
-                                              ,a_efi,right=T,nomatch=0)
+                                              ,coalesce(a_efi,0),right=T,nomatch=0)
                                      # TODO: put vi_c_death as an additional
                                      # criterion, i.e. visits "after" death are
                                      # also part of z_trailing, though they
@@ -281,15 +286,28 @@ dat01[,z_trailing:=seq_len(.N) > max(Position(function(xx) xx>0
                                      ,Position(function(xx) xx,a_anythingtf
                                                ,right=T,nomatch=0))
       ,by=patient_num];
-efi_pats <- unique(subset(dat01,a_efi>0)$patient_num);
-dat01 <- subset(dat01,patient_num %in% efi_pats & !z_trailing);
+.efi_patsNonMissing <- unique(subset(dat01,!is.na(a_efi))$patient_num);
+dat01 <- subset(dat01,patient_num %in% .efi_patsNonMissing);
 consort <- rbind(consort,consortstep(dat01,'haveefi'
+                                     ,label='At least one visit with a non-missing eFI'
+                                     ,previous=tail(consort$node,1)));
+.efi_patsNonZero <- unique(subset(dat01,a_efi>0)$patient_num);
+dat01 <- subset(dat01,patient_num %in% .efi_patsNonZero);
+consort <- rbind(consort,consortstep(dat01,'haveefigt0'
                                      ,label='At least one visit where eFI was greater than 0'
                                      ,previous=tail(consort$node,1)));
+dat01 <- subset(dat01,!z_trailing);
+consort <- rbind(consort,consortstep(dat01,'droptrailing'
+                                     ,label='Drop trailing visits after the last diagnosis, lab, or eFI'
+                                     ,previous=tail(consort$node,1)));
+dat01 <- subset(dat01,age_at_visit_days<=coalesce(age_at_death_days,Inf));
+consort <- rbind(consort,consortstep(dat01,'droppostmortem'
+                                     ,label='Drop invalid visits (after death-date)'
+                                     ,previous=tail(consort$node,1)));
+#+ .z_ixvis----
 # WHERE z_ixvis IS NOW SET AND THEN FILTERED UPON ----
-# . z_ixvis ----
 set.seed(project_seed);
-dat01 <- dat01[
+dat01 <- dat01[,if(.N>3) .SD,by=patient_num][
   # creating a randomly selected index visit for each patient
   ,z_ixvis:=sample(age_at_visit_days[-c(1,.N)],1),by=patient_num][
     ,a_t1:=age_at_visit_days-z_ixvis,by=patient_num][
