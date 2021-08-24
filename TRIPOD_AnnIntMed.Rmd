@@ -19,18 +19,18 @@ bibliography: efi_paper.bib
 csl: harvard-cite-them-right.csl
 always_allow_html: true
 output:
-  bookdown::word_document2:
-    reference_docx: template_AnnIntMed_native.docx
-    fig_caption: true
-    self_contained: true
-    keep_md: true
-    number_sections: false
   bookdown::html_document2:
     fig_caption: true
     self_contained: true
     number_sections: false
     keep_md: true
     clean: false
+  bookdown::word_document2:
+    reference_docx: template_AnnIntMed_native.docx
+    fig_caption: true
+    self_contained: true
+    keep_md: true
+    number_sections: false
 ---
 
 ```{r load_deps, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
@@ -72,8 +72,9 @@ if(is.null(.outfmt)){
 message('.outfmt = ',.outfmt);
 
 .currentscript <- current_scriptname('TRIPOD_AnnIntMed.Rmd');
-.outcomenames <- c('vi_c_hospinfect','vi_c_hosptrauma'
-                   ,'vi_c_cardiac','vi_c_psi');
+# .outcomenames <- c('vi_c_hospinfect','vi_c_hosptrauma'
+#                    ,'vi_c_cardiac','vi_c_psi');
+.outcomenames <- c('vi_c_falls','vi_c_drugadverse','v157_unspcfd__ptnts_tf')
 snip_outcomes <- rname(.outcomenames);
 snip_todates <- dat03[,.(xx=max(start_date)),by=patient_num] %>%
   with(range(xx)) %>% paste0(collapse=' and ');
