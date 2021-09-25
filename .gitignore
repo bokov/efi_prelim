@@ -31,6 +31,7 @@ vignettes/*.pdf
 .Rproj.user
 *.Rproj
 *.Rout
+*.png
 *.md
 # Local configuration
 local
@@ -38,6 +39,7 @@ local.config.R
 # Other temp files
 .~lock.*#
 .out
+nongit
 .logfile
 ./scripts/.rio_installed
 ./scripts/.tidbits_installed
