@@ -286,7 +286,7 @@ eFI is represented by `efi`, a continuous variable with a range of 0 to 1. The
 full expression, `I(10*efi)` means we scaled `efi` by 10 so that the 
 coefficient could be interpreted as the change in hazard ratio per 0.1 change in 
 eFI. All model coefficients are shown below the corresponding Kaplan-Meier 
-curves in Figures \@ref(fig:kmpsicap)-\@ref(fig:kmcardcap).
+curves in Figures \@ref(fig:kmfallscap)-\@ref(fig:kmhfcap).
 
 `r trinote('
 Our missing data strategy approximates a complete-case analysis in 
@@ -391,8 +391,10 @@ if(.outfmt == 'html'){
 ## Prediction of Outcomes
 
 Kaplan-Meier plots of the validation data are shown in 
-Figures \@ref(fig:kmpsicap)-\@ref(fig:kmcardcap) , split on eFI 
-(Frail if above 0.19, non-Frail otherwise). Each plot is followed by
+Figures \@ref(fig:kmfallscap)-\@ref(fig:kmhfcap) , split on eFI 
+(Frail if above 0.19, non-Frail otherwise). Because these are all relatively 
+rare outcomes, the y-range of each plot is limited to 70%-100%, which fully 
+encompasses all events over a 3-year period. Each plot is followed by
 Cox model results with p-values adjusted for multiple comparisons 
 [@holm79] because we are testing four separate hypotheses on the same data. 
 Below that, each figure has a risk table for a sample of time points 
@@ -405,22 +407,23 @@ each plot.
 `r valnote('For each 0.1 increase in EFI, we found approximately a doubling of the hazard.')`
 Roughly approximating these hazards as probabilities, if a hypothetical patient 
 with an eFI of 0 has a 
-`r scales::label_percent(accuracy=0.1)(predict(fitsval$vi_c_psi$models$Frailty,newdata=list(a_t0=0,a_t1=30,xx=NA,a_efi=0),type='expected'))` 
-baseline chance of experiencing a PSI during a 30-day period, 
+`r scales::label_percent(accuracy=0.1)(predict(fitsval$vi_c_falls$models$Frailty,newdata=list(a_t0=0,a_t1=30,xx=NA,a_efi=0),type='expected'))` 
+baseline chance of experiencing a falling injury during a 30-day period, 
 then if their eFI were 0.1 their chance would rise to
-`r scales::label_percent(accuracy=0.1)(predict(fitsval$vi_c_psi$models$Frailty,newdata=list(a_t0=0,a_t1=30,xx=NA,a_efi=0.1),type='expected'))` 
+`r scales::label_percent(accuracy=0.1)(predict(fitsval$vi_c_falls$models$Frailty,newdata=list(a_t0=0,a_t1=30,xx=NA,a_efi=0.1),type='expected'))` 
 and if their eFI were 0.2, just above our operational definition of frailty,
 it would be 
-`r scales::label_percent(accuracy=0.1)(predict(fitsval$vi_c_psi$models$Frailty,newdata=list(a_t0=0,a_t1=30,xx=NA,a_efi=0.2),type='expected'))` 
+`r scales::label_percent(accuracy=0.1)(predict(fitsval$vi_c_falls$models$Frailty,newdata=list(a_t0=0,a_t1=30,xx=NA,a_efi=0.2),type='expected'))` 
 
 
-```{r kmpsi, fig.cap=NULL, message=FALSE,collapse='true',results='asis'}
+```{r kmfalls, fig.cap=NULL, message=FALSE,collapse='true',results='asis'}
 panderOptions('knitr.auto.asis', FALSE);
-with(fitsval$vi_c_psi,{
+with(fitsval$vi_c_falls,{
   message(dispname);
   plotsurv01(survfit(Surv(a_t0,a_t1,xx)~Frail,id=patient_num,data=data)
              ,survfit(Surv(a_t0,a_t1,xx)~Frail,id=patient_num
-                      ,data=fits$vi_c_psi$data)
+                      ,data=fits$vi_c_falls$data)
+             ,ylim=c(0.7,1.0)
              ,labs=c('Non-Frail','Frail',
                      '\nNon-Frail\n(development)','\nFrail\n(development)')
              ,title=dispname) %>% print; 
@@ -430,7 +433,7 @@ with(fitsval$vi_c_psi,{
   });
 
 ```
-```{r kmpsicap, fig.cap='Any PSI',fig.height=0.1}
+```{r kmfallscap, fig.cap='Falls',fig.height=0.1}
 .oldmar <- par('mar'); par(mar=c(0,0,0,0));
 plot(0,type='n',axes=F,xlab=NA,ylab=NA,cex=0.01);
 par(mar=.oldmar);
@@ -438,63 +441,15 @@ par(mar=.oldmar);
 
 
 
-```{r kminf, fig.cap=NULL, message=FALSE,collapse='true',results='asis'}
-panderOptions('knitr.auto.asis', FALSE);
-.subfig <- 0;
-with(fitsval$vi_c_hospinfect,{
-  message(dispname);
-  plotsurv01(survfit(Surv(a_t0,a_t1,xx)~Frail,id=patient_num,data=data)
-             ,survfit(Surv(a_t0,a_t1,xx)~Frail,id=patient_num
-                      ,data=fits$vi_c_hospinfect$data)
-             ,labs=c('Non-Frail','Frail',
-                     '\nNon-Frail\n(development)','\nFrail\n(development)')
-             ,title=dispname) %>% print; 
-  pander(cphunivar(models$Frailty,3,3),row.names=F);
-  risktable00(survfit(Surv(a_t0, a_t1, xx) ~ Frail,data,id = patient_num)) %>%
-    pander(row.names=F);
-  });
-```
-```{r kminfcap, fig.cap='Hospital acquired infections.',fig.height=0.1}
-.oldmar <- par('mar'); par(mar=c(0,0,0,0));
-plot(0,type='n',axes=F,xlab=NA,ylab=NA,cex=0.01);
-par(mar=.oldmar);
-```
-
-
-
-
-```{r kmtra, fig.cap=NULL, message=FALSE,collapse='true',results='asis'}
-panderOptions('knitr.auto.asis', FALSE);
-with(fitsval$vi_c_hosptrauma,{
-  message(dispname);
-  plotsurv01(survfit(Surv(a_t0,a_t1,xx)~Frail,id=patient_num,data=data)
-             ,survfit(Surv(a_t0,a_t1,xx)~Frail,id=patient_num
-                      ,data=fits$vi_c_hosptrauma$data)
-             ,labs=c('Non-Frail','Frail',
-                     '\nNon-Frail\n(development)','\nFrail\n(development)')
-             ,title=dispname) %>% print; 
-  pander(cphunivar(models$Frailty,3,3),row.names=F);
-  risktable00(survfit(Surv(a_t0, a_t1, xx) ~ Frail,data,id = patient_num)) %>%
-    pander(row.names=F);
-  });
-```
-```{r kmtracap, fig.cap='Non-operative trauma.',fig.height=0.1}
-.oldmar <- par('mar'); par(mar=c(0,0,0,0));
-plot(0,type='n',axes=F,xlab=NA,ylab=NA,cex=0.01);
-par(mar=.oldmar);
-```
-
-
-
-
-```{r kmcard, fig.cap=NULL, message=FALSE,collapse='true',results='asis'}
+```{r kmdrug, fig.cap=NULL, message=FALSE,collapse='true',results='asis'}
 panderOptions('knitr.auto.asis', FALSE);
 .subfig <- 0;
-with(fitsval$vi_c_cardiac,{
+with(fitsval$vi_c_drugadverse,{
   message(dispname);
   plotsurv01(survfit(Surv(a_t0,a_t1,xx)~Frail,id=patient_num,data=data)
              ,survfit(Surv(a_t0,a_t1,xx)~Frail,id=patient_num
-                      ,data=fits$vi_c_cardiac$data)
+                      ,data=fits$vi_c_drugadverse$data)
+             ,ylim=c(0.7,1.0)
              ,labs=c('Non-Frail','Frail',
                      '\nNon-Frail\n(development)','\nFrail\n(development)')
              ,title=dispname) %>% print; 
@@ -503,11 +458,40 @@ with(fitsval$vi_c_cardiac,{
     pander(row.names=F);
   });
 ```
-```{r kmcardcap, fig.cap='Cardiac complications.',fig.height=0.1}
+```{r kmdrugcap, fig.cap='Adverse drug reactions.',fig.height=0.1}
 .oldmar <- par('mar'); par(mar=c(0,0,0,0));
 plot(0,type='n',axes=F,xlab=NA,ylab=NA,cex=0.01);
 par(mar=.oldmar);
 ```
+
+
+
+
+```{r kmhf, fig.cap=NULL, message=FALSE,collapse='true',results='asis'}
+panderOptions('knitr.auto.asis', FALSE);
+with(fitsval$v157_unspcfd__ptnts_tf,{
+  message(dispname);
+  plotsurv01(survfit(Surv(a_t0,a_t1,xx)~Frail,id=patient_num,data=data)
+             ,survfit(Surv(a_t0,a_t1,xx)~Frail,id=patient_num
+                      ,data=fits$v157_unspcfd__ptnts_tf$data)
+             ,ylim=c(0.7,1.0)
+             ,labs=c('Non-Frail','Frail',
+                     '\nNon-Frail\n(development)','\nFrail\n(development)')
+             ,title=dispname) %>% print; 
+  pander(cphunivar(models$Frailty,3,3),row.names=F);
+  risktable00(survfit(Surv(a_t0, a_t1, xx) ~ Frail,data,id = patient_num)) %>%
+    pander(row.names=F);
+  });
+```
+```{r kmhfcap, fig.cap='Heart failure.',fig.height=0.1}
+.oldmar <- par('mar'); par(mar=c(0,0,0,0));
+plot(0,type='n',axes=F,xlab=NA,ylab=NA,cex=0.01);
+par(mar=.oldmar);
+```
+
+
+
+
 
 
 ## Model performance
@@ -515,12 +499,10 @@ par(mar=.oldmar);
 `r trinote('...','*[TRIPOD 16] Report performance measures (with CIs) for the prediction model.*  
 *~~[TRIPOD 17, validation only] If done, report the results from any model updating (i.e., model specification, model performance).~~*')`
 
-`r valnote("All models had a C-statistic above 0.7, with cardiac complications 
-exceeding 0.8. The proportional hazard assumption was satisfied for all outcomes 
-except for all patient safety indicators combined (Table \\@ref(tab:tb3)). 
-Though statistically significant, this time-dependent deviation from 
-proportionality is modest and is in the direction of increasing divergence with 
-time (Figure S1).")`
+`r valnote("All models had a C-statistic above 0.7. The proportional hazard assumption was satisfied for all outcomes except adverse drug events
+(Table \\@ref(tab:tb3)). For adverse drug events, the deviation from 
+proportionality is time-dependent and results in some loss sensitivity with
+increasing followup time (Figure S1).") `
 
 ```{r tb3}
 panderOptions('knitr.auto.asis', TRUE);
@@ -550,7 +532,7 @@ of remaining variation explained by the updated (validation) model but not
 explained by the out-of-sample prediction of the development model. Here a
 non-significant result means that the model predicted out-of-sample results
 without there being any benefit to updating on the new data. The models for
-all the outcomes passed this test with the exception of the all-PSI model.')`
+all the outcomes passed this test.')`
 
 ```{r coxgof}
 lapply(valresults[.outcomenames]
