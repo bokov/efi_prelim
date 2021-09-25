@@ -72,6 +72,7 @@ message('.outfmt = ',.outfmt);
 .currentscript <- current_scriptname('TRIPOD_AnnIntMed.Rmd');
 # .outcomenames <- c('vi_c_hospinfect','vi_c_hosptrauma'
 #                    ,'vi_c_cardiac','vi_c_psi');
+# outcomenames ----
 .outcomenames <- c('vi_c_falls','vi_c_drugadverse','v157_unspcfd__ptnts_tf')
 snip_outcomes <- rname(.outcomenames);
 snip_todates <- dat03[,.(xx=max(start_date)),by=patient_num] %>%
@@ -178,8 +179,8 @@ the outcomes is reported in the [Results] section, below.
 
 ```{r consort,fig.cap=NULL,fig.width=5}
 #grViz(consortgv);
-grViz(consortgv) %>% DiagrammeRsvg::export_svg() %>% charToRaw %>% rsvg::rsvg_png(file='foo.png');
-knitr::include_graphics('foo.png');
+grViz(consortgv) %>% DiagrammeRsvg::export_svg() %>% charToRaw %>% rsvg::rsvg_png(file='fig1_consort.png');
+knitr::include_graphics('fig1_consort.png');
 ```
 ```{r consortcap, fig.cap='CONSORT diagram.',fig.height=0.1}
 .oldmar <- par('mar'); par(mar=c(0,0,0,0));
