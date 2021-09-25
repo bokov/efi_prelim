@@ -552,12 +552,13 @@ validation models with each other is evaluated by regressing their linear
 predictors against each other [@royston13]. Exact agreement would result in an
 intercept of zero and a slope of one. A slope greater than one indicates that 
 the validation model is actually more sensitive than implied by the 
-development results, a slope less than indicates lowered sensitivity and a slope
-of zero would imply no correlation between the development and validation 
+development results, a slope less than one indicates lowered sensitivity and a 
+slope of zero would imply no correlation between the development and validation 
 results. For all outcomes the slopes were significantly lower than 1 with very
 small standard errors, so relying on the development data alone would have 
-over-esimated the sensitivity of eFI as a predictor. However, except for
-all-PSI, the slopes were above 0.9.')`
+over-esimated the sensitivity of eFI as a predictor. All the slopes were above 
+0.9 and adverse drug events validatiom model was slightly more sensitive than 
+the development model.')`
 
 ```{r lmdiscrim}
 valresultsout <- lapply(valresults[.outcomenames]
@@ -582,10 +583,10 @@ in-sample by the validation models (Figure S2).')`
 # Discussion
 
 We implemented an electronic Frailty Index using the Rockwood
-deficit-accumulation framework and used it to predict PSIs in real-world data
-from an EHR system. Our results add to the evidence that Rockwood indexes are a
-rapid, low-effort method of risk assessment that scales to large patient
-populations.
+deficit-accumulation framework and used it to predict a diverse set of poor
+patient outcomes in real-world EHR data. Our results add to the evidence that
+Rockwood indexes are a rapid, low-effort method of risk assessment that scales
+to large patient populations.
 
 ## Limitations
 
@@ -617,27 +618,26 @@ index date between that patient's first and last available visit. This design
 mimics a scenario where an existing patient is seen for the first time after
 clinical deployment of eFI and the goal is to determine how well eFI by itself
 will predict the outcomes without any additional information about prior
-occurrences. eFI predicted infections, trauma, cardiac complications, and
-overall PSI with high statistical significance. In all cases the effect size was
-large enough to be clinically significant and the models had high concordances
+occurrences. eFI predicted falls, adverse drug reactions, and heart failure with
+high statistical significance. In all cases the effect size was large enough to
+be clinically significant and the models had high concordances
 (Table \@ref(tab:tb3)). 
-`r trinote('PSI was the one outcome for which the Cox model\'s 
-proportionality assumption was not met. This may be due to PSI encompassing a
+`r trinote('Drug reactions was the one outcome for which the Cox model\'s 
+proportionality assumption was not met. This may be due to adverse drug events
+being more rare or encompassing a
 more heterogeneous set of diagnoses than the other outcomes and some of these
 diagnoses may be more prevalent with age thus introducing a time interaction
-which the univariate model does not include. This may also be why PSI was the 
-only outcome for which there was a significant amount of variation in the 
+which the univariate model does not include. This may also be why drug events 
+was the outcome for which there was a significant amount of variation in the 
 validation data which was not explained by out-of-sample predictions 
-(Table \\@ref(tab:coxgof)). For infections, trauma, and cardiac complications the 
+(Table \\@ref(tab:coxgof)). For all outcomes the 
 out-of-sample prediction was not significantly worse than the in-sample 
 prediction.'
 ,'*[TRIPOD 19.a, validation only] For validation, discuss the results with reference to performance in the development data, and any other validation data. *  ')`
 There was generally a high correlation between the out-of-sample and 
 in-sample predictions (
-`r subset(valresultsout,Outcome!='(Intercept)' & outcome != 'vi_c_psi' )$estimate %>% range %>% nb(digits=2) %>% paste(collapse=' - ')`
-, Table \@ref(tab:lmdiscrim)) except PSI which had a moderate correlation (
-`r subset(valresultsout,Outcome!='(Intercept)' & outcome == 'vi_c_psi')$estimate %>% nb(digits=2)`
-).
+`r subset(valresultsout,Outcome!='(Intercept)')$estimate %>% range %>% nb(digits=2) %>% paste(collapse=' - ')`
+, Table \@ref(tab:lmdiscrim)).
 
 
 ## Implications
@@ -652,8 +652,7 @@ example @fried01a) but these are time intensive and often difficult to implement
 in a busy general practice. Because of the simplicity of the Rockwood Frailty
 Index, it is more likely to be adopted by clinicians in a busy practice.
 
-The statistical analysis we used to _validate_ eFI as a predictor of 
-infections, trauma, and cardiac complications and PSI is not 
+The statistical analysis we used to _validate_ eFI as a predictor is not 
 a prerequisite for _deploying_ eFI in the clinic. Though Cox models can be 
 useful initially to find optimal thresholds tuned to specific populations and 
 outcomes instead of relying on the 0.19 cutoff we used here though it was 
