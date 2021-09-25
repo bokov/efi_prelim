@@ -1,5 +1,5 @@
 ---
-title: "Development and validation of an EHR-based frailty index for predicting infections, non-operative trauma, cardiac complications, and patient safety indicators"
+title: "Development and validation of an EHR-based frailty index for predicting falls, adverse drug reactions, and heart failure"
 author: 'Alex Bokov ^1,✉^, Sara Espinoza ^1^, Chandana Tripathy ^1^, and Kathleen R. Stevens ^1^'
 css: "production.css"
 abstract: | 
@@ -7,11 +7,9 @@ abstract: |
   randomly sampled from all adult patients in the Epic EHR system of a large 
   South Texas academic health center and its teaching hospital partner to 
   determine whether our implementation of the Rockwood frailty index (eFI) can 
-  predict patient safety indicators (PSIs) using only codes and numeric values 
-  routinely collected in EHR systems. According to both the c-statistic and the 
-  AIC of the Cox proportional hazard models we used to analyze the data, eFI 
-  performs well as a predictor of infections, non-operative trauma, cardiac 
-  complications, and to a lesser extent the ocurrence of any PSI.
+  predict patient outcomes using only codes and numeric values routinely 
+  collected in EHR systems. We found that eFI performs well as a predictor of 
+  falls, adverse drug reactions, and heart failure.
 documentclass: article
 description: 'Manuscript'
 clean: false
@@ -96,9 +94,8 @@ snip_fromdates <- dat03[,.(xx=min(start_date)),by=patient_num] %>%
 Improving patient safety is a key goal for every health system. A simple and 
 rapid frailty assessment would help clinicians can tailor interventions to avoid 
 poor patient outcomes. Our objective was to evaluate a deficit-accumulation
-electronic frailty index (eFI) as a predictor of preventable infections, 
-non-operative trauma, cardiac complications, and general patient safety 
-indicators (PSIs) and then validate it against hold-out data.
+electronic frailty index (eFI) as a predictor of falls, adverse reactions to
+medications, and heart failure and then validate it against hold-out data.
 
 Frailty is the lifelong erosion of stress resistance and accumulation of
 impairments across multiple physiological systems. Among older community
@@ -197,12 +194,11 @@ groups were determined by patient eFI as will be discussed below.
 ## Outcomes 
 *[TRIPOD 6.a] Clearly define the outcome that is predicted by the prediction model, including how and when assessed. *  
 
-The four outcomes we predicted with eFI were infections, non-operative trauma,
-cardiac complications, and the occurrence of one or more of these or one or more
-PSIs in general as defined by @southern17. Following principles of
-implementation science [@meissner20a], we drew on the expertise of the clinical
-stakeholders on our team (CT and SE) to select outcomes that are meaningful,
-relevant, and useful in guiding clinical care planning.
+The three outcomes we predicted with eFI were falls, adverse reactions to drugs,
+and heart failure. Following principles of implementation science
+[@meissner20a], we drew on the expertise of the clinical stakeholders on our
+team (CT and SE) to select outcomes that are meaningful, relevant, and useful in
+guiding clinical care planning.
 
 `r trinote('All decisions about processing and statistical analysis were made
 using only the development data, blinded to the validation data. After the 
