@@ -258,7 +258,7 @@ proj_render_strat <- function (label, n, transpose = F){
 plotsurv01 <- function(srv1,srv2
                        ,labs=NA
                        ,conf.int=T
-                       ,xlim=c(0,365.25*3)
+                       ,xlim=c(0,365.25*3.1)
                        # hard to distinguish training and validation when censor marks present, so turning off
                        ,censor.size=0
                        ,break.time.by=365.25/2 # 6 months
