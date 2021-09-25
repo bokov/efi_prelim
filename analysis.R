@@ -123,8 +123,8 @@ consortgv <- c(
   # edges are hardcoded for now
   ,'dev -> branchpoint0 [dir="back"];
 branchpoint0 -> test;
-start -> adultvis -> postidxefivisgt1 -> haveefi;
-haveefi -> branchpoint0 [arrowhead=none];'
+start -> adultvis -> haveefi -> haveefigt0 -> droptrailing -> droppostmortem -> postidxefivisgt1;
+postidxefivisgt1 -> branchpoint0 [arrowhead=none];'
   ,'}');
 
 
