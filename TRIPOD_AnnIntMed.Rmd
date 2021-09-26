@@ -17,18 +17,18 @@ bibliography: efi_paper.bib
 csl: harvard-cite-them-right.csl
 always_allow_html: true
 output:
-  bookdown::html_document2:
-    fig_caption: true
-    self_contained: true
-    number_sections: false
-    keep_md: true
-    clean: false
   bookdown::word_document2:
     reference_docx: template_AnnIntMed_native.docx
     fig_caption: true
     self_contained: true
     keep_md: true
     number_sections: false
+  bookdown::html_document2:
+    fig_caption: true
+    self_contained: true
+    number_sections: false
+    keep_md: true
+    clean: false
 ---
 
 ```{r load_deps, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
@@ -92,11 +92,17 @@ snip_fromdates <- dat03[,.(xx=min(start_date)),by=patient_num] %>%
 *[TRIPOD 3.a] Explain the medical context (including whether diagnostic or prognostic) and rationale for developing or validating the multivariable prediction model, including references to existing models.*  
 *[TRIPOD 3.b] Specify the objectives, including whether the study describes the development or validation of the model or both.*  ')`
 
-Improving patient safety is a key goal for every health system. A simple and 
-rapid frailty assessment would help clinicians can tailor interventions to avoid 
-poor patient outcomes. Our objective was to evaluate a deficit-accumulation
-electronic frailty index (eFI) as a predictor of falls, adverse reactions to
-medications, and heart failure and then validate it against hold-out data.
+The project was set in the context of the learning health system (LHS).  LHS is
+a strategy that leverages health information technology, clinical data
+infrastructure (EHR), and data analytic techniques to achieved improved, more
+affordable care [@etheredge07; @friedman14].  LHS is characterized as rapid
+bidirectional cycle of learning where practice informs research evidence and
+evidence informs practice [@greene12]. Improving patient safety is a key goal
+for every health system. A simple and rapid frailty assessment would help
+clinicians can tailor interventions to avoid poor patient outcomes. Our
+objective was to evaluate a deficit-accumulation electronic frailty index (eFI)
+as a predictor of falls, adverse reactions to medications, and heart failure and
+then validate it against hold-out data.
 
 Frailty is the lifelong erosion of stress resistance and accumulation of
 impairments across multiple physiological systems. Among older community
@@ -121,6 +127,10 @@ scripts, code-mappings, and usage notes are freely available online.
 
 
 # Methods
+
+Using EHR data, we employed an LHS approach to identification and analysis of
+frailty with the goal of better decisions for preventive care and therapeutic
+interventions. The eFI may also inform prospective study design and recruitment.
 
 ## Source of data
 
@@ -584,9 +594,9 @@ in-sample by the validation models (Figure S2).')`
 
 We implemented an electronic Frailty Index using the Rockwood
 deficit-accumulation framework and used it to predict a diverse set of poor
-patient outcomes in real-world EHR data. Our results add to the evidence that
-Rockwood indexes are a rapid, low-effort method of risk assessment that scales
-to large patient populations.
+patient outcomes in real-world EHR data. This LHS approach offers a low-effort
+non-invasive risk assessment method for informing clinical and utilization
+decisions that scales to large patient populations.
 
 ## Limitations
 
@@ -635,8 +645,7 @@ out-of-sample prediction was not significantly worse than the in-sample
 prediction.'
 ,'*[TRIPOD 19.a, validation only] For validation, discuss the results with reference to performance in the development data, and any other validation data. *  ')`
 There was generally a high correlation between the out-of-sample and 
-in-sample predictions (
-`r subset(valresultsout,Outcome!='(Intercept)')$estimate %>% range %>% nb(digits=2) %>% paste(collapse=' - ')`
+in-sample predictions (`r subset(valresultsout,Outcome!='(Intercept)')$estimate %>% range %>% nb(digits=2) %>% paste(collapse=' - ')`
 , Table \@ref(tab:lmdiscrim)).
 
 
@@ -644,13 +653,15 @@ in-sample predictions (
 
 *[TRIPOD 20] Discuss the potential clinical use of the model and implications for future research. *
 
-Assessing frailty helps clinicians identify high risk patients and tailor
-interventions to prevent health decline and poor outcomes. There is no gold
-standard method to assess Frailty in clinical practice. Currently available
-frailty assessment tools used in geriatric practice have good validity (for
-example @fried01a) but these are time intensive and often difficult to implement
-in a busy general practice. Because of the simplicity of the Rockwood Frailty
-Index, it is more likely to be adopted by clinicians in a busy practice.
+The LHS approach to harness EHR data and rapidly generate clinical knowledge can
+be transformative for primary and specialist care. Assessing frailty helps
+clinicians identify high risk patients and tailor interventions to prevent
+health decline and poor outcomes. There is no gold standard method to assess
+Frailty in clinical practice. Currently available frailty assessment tools used
+in geriatric practice have good validity (for example @fried01a) but these are
+time intensive and often difficult to implement in a busy general practice.
+Because of the simplicity of the Rockwood Frailty Index, it is more likely to be
+adopted by clinicians in a busy practice.
 
 The statistical analysis we used to _validate_ eFI as a predictor is not 
 a prerequisite for _deploying_ eFI in the clinic. Though Cox models can be 
@@ -665,16 +676,25 @@ cross-walked to eFI values at patient-visit granularity.
 
 # Conclusions
 
-This contributes to a growing body of evidence that
+The LHS approach enabled our study to successfully draw knowledge from
+real-world care-delivery data to promote improvement and health system change
+based on rigorous, generalizable research.
+
+Our results contribute to a growing body of evidence that
 risk scores built using the Rockwood framework [@mitnitski01a] will be a
 valuable tool for clinical decision support not restricted to any one illness or
 specialty. The variables used to calculate EFI are ones that are in some form
 available in every EMR system. If there are EMR systems where a few of these
 variables are not available, Rockwood deficit accumulation indexes have been
 shown to continue giving consistent results despite variations in what
-individual codes are available [@rockwood06] as long as there is a sufficiently large and
-representative collection of deficits into which these variables can be binned
-[@searle08a; @mitnitski05].
+individual codes are available [@rockwood06] as long as there is a sufficiently
+large and representative collection of deficits into which these variables can
+be binned [@searle08a; @mitnitski05].
+
+Our future work will include promoting the adoption of the eFI by Learning
+Health Systems, bridging gaps between clinical data and improved care through
+data analytics and informatics tools, and connecting eFI-informed decisions with
+patient and health system outcomes.
 
 `r trinote('
 To facilitate adoption and refinement of EFI, in addition to the crosswalk 
@@ -687,7 +707,8 @@ assessment at the clinical point of care and assist clinicians in developing
 care plans to mitigate the risks of frailty.'
 ,'*[TRIPOD 21] Provide information about the availability of supplementary resources, such as study protocol, Web calculator, and data sets. *  
 *[TRIPOD 15.b, development only] Explain how to the use the prediction model.*
-')`
+')`.
+
 
 # Acknowledgments
 
