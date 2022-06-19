@@ -17,18 +17,18 @@ bibliography: efi_paper.bib
 csl: harvard-cite-them-right.csl
 always_allow_html: true
 output:
-  bookdown::word_document2:
-    reference_docx: template_AnnIntMed_native.docx
-    fig_caption: true
-    self_contained: true
-    keep_md: true
-    number_sections: false
   bookdown::html_document2:
     fig_caption: true
     self_contained: true
     number_sections: false
     keep_md: true
     clean: false
+  bookdown::word_document2:
+    reference_docx: template_AnnIntMed_native.docx
+    fig_caption: true
+    self_contained: true
+    keep_md: true
+    number_sections: false
 ---
 
 ```{r load_deps, echo=FALSE, message=FALSE, warning=FALSE, results='hide'}
@@ -426,7 +426,7 @@ it would be
 `r scales::label_percent(accuracy=0.1)(predict(fitsval$vi_c_falls$models$Frailty,newdata=list(a_t0=0,a_t1=30,xx=NA,a_efi=0.2),type='expected'))` 
 
 
-```{r kmfalls, fig.cap=NULL, message=FALSE,collapse='true',results='asis'}
+```{r kmfalls, fig.cap=NULL, message=FALSE,collapse=TRUE,results='asis'}
 panderOptions('knitr.auto.asis', FALSE);
 with(fitsval$vi_c_falls,{
   message(dispname);
@@ -451,7 +451,7 @@ par(mar=.oldmar);
 
 
 
-```{r kmdrug, fig.cap=NULL, message=FALSE,collapse='true',results='asis'}
+```{r kmdrug, fig.cap=NULL, message=FALSE,collapse=TRUE,results='asis'}
 panderOptions('knitr.auto.asis', FALSE);
 .subfig <- 0;
 with(fitsval$vi_c_drugadverse,{
@@ -477,7 +477,7 @@ par(mar=.oldmar);
 
 
 
-```{r kmhf, fig.cap=NULL, message=FALSE,collapse='true',results='asis'}
+```{r kmhf, fig.cap=NULL, message=FALSE,collapse=TRUE,results='asis'}
 panderOptions('knitr.auto.asis', FALSE);
 with(fitsval$v157_unspcfd__ptnts_tf,{
   message(dispname);
